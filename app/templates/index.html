@@ -1,0 +1,1019 @@
+{% extends "base.html" %}
+{% block title %}特殊学校公益展示 · 让每一份善意被看见{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ===== 首页特有样式 ===== */
+  .hero {
+    padding-top: 104px;
+    padding-bottom: var(--space-16);
+    background: var(--bg-hero);
+  }
+
+  @media (min-width: 1024px) {
+    .hero {
+      padding-top: 152px;
+      padding-bottom: var(--space-20);
+    }
+  }
+
+  .hero-inner {
+    display: grid;
+    gap: var(--space-10);
+    align-items: center;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-inner {
+      grid-template-columns: 5fr 7fr;
+      gap: var(--space-16);
+    }
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-sans);
+    font-size: var(--text-caption);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: var(--space-4);
+  }
+
+  .hero-title {
+    font-size: var(--text-hero);
+    line-height: 1.15;
+    margin-bottom: var(--space-6);
+  }
+
+  .hero-title .highlight {
+    position: relative;
+    display: inline-block;
+    color: var(--color-primary);
+  }
+
+  .hero-title .highlight::after {
+    content: "";
+    position: absolute;
+    bottom: 4px;
+    left: -4px;
+    right: -4px;
+    height: 12px;
+    background: var(--color-accent-bg);
+    z-index: -1;
+    border-radius: var(--radius-sm);
+  }
+
+  .hero-desc {
+    font-size: var(--text-body-lg);
+    color: var(--text-secondary);
+    line-height: 1.8;
+    max-width: 480px;
+    margin-bottom: var(--space-8);
+  }
+
+  .hero-visual {
+    position: relative;
+  }
+
+  .hero-image {
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+
+  .hero-image:hover img {
+    transform: scale(1.03);
+  }
+
+  .hero-float-stat {
+    position: absolute;
+    bottom: -24px;
+    left: -16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5) var(--space-6);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 768px) {
+    .hero-float-stat {
+      bottom: -32px;
+      left: -32px;
+      padding: var(--space-6) var(--space-8);
+    }
+  }
+
+  .hero-float-stat .stat-number {
+    font-family: var(--font-mono);
+    font-size: var(--text-data);
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1.1;
+  }
+
+  .hero-float-stat .stat-label {
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .section-sm {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-12);
+  }
+
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8) var(--space-6);
+    box-shadow: var(--shadow-sm);
+  }
+
+  @media (min-width: 768px) {
+    .stats-bar {
+      grid-template-columns: repeat(4, 1fr);
+      padding: var(--space-10) var(--space-8);
+    }
+  }
+
+  .stat-item {
+    text-align: center;
+  }
+
+  .stat-item .stat-number {
+    font-family: var(--font-mono);
+    font-size: clamp(1.75rem, 4vw, var(--text-data));
+    font-weight: 700;
+    color: var(--color-primary);
+    line-height: 1.1;
+    margin-bottom: var(--space-2);
+  }
+
+  .stat-item .stat-label {
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+  }
+
+  .promise-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .promise-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .promise-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
+  }
+
+  .promise-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .promise-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: var(--space-5);
+  }
+
+  .promise-card-title {
+    font-size: var(--text-h4);
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+    color: var(--text-primary);
+  }
+
+  .promise-card p {
+    font-size: var(--text-body);
+    color: var(--text-secondary);
+    line-height: 1.7;
+  }
+
+  .schools-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .schools-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .schools-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .school-card {
+    display: block;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
+  }
+
+  .school-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .school-card-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .school-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+
+  .school-card:hover .school-card-image img {
+    transform: scale(1.04);
+  }
+
+  .school-card-body {
+    padding: var(--space-6);
+  }
+
+  .school-card-body h3 {
+    margin-bottom: var(--space-2);
+    color: var(--text-primary);
+  }
+
+  .school-location {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-body-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .school-desc {
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-5);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .school-meta {
+    display: flex;
+    gap: var(--space-5);
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+  }
+
+  .school-meta strong {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .children-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .children-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .children-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .child-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+    text-align: center;
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
+  }
+
+  .child-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .child-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin: 0 auto var(--space-5);
+    border: 3px solid var(--color-ink-100);
+    background: var(--bg-section);
+  }
+
+  .child-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .child-name {
+    font-family: var(--font-display);
+    font-size: var(--text-h4);
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+  }
+
+  .child-age {
+    font-size: var(--text-body-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-4);
+  }
+
+  .child-quote {
+    font-family: var(--font-display);
+    font-size: var(--text-body-lg);
+    font-style: italic;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-5);
+  }
+
+  .child-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-2);
+  }
+
+  .story-card {
+    display: grid;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
+  }
+
+  .story-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  @media (min-width: 768px) {
+    .story-card {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .story-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .story-image {
+      aspect-ratio: auto;
+    }
+  }
+
+  .story-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+
+  .story-card:hover .story-image img {
+    transform: scale(1.04);
+  }
+
+  .story-body {
+    padding: var(--space-8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .story-date {
+    font-size: var(--text-body-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .story-body h3 {
+    margin-bottom: var(--space-4);
+    color: var(--text-primary);
+  }
+
+  .story-body p {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    margin-bottom: var(--space-6);
+  }
+
+  .posts-grid {
+    display: grid;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .posts-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .posts-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .post-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
+  }
+
+  .post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .post-card-image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  .post-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+
+  .post-card:hover .post-card-image img {
+    transform: scale(1.04);
+  }
+
+  .post-card-body {
+    padding: var(--space-6);
+  }
+
+  .post-card-body .post-date {
+    font-size: var(--text-body-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-2);
+  }
+
+  .post-card-title {
+    font-size: var(--text-h4);
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+    color: var(--text-primary);
+  }
+
+  .post-card-body > p {
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .post-media-mini {
+    display: flex;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    align-items: center;
+  }
+
+  .post-media-mini img {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+  }
+
+  .media-mini-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-caption);
+    background: var(--color-ink-100);
+    color: var(--text-secondary);
+  }
+
+  .media-mini-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    font-size: var(--text-caption);
+    font-weight: 600;
+  }
+
+  .donations-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .donation-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: var(--space-4);
+    align-items: center;
+    padding: var(--space-5) var(--space-6);
+    border-bottom: 1px solid var(--border-light);
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+
+  .donation-item:last-child {
+    border-bottom: none;
+  }
+
+  .donation-item:hover {
+    background: var(--color-ink-50);
+  }
+
+  @media (min-width: 768px) {
+    .donation-item {
+      grid-template-columns: auto 1fr auto auto;
+      gap: var(--space-6);
+      padding: var(--space-6) var(--space-8);
+    }
+  }
+
+  .donation-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .donation-info {
+    min-width: 0;
+  }
+
+  .donor-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+  }
+
+  .donation-item-name {
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .donation-date {
+    display: none;
+    font-size: var(--text-body-sm);
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  @media (min-width: 768px) {
+    .donation-date {
+      display: block;
+    }
+  }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .status-received { background: var(--color-secondary-bg); color: var(--color-secondary); }
+  .status-distributing { background: var(--color-accent-bg); color: var(--color-gold-600); }
+  .status-completed { background: var(--color-success-bg); color: var(--color-success); }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: currentColor;
+  }
+
+  .text-center { text-align: center; }
+  .mt-48 { margin-top: var(--space-12); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-image img,
+    .school-card-image img,
+    .child-card,
+    .story-card,
+    .story-image img,
+    .post-card,
+    .post-card-image img,
+    .donation-item,
+    .promise-card,
+    .school-card {
+      transition: none;
+    }
+
+    .school-card:hover,
+    .child-card:hover,
+    .story-card:hover,
+    .post-card:hover,
+    .promise-card:hover {
+      transform: none;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="hero" aria-labelledby="hero-title">
+  <div class="container">
+    <div class="hero-inner">
+      <div class="hero-text scroll-animate">
+        <p class="hero-eyebrow">Charity · Transparency · Hope</p>
+        <h1 id="hero-title" class="hero-title">让每一份<span class="highlight">善意</span>被看见</h1>
+        <p class="hero-desc">
+          我们搭建透明化的公益展示平台，记录每一笔捐赠的旅程，展示每一位孩子的成长。让善意循着温暖的光，抵达它该去的地方。
+        </p>
+        <div class="btn-group">
+          <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-lg">
+            查看捐赠公示
+            <i data-lucide="arrow-right" style="width:18px;height:18px;" aria-hidden="true"></i>
+          </a>
+          <a href="{{ url_for('main.school_detail', school_id=schools[0].id if schools else 1) }}" class="btn btn-outline btn-lg">了解学校</a>
+        </div>
+      </div>
+      <div class="hero-visual scroll-animate">
+        <div class="hero-image">
+          <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=1200&amp;q=85"
+               alt="特殊教育课堂上，老师与孩子一起学习的温暖瞬间"
+               onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22900%22 height=%22675%22%3E%3Crect fill=%22%23F0EBE0%22 width=%22100%25%22 height=%22100%25%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%23A09990%22 font-size=%2224%22 font-family=%22serif%22%3E%E7%88%B1%E4%B8%8E%E5%B8%8C%E6%9C%9B%3C/text%3E%3C/svg%3E'">
+        </div>
+        <div class="hero-float-stat">
+          <div class="stat-number" data-target="{{ total_donations }}">{{ total_donations }}</div>
+          <div class="stat-label">笔爱心<br>捐赠记录</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 统计数据栏 -->
+<section class="section-sm" aria-label="平台数据">
+  <div class="container">
+    <div class="stats-bar scroll-animate">
+      <div class="stat-item">
+        <div class="stat-number" data-target="{{ schools|length }}">0</div>
+        <div class="stat-label">合作学校</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="{{ schools | sum(attribute='student_count') }}">0</div>
+        <div class="stat-label">在校学生</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="{{ total_donations }}">0</div>
+        <div class="stat-label">捐赠记录</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-target="{{ (total_amount / 10000)|int if total_amount else 0 }}">0</div>
+        <div class="stat-label">累计善款（万元）</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 透明承诺 -->
+<section class="section section-alt" aria-labelledby="promise-title">
+  <div class="container">
+    <div class="section-header center scroll-animate">
+      <p class="eyebrow">Our Promise</p>
+      <h2 id="promise-title">透明承诺</h2>
+      <p>公益的根基是信任。我们承诺让每一笔捐赠、每一次帮助都清晰可见。</p>
+    </div>
+    <div class="promise-grid">
+      <article class="promise-card scroll-animate stagger-1">
+        <div class="promise-icon" aria-hidden="true">
+          <i data-lucide="file-text" style="width:28px;height:28px;"></i>
+        </div>
+        <h3 class="promise-card-title">公示每笔捐赠</h3>
+        <p>捐赠人、物品、金额与去向全部公开，随时可查，经得起追问。</p>
+      </article>
+      <article class="promise-card scroll-animate stagger-2">
+        <div class="promise-icon" aria-hidden="true">
+          <i data-lucide="shield-check" style="width:28px;height:28px;"></i>
+        </div>
+        <h3 class="promise-card-title">真实学校数据</h3>
+        <p>合作学校均经过核实，学生信息与校园动态来自一线老师真实记录。</p>
+      </article>
+      <article class="promise-card scroll-animate stagger-3">
+        <div class="promise-icon" aria-hidden="true">
+          <i data-lucide="clock" style="width:28px;height:28px;"></i>
+        </div>
+        <h3 class="promise-card-title">进度全程追踪</h3>
+        <p>从捐赠接收到分发完成，每一步状态实时更新，让善意有始有终。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 合作学校 -->
+<section class="section" id="schools" aria-labelledby="schools-title">
+  <div class="container">
+    <div class="section-header scroll-animate">
+      <p class="eyebrow">Partner Schools</p>
+      <h2 id="schools-title">合作学校</h2>
+      <p>我们与多所特殊教育学校携手，共同为孩子们打造温暖的学习与成长空间。</p>
+    </div>
+    {% if schools %}
+    <div class="schools-grid">
+      {% for school in schools %}
+      <a href="{{ url_for('main.school_detail', school_id=school.id) }}" class="school-card scroll-animate stagger-{{ (loop.index - 1) % 5 + 1 }}">
+        <div class="school-card-image">
+          <img src="{{ school.cover_image or 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&amp;q=85' }}"
+               alt="{{ school.name }}校园一角"
+               onerror="this.src='https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800&amp;q=85'">
+        </div>
+        <div class="school-card-body">
+          <h3>{{ school.name }}</h3>
+          <p class="school-location">
+            <i data-lucide="map-pin" style="width:14px;height:14px;" aria-hidden="true"></i>
+            {{ school.location or '地址待补充' }}
+          </p>
+          <p class="school-desc">{{ school.description or '学校简介待补充' }}</p>
+          <div class="school-meta">
+            <span>学生 <strong>{{ school.student_count or 0 }}</strong> 人</span>
+            <span>教师 <strong>{{ school.teacher_count or 0 }}</strong> 人</span>
+            <span>创校 <strong>{{ school.founded_year or '-' }}</strong> 年</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center" style="padding: var(--space-12) 0; color: var(--text-muted);">
+      <i data-lucide="school" style="width:48px;height:48px;margin-bottom:var(--space-4);opacity:0.5;" aria-hidden="true"></i>
+      <p>暂无合作学校信息</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- 儿童风采 -->
+<section class="section section-alt" aria-labelledby="children-title">
+  <div class="container">
+    <div class="section-header scroll-animate">
+      <p class="eyebrow">Our Children</p>
+      <h2 id="children-title">每一个孩子，都有自己的光</h2>
+      <p>他们或许走得慢一些，但每一步都在闪闪发光。用爱守护，静待花开。</p>
+    </div>
+    {% if children %}
+    <div class="children-grid">
+      {% for child in children[:3] %}
+      <article class="child-card scroll-animate stagger-{{ (loop.index - 1) % 5 + 1 }}">
+        <div class="child-avatar">
+          <img src="{{ child.avatar or 'https://api.dicebear.com/7.x/thumbs/svg?seed=' + child.name }}"
+               alt="{{ child.name }}的照片"
+               onerror="this.src='https://api.dicebear.com/7.x/thumbs/svg?seed={{ child.name }}'">
+        </div>
+        <h3 class="child-name">{{ child.name }}</h3>
+        <p class="child-age">{{ child.age }}岁</p>
+        <p class="child-quote">&ldquo;{{ child.quote or '每一天都是新的开始' }}&rdquo;</p>
+        <div class="child-tags">
+          {% for tag in (child.tags or '').split(',') %}
+          {% if tag.strip() %}
+          <span class="tag tag-accent">{{ tag.strip() }}</span>
+          {% endif %}
+          {% endfor %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center" style="padding: var(--space-12) 0; color: var(--text-muted);">
+      <i data-lucide="users" style="width:48px;height:48px;margin-bottom:var(--space-4);opacity:0.5;" aria-hidden="true"></i>
+      <p>暂无受助儿童信息</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- 影响力故事 -->
+<section class="section" aria-labelledby="impact-title">
+  <div class="container">
+    <div class="section-header scroll-animate">
+      <p class="eyebrow">Impact Stories</p>
+      <h2 id="impact-title">影响力故事</h2>
+      <p>一个举动，一份礼物，也许就能点亮一个孩子的一天，甚至改变一段成长轨迹。</p>
+    </div>
+    {% if recent_posts %}
+    {% set story = recent_posts[0] %}
+    <a href="{{ url_for('main.school_detail', school_id=story.school_id) }}" class="story-card scroll-animate">
+      <div class="story-image">
+        <img src="{{ story.image_url or 'https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=1200&amp;q=85' }}"
+             alt="{{ story.title }}"
+             onerror="this.src='https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=1200&amp;q=85'">
+      </div>
+      <div class="story-body">
+        <p class="story-date">
+          {{ story.created_at.strftime('%Y年%m月%d日') if story.created_at else '' }}
+          {% if story.school %} · {{ story.school.name }}{% endif %}
+        </p>
+        <h3>{{ story.title }}</h3>
+        <p>{{ story.content or '暂无详细内容' }}</p>
+        <span class="btn btn-outline btn-sm">阅读完整故事 <i data-lucide="arrow-right" style="width:16px;height:16px;" aria-hidden="true"></i></span>
+      </div>
+    </a>
+    {% else %}
+    <div class="text-center" style="padding: var(--space-12) 0; color: var(--text-muted);">
+      <i data-lucide="book-open" style="width:48px;height:48px;margin-bottom:var(--space-4);opacity:0.5;" aria-hidden="true"></i>
+      <p>暂无影响力故事</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- 最新动态 -->
+<section class="section" aria-labelledby="updates-title">
+  <div class="container">
+    <div class="section-header scroll-animate">
+      <p class="eyebrow">Latest Updates</p>
+      <h2 id="updates-title">最新动态</h2>
+      <p>记录校园里的每一份温暖瞬间，见证孩子们的成长与变化。</p>
+    </div>
+    {% if recent_posts %}
+    <div class="posts-grid">
+      {% for post in recent_posts %}
+      <article class="post-card scroll-animate stagger-{{ (loop.index - 1) % 5 + 1 }}">
+        <div class="post-card-image">
+          <img src="{{ post.image_url or 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&amp;q=85' }}"
+               alt="{{ post.title }}"
+               onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&amp;q=85'">
+        </div>
+        <div class="post-card-body">
+          <p class="post-date">{{ post.created_at.strftime('%Y年%m月%d日') if post.created_at else '' }}</p>
+          <h3 class="post-card-title">{{ post.title }}</h3>
+          <p>{{ post.content or '' }}</p>
+          {% set post_media = post.get_media() %}
+          {% if post_media %}
+          <div class="post-media-mini">
+            {% for media in post_media[:3] %}
+              {% if media.type == 'video' %}
+              <span class="media-mini-tag video">视频</span>
+              {% else %}
+              <img src="{{ media.url }}" alt="" loading="lazy">
+              {% endif %}
+            {% endfor %}
+            {% if post_media|length > 3 %}
+            <span class="media-mini-more">+{{ post_media|length - 3 }}</span>
+            {% endif %}
+          </div>
+          {% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center" style="padding: var(--space-12) 0; color: var(--text-muted);">
+      <i data-lucide="newspaper" style="width:48px;height:48px;margin-bottom:var(--space-4);opacity:0.5;" aria-hidden="true"></i>
+      <p>暂无校园动态</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- 近期捐赠 -->
+<section class="section section-alt" id="donations" aria-labelledby="donations-title">
+  <div class="container">
+    <div class="section-header scroll-animate">
+      <p class="eyebrow">Recent Donations</p>
+      <h2 id="donations-title">近期捐赠</h2>
+      <p>每一笔捐赠都值得被记录，每一份善意都值得被感恩。</p>
+    </div>
+    {% if recent_donations %}
+    <div class="card scroll-animate">
+      <div class="donations-list">
+        {% for donation in recent_donations %}
+        <div class="donation-item">
+          <span class="donation-avatar" aria-hidden="true">{{ donation.donor_name[0] }}</span>
+          <div class="donation-info">
+            <div class="donor-name">{{ donation.donor_name }}</div>
+            <div class="donation-item-name">{{ donation.item_name }} · {{ donation.quantity or '数量待补充' }}</div>
+          </div>
+          <time class="donation-date" datetime="{{ donation.created_at.strftime('%Y-%m-%d') if donation.created_at else '' }}">
+            {{ donation.created_at.strftime('%m/%d') if donation.created_at else '' }}
+          </time>
+          <span class="status-badge status-{{ donation.status }}">
+            <span class="status-dot" aria-hidden="true"></span>
+            {% if donation.status == 'received' %}已接收
+            {% elif donation.status == 'distributing' %}分发中
+            {% else %}已完成{% endif %}
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="text-center mt-48 scroll-animate">
+      <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary">
+        查看全部捐赠记录 <i data-lucide="arrow-right" style="width:16px;height:16px;" aria-hidden="true"></i>
+      </a>
+    </div>
+    {% else %}
+    <div class="text-center scroll-animate" style="padding: var(--space-12) 0; color: var(--text-muted);">
+      <i data-lucide="inbox" style="width:48px;height:48px;margin-bottom:var(--space-4);opacity:0.5;" aria-hidden="true"></i>
+      <p>暂无近期捐赠记录</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- 参与捐赠 CTA -->
+<section class="section" aria-labelledby="participate-title">
+  <div class="container">
+    <div class="section-header center scroll-animate">
+      <p class="eyebrow">Join Us</p>
+      <h2 id="participate-title">成为照亮孩子的一束光</h2>
+      <p>无论是一次捐赠、一次转发，还是一次志愿服务，你的善意都将成为孩子成长路上的温暖力量。</p>
+    </div>
+    <div class="text-center scroll-animate">
+      <div class="btn-group" style="justify-content:center;">
+        <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary">
+          <i data-lucide="heart" style="width:18px;height:18px;" aria-hidden="true"></i>
+          我要捐赠
+        </a>
+        <a href="mailto:contact@special-school.org" class="btn btn-outline">成为志愿者</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

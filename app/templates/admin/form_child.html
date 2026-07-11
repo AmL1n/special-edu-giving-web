@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}{{ '编辑' if item else '新增' }}学生 - 特殊学校公益平台{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container-narrow">
+    <div class="section-header">
+      <p class="eyebrow">{{ '编辑' if item else '新增' }}学生</p>
+        <h1 style="font-size:var(--text-h2);">{{ item.name if item else '新增受助学生' }}</h1>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('admin.edit_child', child_id=item.id) if item else url_for('admin.new_child') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+          <div class="form-group">
+            <label class="form-label" for="school_id">所属学校 *</label>
+            <select class="form-select" id="school_id" name="school_id" required>
+              <option value="">请选择学校</option>
+              {% for school in schools %}
+                <option value="{{ school.id }}" {% if item and item.school_id == school.id %}selected{% endif %}>{{ school.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="name">姓名 *</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ item.name if item else '' }}" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="age">年龄</label>
+            <input type="number" class="form-control" id="age" name="age" value="{{ item.age if item else '' }}">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="bio">个人简介</label>
+            <textarea class="form-textarea" id="bio" name="bio" rows="5">{{ item.bio if item else '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="quote">语录</label>
+            <input type="text" class="form-control" id="quote" name="quote" value="{{ item.quote if item else '' }}">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="avatar">头像</label>
+            <input type="text" class="form-control image-url-input" id="avatar" name="avatar" value="{{ item.avatar if item else '' }}" placeholder="可输入图片地址或点击下方上传">
+            <input type="file" class="image-upload-input" data-target="avatar" accept="image/png,image/jpg,image/jpeg,image/gif,image/webp" style="margin-top:var(--space-3);">
+            <img id="preview_avatar" class="image-preview" src="{{ item.avatar if item else '' }}" alt="" style="margin-top:var(--space-3);max-width:120px;max-height:120px;object-fit:cover;border-radius:50%;border:1px solid var(--border-light);display:{{ 'block' if item and item.avatar else 'none' }};">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="tags">兴趣标签</label>
+            <input type="text" class="form-control" id="tags" name="tags" value="{{ item.tags if item else '' }}" placeholder="例如：绘画,音乐,手工">
+            <p class="form-help">多个标签请用英文逗号分隔</p>
+          </div>
+
+          <div class="btn-group" style="margin-top:var(--space-8);">
+            <button type="submit" class="btn btn-primary">保存</button>
+            <a href="{{ url_for('admin.list_children') }}" class="btn btn-secondary">取消</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

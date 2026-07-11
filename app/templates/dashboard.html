@@ -1,0 +1,671 @@
+{% extends "base.html" %}
+{% block title %}捐赠透明公示 · 数据大屏{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* 捐赠公示页特有样式 */
+  .page-hero {
+    padding-top: calc(var(--nav-height) + var(--space-16));
+    padding-bottom: var(--space-12);
+    background: var(--bg-hero);
+  }
+
+  @media (min-width: 1024px) {
+    .page-hero {
+      padding-top: calc(var(--nav-height-lg) + var(--space-24));
+      padding-bottom: var(--space-16);
+    }
+  }
+
+  .page-hero h1 {
+    max-width: 720px;
+    margin-bottom: var(--space-5);
+  }
+
+  .section-desc {
+    color: var(--text-secondary);
+    font-size: var(--text-body-lg);
+    line-height: 1.8;
+    max-width: 640px;
+  }
+
+  /* KPI */
+  .kpi-section {
+    padding-bottom: var(--space-16);
+  }
+
+  @media (min-width: 1024px) {
+    .kpi-section {
+      padding-bottom: var(--space-24);
+    }
+  }
+
+  /* Filters */
+  .filter-section {
+    padding-bottom: var(--space-12);
+  }
+
+  .filter-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .filter-card {
+      padding: var(--space-8);
+    }
+  }
+
+  .filter-group {
+    margin-bottom: var(--space-6);
+  }
+
+  .filter-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .filter-label {
+    display: block;
+    font-size: var(--text-body-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-3);
+  }
+
+  .filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .filter-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 8px 14px;
+    border-radius: var(--radius-full);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    border: 1px solid transparent;
+    transition: all var(--duration-fast) var(--ease-out);
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .filter-tag:hover {
+    background: var(--color-primary-bg);
+  }
+
+  .filter-tag.is-active {
+    background: var(--color-primary);
+    color: var(--text-inverse);
+  }
+
+  .filter-tag:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  .filter-controls {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--border-light);
+  }
+
+  @media (min-width: 768px) {
+    .filter-controls {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .filter-controls {
+      grid-template-columns: 160px 160px 1fr auto;
+      align-items: end;
+    }
+  }
+
+  .filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .filter-field label {
+    font-size: var(--text-body-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .filter-actions {
+    display: flex;
+    gap: var(--space-3);
+    padding-top: var(--space-2);
+  }
+
+  @media (min-width: 1024px) {
+    .filter-actions {
+      padding-top: 0;
+    }
+  }
+
+  /* Hint */
+  .hint-card {
+    display: flex;
+    gap: var(--space-4);
+    background: var(--color-secondary-bg);
+    border: 1px solid var(--color-moss-200);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    margin-bottom: var(--space-12);
+  }
+
+  .hint-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: var(--color-secondary);
+    color: var(--text-inverse);
+    display: grid;
+    place-items: center;
+  }
+
+  .hint-content strong {
+    font-family: var(--font-display);
+    font-size: var(--text-body);
+    color: var(--color-moss-900);
+  }
+
+  .hint-content p {
+    margin-top: var(--space-1);
+    font-size: var(--text-body-sm);
+    color: var(--color-moss-700);
+    line-height: 1.7;
+  }
+
+  /* Records */
+  .records-section {
+    padding-bottom: var(--space-24);
+  }
+
+  .section-header {
+    margin-bottom: var(--space-8);
+  }
+
+  .section-header h2 {
+    margin-bottom: var(--space-3);
+  }
+
+  .section-header p {
+    color: var(--text-secondary);
+    max-width: 560px;
+  }
+
+  /* Mobile Cards */
+  .donation-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .donation-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
+  }
+
+  .donation-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .donation-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-4);
+  }
+
+  .donation-card-donor {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .donor-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-subtle);
+    color: var(--color-primary);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 600;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .donor-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .donor-item {
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+    margin-top: var(--space-1);
+  }
+
+  .donation-card-body {
+    display: grid;
+    gap: var(--space-3);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-light);
+  }
+
+  .donation-card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .donation-card-label {
+    font-size: var(--text-caption);
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .donation-card-value {
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+    text-align: right;
+  }
+
+  /* Desktop Table */
+  .donation-table-wrap {
+    display: none;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  @media (min-width: 1024px) {
+    .donation-cards {
+      display: none;
+    }
+    .donation-table-wrap {
+      display: block;
+    }
+  }
+
+  .donation-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .donation-table thead {
+    background: var(--bg-section);
+  }
+
+  .donation-table th {
+    padding: var(--space-4) var(--space-5);
+    text-align: left;
+    font-family: var(--font-sans);
+    font-size: var(--text-caption);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .donation-table th:nth-child(1),
+  .donation-table th:nth-child(5),
+  .donation-table th:nth-child(6) {
+    text-align: center;
+  }
+
+  .donation-table td {
+    padding: var(--space-5);
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: middle;
+  }
+
+  .donation-table tbody tr {
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+
+  .donation-table tbody tr:hover {
+    background: var(--color-ink-50);
+  }
+
+  .donation-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .cell-serial {
+    width: 48px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-body-sm);
+    color: var(--text-muted);
+  }
+
+  .cell-donor {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .cell-donor .donor-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .cell-item {
+    max-width: 280px;
+  }
+
+  .item-name {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+  }
+
+  .item-detail {
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .cell-meta {
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+    text-align: center;
+  }
+
+  .cell-meta .meta-school {
+    color: var(--text-primary);
+    font-weight: 500;
+    margin-bottom: var(--space-1);
+  }
+
+  .cell-date {
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+  }
+
+  .cell-status {
+    text-align: center;
+  }
+
+  /* Empty */
+  .empty-state {
+    text-align: center;
+    padding: var(--space-16) var(--space-6);
+    color: var(--text-muted);
+  }
+
+  .empty-state i {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto var(--space-4);
+    opacity: 0.5;
+  }
+
+  .empty-state p {
+    font-size: var(--text-body-lg);
+    margin-bottom: var(--space-2);
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+  <section class="page-hero">
+    <div class="container">
+      <p class="eyebrow scroll-animate">Transparency Dashboard</p>
+      <h1 class="scroll-animate stagger-1">捐赠透明公示</h1>
+      <p class="section-desc scroll-animate stagger-2">每一笔捐赠的来源与去向，都完整记录在案。透明，是我们对每一份善意的承诺。</p>
+    </div>
+  </section>
+
+  <!-- KPI Cards -->
+  <section class="kpi-section" aria-labelledby="kpi-heading">
+    <h2 id="kpi-heading" class="sr-only">核心数据指标</h2>
+    <div class="container">
+      <div class="kpi-grid">
+        <article class="kpi-card scroll-animate">
+          <div class="kpi-icon terracotta" aria-hidden="true">
+            <i data-lucide="heart" style="width:22px;height:22px;"></i>
+          </div>
+          <div class="kpi-value" data-target="{{ total_count }}">{{ total_count }}</div>
+          <div class="kpi-label">爱心捐赠总笔数</div>
+        </article>
+
+        <article class="kpi-card scroll-animate stagger-1">
+          <div class="kpi-icon gold" aria-hidden="true">
+            <i data-lucide="users" style="width:22px;height:22px;"></i>
+          </div>
+          <div class="kpi-value" data-target="{{ donor_count }}">{{ donor_count }}</div>
+          <div class="kpi-label">累计捐赠人次</div>
+        </article>
+
+        <article class="kpi-card scroll-animate stagger-2">
+          <div class="kpi-icon moss" aria-hidden="true">
+            <i data-lucide="banknote" style="width:22px;height:22px;"></i>
+          </div>
+          <div class="kpi-value" data-target="{{ total_amount|int }}">{{ total_amount|int }}</div>
+          <div class="kpi-label">累计善款金额（元）</div>
+        </article>
+
+        <article class="kpi-card scroll-animate stagger-3">
+          <div class="kpi-icon ink" aria-hidden="true">
+            <i data-lucide="check-circle-2" style="width:22px;height:22px;"></i>
+          </div>
+          <div class="kpi-value" data-target="{{ completed_count }}">{{ completed_count }}</div>
+          <div class="kpi-label">已完成分发</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="filter-section" aria-labelledby="filter-heading">
+    <h2 id="filter-heading" class="sr-only">筛选与排序</h2>
+    <div class="container">
+      <div class="filter-card scroll-animate">
+        <div class="filter-group">
+          <span class="filter-label">学校筛选</span>
+          <div class="filter-tags" role="group" aria-label="按学校筛选">
+            <a href="{{ url_for('main.dashboard', status=status, q=q, sort=sort) }}" class="filter-tag {% if not school_id %}is-active{% endif %}">全部学校</a>
+            {% for school in schools %}
+            <a href="{{ url_for('main.dashboard', school_id=school.id, status=status, q=q, sort=sort) }}" class="filter-tag {% if school_id == school.id %}is-active{% endif %}">{{ school.name }}</a>
+            {% endfor %}
+          </div>
+        </div>
+
+        <form class="filter-controls" method="GET" action="{{ url_for('main.dashboard') }}">
+          {% if school_id %}
+          <input type="hidden" name="school_id" value="{{ school_id }}">
+          {% endif %}
+
+          <div class="filter-field">
+            <label for="status">状态</label>
+            <select id="status" name="status" class="form-control" aria-label="按状态筛选" onchange="this.form.submit()">
+              <option value="" {% if not status %}selected{% endif %}>全部状态</option>
+              <option value="received" {% if status == 'received' %}selected{% endif %}>已接收</option>
+              <option value="distributing" {% if status == 'distributing' %}selected{% endif %}>分发中</option>
+              <option value="completed" {% if status == 'completed' %}selected{% endif %}>已完成</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="sort">排序</label>
+            <select id="sort" name="sort" class="form-control" aria-label="排序方式" onchange="this.form.submit()">
+              <option value="date_desc" {% if sort == 'date_desc' %}selected{% endif %}>时间从新到旧</option>
+              <option value="date_asc" {% if sort == 'date_asc' %}selected{% endif %}>时间从旧到新</option>
+              <option value="amount_desc" {% if sort == 'amount_desc' %}selected{% endif %}>金额从高到低</option>
+              <option value="amount_asc" {% if sort == 'amount_asc' %}selected{% endif %}>金额从低到高</option>
+            </select>
+          </div>
+
+          <div class="filter-field">
+            <label for="q">搜索</label>
+            <input type="text" id="q" name="q" class="form-control" value="{{ q }}" placeholder="捐赠人 / 物品名称" aria-label="搜索捐赠人或物品">
+          </div>
+
+          <div class="filter-actions">
+            <button type="submit" class="btn btn-primary btn-sm">筛选</button>
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary btn-sm">重置</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hint -->
+  <div class="container">
+    <div class="hint-card scroll-animate" role="note" aria-label="使用提示">
+      <div class="hint-icon" aria-hidden="true">
+        <i data-lucide="info" style="width:18px;height:18px;"></i>
+      </div>
+      <div class="hint-content">
+        <strong>如何使用本页</strong>
+        <p>点击上方学校标签可筛选对应学校的捐赠记录；每条记录右侧的状态标签显示物资当前进度，实时同步后台数据。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Records -->
+  <section class="records-section" aria-labelledby="records-heading">
+    <div class="container">
+      <header class="section-header scroll-animate">
+        <p class="eyebrow">All Donations</p>
+        <h2 id="records-heading">全部捐赠记录</h2>
+        <p>实时更新展示所有捐赠记录，追踪每一份善意的旅程。</p>
+      </header>
+
+      {% if donations %}
+      <!-- Mobile Cards -->
+      <div class="donation-cards" aria-label="捐赠记录卡片列表">
+        {% for donation in donations %}
+        <article class="donation-card scroll-animate stagger-{{ (loop.index - 1) % 5 + 1 }}">
+          <div class="donation-card-header">
+            <div class="donation-card-donor">
+              <span class="donor-avatar" aria-hidden="true">{{ donation.donor_name[0] }}</span>
+              <div>
+                <div class="donor-name">{{ donation.donor_name }}</div>
+                <div class="donor-item">{{ donation.item_name }} · {{ donation.quantity or '1件' }}</div>
+              </div>
+            </div>
+            <span class="badge badge-{{ donation.status }}">
+              <span class="badge-dot" aria-hidden="true"></span>
+              {% if donation.status == 'received' %}已接收
+              {% elif donation.status == 'distributing' %}分发中
+              {% else %}已完成{% endif %}
+            </span>
+          </div>
+          <div class="donation-card-body">
+            <div class="donation-card-row">
+              <span class="donation-card-label">接收方</span>
+              <span class="donation-card-value">{{ donation.school.name if donation.school else '未知学校' }}<br>{{ donation.received_class or '学校统一' }}</span>
+            </div>
+            <div class="donation-card-row">
+              <span class="donation-card-label">日期</span>
+              <span class="donation-card-value" style="font-family:var(--font-mono);">{{ donation.created_at.strftime('%Y-%m-%d') if donation.created_at else '-' }}</span>
+            </div>
+            {% if donation.item_detail %}
+            <div class="donation-card-row">
+              <span class="donation-card-label">物品详情</span>
+              <span class="donation-card-value">{{ donation.item_detail }}</span>
+            </div>
+            {% endif %}
+            {% if donation.amount %}
+            <div class="donation-card-row">
+              <span class="donation-card-label">金额</span>
+              <span class="donation-card-value" style="font-family:var(--font-mono);">¥{{ donation.amount }}</span>
+            </div>
+            {% endif %}
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+      <!-- Desktop Table -->
+      <div class="donation-table-wrap scroll-animate">
+        <table class="donation-table" aria-label="全部捐赠记录表格">
+          <thead>
+            <tr>
+              <th scope="col">序号</th>
+              <th scope="col">捐赠人</th>
+              <th scope="col">捐赠物品</th>
+              <th scope="col">接收班级 / 学校</th>
+              <th scope="col">日期</th>
+              <th scope="col">状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for donation in donations %}
+            <tr>
+              <td class="cell-serial">{{ loop.index }}</td>
+              <td>
+                <div class="cell-donor">
+                  <span class="donor-avatar" aria-hidden="true">{{ donation.donor_name[0] }}</span>
+                  <span class="donor-name">{{ donation.donor_name }}</span>
+                </div>
+              </td>
+              <td class="cell-item">
+                <div class="item-name">{{ donation.item_name }}</div>
+                <div class="item-detail">{{ donation.item_detail or '' }} · {{ donation.quantity or '1件' }}</div>
+              </td>
+              <td class="cell-meta">
+                <div class="meta-school">{{ donation.school.name if donation.school else '未知学校' }}</div>
+                <div>{{ donation.received_class or '学校统一' }}</div>
+              </td>
+              <td class="cell-date">{{ donation.created_at.strftime('%Y-%m-%d') if donation.created_at else '-' }}</td>
+              <td class="cell-status">
+                <span class="badge badge-{{ donation.status }}">
+                  <span class="badge-dot" aria-hidden="true"></span>
+                  {% if donation.status == 'received' %}已接收
+                  {% elif donation.status == 'distributing' %}分发中
+                  {% else %}已完成{% endif %}
+                </span>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state" role="status" aria-live="polite">
+        <i data-lucide="inbox" style="width:48px;height:48px;" aria-hidden="true"></i>
+        <p>暂无符合条件的捐赠记录</p>
+        <p>请尝试调整筛选条件或稍后再来查看。</p>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+{% endblock %}

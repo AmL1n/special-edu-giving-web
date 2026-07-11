@@ -1,0 +1,931 @@
+{% extends "base.html" %}
+{% block title %}{{ school.name }} · 学校详情{% endblock %}
+
+{% block extra_css %}
+<style>
+  /* ===== 学校详情页特有样式 ===== */
+  .detail-hero {
+    position: relative;
+    width: 100%;
+    height: 360px;
+    overflow: hidden;
+  }
+
+  @media (min-width: 768px) {
+    .detail-hero { height: 420px; }
+  }
+
+  @media (min-width: 1024px) {
+    .detail-hero { height: 480px; }
+  }
+
+  .detail-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .detail-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(28, 26, 24, 0) 35%,
+      rgba(28, 26, 24, 0.45) 70%,
+      rgba(28, 26, 24, 0.78) 100%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: var(--space-8) var(--container-padding);
+  }
+
+  @media (min-width: 768px) {
+    .detail-hero-overlay {
+      padding-left: var(--container-padding-md);
+      padding-right: var(--container-padding-md);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .detail-hero-overlay {
+      padding-left: var(--container-padding-lg);
+      padding-right: var(--container-padding-lg);
+    }
+  }
+
+  .detail-hero-content {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .detail-hero h1 {
+    color: var(--text-inverse);
+    font-size: clamp(1.75rem, 4vw, 2.8rem);
+    margin-bottom: var(--space-2);
+    text-shadow: 0 2px 12px rgba(28, 26, 24, 0.25);
+  }
+
+  .detail-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.9375rem;
+  }
+
+  .detail-hero-meta .dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+  }
+
+  .detail-section {
+    padding-top: var(--space-12);
+    padding-bottom: var(--space-16);
+  }
+
+  @media (min-width: 1024px) {
+    .detail-section {
+      padding-top: var(--space-16);
+      padding-bottom: var(--space-24);
+    }
+  }
+
+  .detail-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+  }
+
+  @media (min-width: 1024px) {
+    .detail-layout {
+      grid-template-columns: 1fr 340px;
+      gap: var(--space-12);
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .detail-layout { gap: var(--space-16); }
+  }
+
+  .detail-main { min-width: 0; }
+
+  .school-intro {
+    margin-bottom: var(--space-10);
+  }
+
+  .school-intro h2 {
+    font-size: var(--text-h3);
+    margin-bottom: var(--space-4);
+  }
+
+  .school-intro p {
+    font-size: var(--text-body-lg);
+    line-height: 1.85;
+    color: var(--text-secondary);
+  }
+
+  .detail-tabs {
+    display: flex;
+    gap: var(--space-1);
+    margin-bottom: var(--space-8);
+    padding: var(--space-1);
+    background: var(--bg-section);
+    border-radius: var(--radius-full);
+    width: fit-content;
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .detail-tabs::-webkit-scrollbar { display: none; }
+
+  .detail-tab {
+    flex-shrink: 0;
+    padding: 10px 20px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease-out);
+    min-height: 44px;
+  }
+
+  @media (min-width: 768px) {
+    .detail-tab { padding: 10px 24px; }
+  }
+
+  .detail-tab:hover:not([aria-selected="true"]) {
+    color: var(--text-primary);
+  }
+
+  .detail-tab.active,
+  .detail-tab[aria-selected="true"] {
+    background: var(--bg-card);
+    color: var(--text-primary);
+    box-shadow: var(--shadow-xs);
+    font-weight: 600;
+  }
+
+  .tab-panel { display: none; }
+  .tab-panel.active,
+  .tab-panel.is-active { display: block; }
+
+  .masonry {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .masonry { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .masonry-item {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
+  }
+
+  .masonry-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .masonry-image-wrap {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+    background: var(--bg-section);
+  }
+
+  .masonry-image-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+
+  .masonry-item:hover .masonry-image-wrap img { transform: scale(1.04); }
+
+  .masonry-type-tag {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .masonry-item-body { padding: var(--space-5); }
+
+  .masonry-item-body .post-date {
+    font-size: var(--text-caption);
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+  }
+
+  .masonry-item-body h4 {
+    font-family: var(--font-body);
+    font-size: var(--text-h4);
+    font-weight: 600;
+    line-height: 1.4;
+    margin-bottom: var(--space-2);
+    color: var(--text-primary);
+  }
+
+  .masonry-item-body > p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .donation-filter-hint {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+    padding: var(--space-4);
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+  }
+
+  .filter-bar-label {
+    font-size: var(--text-body-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  .filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .tag-interactive.filter-active {
+    border-color: currentColor;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .donation-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .donation-card {
+    display: grid;
+    grid-template-columns: 40px 1fr auto;
+    gap: var(--space-4);
+    align-items: center;
+    padding: var(--space-4);
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    transition: background var(--duration-fast) var(--ease-out);
+  }
+
+  @media (min-width: 768px) {
+    .donation-card {
+      grid-template-columns: 48px 1fr 140px 120px;
+      padding: var(--space-5);
+    }
+  }
+
+  .donation-card:hover { background: var(--color-ink-50); }
+
+  .donation-serial {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--bg-section);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  @media (min-width: 768px) {
+    .donation-serial { width: 40px; height: 40px; }
+  }
+
+  .donation-info .donor {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 2px;
+  }
+
+  .donation-info .item {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .donation-meta {
+    display: none;
+    font-size: var(--text-body-sm);
+    color: var(--text-muted);
+    text-align: right;
+  }
+
+  @media (min-width: 768px) {
+    .donation-meta { display: block; }
+  }
+
+  .donation-status {
+    justify-self: end;
+  }
+
+  .donation-empty {
+    display: none;
+    text-align: center;
+    padding: var(--space-12) var(--space-6);
+    color: var(--text-muted);
+  }
+
+  .donation-empty.is-visible { display: block; }
+
+  .children-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (min-width: 768px) {
+    .children-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .child-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+    padding: var(--space-8) var(--space-6) var(--space-6);
+    text-align: center;
+    transition: transform var(--duration-normal) var(--ease-out),
+                box-shadow var(--duration-normal) var(--ease-out);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .child-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .child-card .child-avatar {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto var(--space-5);
+    border: 3px solid var(--border-light);
+    background: var(--bg-section);
+  }
+
+  .child-card .child-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .child-card .child-name {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
+  }
+
+  .child-card .child-age {
+    font-size: var(--text-body-sm);
+    color: var(--text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .child-card .child-bio {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-3);
+  }
+
+  .child-card .child-quote {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--color-primary);
+    line-height: 1.6;
+    margin-bottom: var(--space-4);
+    padding: 0 var(--space-2);
+  }
+
+  .child-card .child-tags {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .detail-sidebar {
+    order: -1;
+  }
+
+  @media (min-width: 1024px) {
+    .detail-sidebar {
+      order: 0;
+      position: sticky;
+      top: calc(var(--nav-height-lg) + var(--space-6));
+      align-self: start;
+    }
+  }
+
+  .sidebar-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border-light);
+    padding: var(--space-6);
+  }
+
+  @media (min-width: 1024px) {
+    .sidebar-card { padding: var(--space-8); }
+  }
+
+  .sidebar-card h3 {
+    font-family: var(--font-body);
+    font-size: var(--text-h4);
+    font-weight: 600;
+    margin-bottom: var(--space-5);
+    color: var(--text-primary);
+  }
+
+  .school-switcher {
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-5);
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .school-switcher label {
+    display: block;
+    font-size: var(--text-body-sm);
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-2);
+  }
+
+  .school-switcher .form-select {
+    width: 100%;
+    padding: 12px 40px 12px 16px;
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: var(--text-body);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+    min-height: 48px;
+  }
+
+  .school-switcher .form-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-subtle);
+  }
+
+  .sidebar-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 0.9375rem;
+  }
+
+  .sidebar-stat-row:last-of-type { border-bottom: none; }
+
+  .sidebar-stat-row .key { color: var(--text-secondary); }
+  .sidebar-stat-row .val {
+    font-weight: 600;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+  }
+
+  .sidebar-cta {
+    margin-top: var(--space-6);
+  }
+
+  .sidebar-note {
+    margin-top: var(--space-4);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--border-light);
+    font-size: var(--text-caption);
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .media-gallery {
+    margin-bottom: var(--space-10);
+  }
+
+  .media-gallery-title {
+    font-size: var(--text-h3);
+    margin-bottom: var(--space-5);
+  }
+
+  .media-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+  }
+
+  @media (min-width: 768px) {
+    .media-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (min-width: 1024px) {
+    .media-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  .media-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+  }
+
+  .media-wrap {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+  }
+
+  .media-wrap img,
+  .media-wrap video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .media-caption {
+    padding: var(--space-3) var(--space-4);
+    font-size: var(--text-body-sm);
+    color: var(--text-secondary);
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border-light);
+    margin: var(--space-10) 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .masonry-item,
+    .child-card,
+    .donation-card,
+    .masonry-image-wrap img {
+      transition: none;
+    }
+
+    .masonry-item:hover,
+    .child-card:hover {
+      transform: none;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- 学校 Hero -->
+<section class="detail-hero" aria-labelledby="school-name">
+  <img src="{{ school.cover_image or 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600&amp;q=85' }}"
+       alt="{{ school.name }}教学楼与户外活动空间"
+       onerror="this.src='https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600&amp;q=85'">
+  <div class="detail-hero-overlay">
+    <div class="detail-hero-content">
+      <p class="eyebrow" style="color: rgba(255,255,255,0.85); margin-bottom: var(--space-2);">学校详情</p>
+      <h1 id="school-name">{{ school.name }}</h1>
+      <div class="detail-hero-meta">
+        <span>
+          <i data-lucide="map-pin" style="width:14px;height:14px; vertical-align:-2px; margin-right:4px;" aria-hidden="true"></i>
+          {{ school.location or '地址待补充' }}
+        </span>
+        {% if school.founded_year %}
+        <span class="dot" aria-hidden="true"></span>
+        <span>创校 {{ school.founded_year }} 年</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 主体内容 -->
+<section class="detail-section">
+  <div class="container">
+    <div class="detail-layout">
+      <div class="detail-main">
+        <!-- 学校简介 -->
+        <div class="school-intro scroll-animate">
+          <h2>学校简介</h2>
+          <p>{{ school.description or '学校简介待补充' }}</p>
+        </div>
+
+        <!-- 校园相册 -->
+        {% set school_media = school.get_media() %}
+        {% if school_media %}
+        <div class="media-gallery scroll-animate">
+          <h3 class="media-gallery-title">校园相册</h3>
+          <div class="media-grid">
+            {% for media in school_media %}
+            <div class="media-card">
+              <div class="media-wrap">
+                {% if media.type == 'video' %}
+                <video src="{{ media.url }}" controls preload="metadata"></video>
+                {% else %}
+                <img src="{{ media.url }}" alt="{{ media.caption or '校园照片' }}" loading="lazy">
+                {% endif %}
+              </div>
+              {% if media.caption %}
+              <div class="media-caption">{{ media.caption }}</div>
+              {% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="divider"></div>
+        {% endif %}
+
+        <!-- Tab 切换 -->
+        <div data-tab-group="detail">
+          <div class="detail-tabs" role="tablist" aria-label="学校详情分类">
+            <button class="detail-tab active" id="tab-daily" role="tab" aria-selected="true" aria-controls="panel-daily" data-tab="daily">日常动态</button>
+            <button class="detail-tab" id="tab-donations" role="tab" aria-selected="false" aria-controls="panel-donations" data-tab="donations">捐赠公示</button>
+            <button class="detail-tab" id="tab-children" role="tab" aria-selected="false" aria-controls="panel-children" data-tab="children">学生风采</button>
+          </div>
+
+          <!-- 日常动态 -->
+          <div class="tab-panel active" id="panel-daily" role="tabpanel" aria-labelledby="tab-daily" data-tab-content="daily">
+            {% if posts %}
+            <div class="masonry">
+              {% for post in posts %}
+              <article class="masonry-item scroll-animate stagger-{{ (loop.index - 1) % 5 + 1 }}">
+                <div class="masonry-image-wrap">
+                  <img src="{{ post.image_url or 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&amp;q=80' }}"
+                       alt="{{ post.title }}"
+                       onerror="this.src='https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&amp;q=80'">
+                  <span class="tag {% if post.post_type == 'distribution' %}tag-gold{% else %}tag-moss{% endif %} masonry-type-tag">
+                    {% if post.post_type == 'distribution' %}捐赠分发{% else %}校园日常{% endif %}
+                  </span>
+                </div>
+                <div class="masonry-item-body">
+                  <p class="post-date">{{ post.created_at.strftime('%Y 年 %m 月 %d 日') if post.created_at else '' }}</p>
+                  <h4>{{ post.title }}</h4>
+                  <p>{{ post.content or '' }}</p>
+                  {% set post_media = post.get_media() %}
+                  {% if post_media %}
+                  <div class="post-media-mini">
+                    {% for media in post_media[:3] %}
+                      {% if media.type == 'video' %}
+                      <span class="media-mini-tag video">视频</span>
+                      {% else %}
+                      <img src="{{ media.url }}" alt="" loading="lazy">
+                      {% endif %}
+                    {% endfor %}
+                    {% if post_media|length > 3 %}
+                    <span class="media-mini-more">+{{ post_media|length - 3 }}</span>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="donation-empty is-visible">
+              <i data-lucide="inbox" style="width:40px;height:40px;margin-bottom:var(--space-3);" aria-hidden="true"></i>
+              <p>暂无日常动态</p>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- 捐赠公示 -->
+          <div class="tab-panel" id="panel-donations" role="tabpanel" aria-labelledby="tab-donations" data-tab-content="donations">
+            <div class="donation-filter-hint scroll-animate">
+              <span class="filter-bar-label">按状态筛选：</span>
+              <div class="filter-tags" role="group" aria-label="捐赠状态筛选">
+                <button class="tag tag-interactive filter-active" data-filter="all">全部 <span class="font-mono">{{ donations|length }}</span></button>
+                <button class="tag tag-moss tag-interactive" data-filter="received">已接收 <span class="font-mono">{{ donations|selectattr('status','equalto','received')|list|length }}</span></button>
+                <button class="tag tag-gold tag-interactive" data-filter="distributing">分发中 <span class="font-mono">{{ donations|selectattr('status','equalto','distributing')|list|length }}</span></button>
+                <button class="tag tag-green tag-interactive" data-filter="completed">已完成 <span class="font-mono">{{ donations|selectattr('status','equalto','completed')|list|length }}</span></button>
+              </div>
+            </div>
+
+            {% if donations %}
+            <div class="donation-list" id="donationList">
+              {% for donation in donations %}
+              <article class="donation-card scroll-animate stagger-{{ (loop.index - 1) % 5 + 1 }}" data-status="{{ donation.status }}">
+                <div class="donation-serial" aria-label="第 {{ loop.index }} 条">{{ loop.index }}</div>
+                <div class="donation-info">
+                  <div class="donor">{{ donation.donor_name }}</div>
+                  <div class="item">{{ donation.item_name }} · {{ donation.quantity or '数量待补充' }}</div>
+                </div>
+                <div class="donation-meta">{{ donation.received_class or '学校统一' }}</div>
+                <div class="donation-status">
+                  <span class="badge badge-{{ donation.status }}">
+                    <span class="badge-dot" aria-hidden="true"></span>
+                    {% if donation.status == 'received' %}已接收
+                    {% elif donation.status == 'distributing' %}分发中
+                    {% else %}已完成{% endif %}
+                  </span>
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+            <div class="donation-empty" id="donationEmpty" role="status" aria-live="polite">
+              <i data-lucide="inbox" style="width:40px;height:40px;margin-bottom:var(--space-3);" aria-hidden="true"></i>
+              <p>当前筛选条件下暂无捐赠记录</p>
+            </div>
+            {% else %}
+            <div class="donation-empty is-visible">
+              <i data-lucide="inbox" style="width:40px;height:40px;margin-bottom:var(--space-3);" aria-hidden="true"></i>
+              <p>暂无捐赠记录</p>
+            </div>
+            {% endif %}
+          </div>
+
+          <!-- 学生风采 -->
+          <div class="tab-panel" id="panel-children" role="tabpanel" aria-labelledby="tab-children" data-tab-content="children">
+            {% if children %}
+            <div class="children-grid">
+              {% for child in children %}
+              <article class="child-card scroll-animate stagger-{{ (loop.index - 1) % 5 + 1 }}">
+                <div class="child-avatar">
+                  <img src="{{ child.avatar or 'https://api.dicebear.com/7.x/thumbs/svg?seed=' + child.name }}"
+                       alt="{{ child.name }}的照片"
+                       onerror="this.src='https://api.dicebear.com/7.x/thumbs/svg?seed={{ child.name }}'">
+                </div>
+                <h3 class="child-name">{{ child.name }}</h3>
+                <p class="child-age">{{ child.age }}岁 · {{ school.name }}</p>
+                {% if child.bio %}
+                <p class="child-bio">{{ child.bio }}</p>
+                {% endif %}
+                <p class="child-quote">&ldquo;{{ child.quote or '每一天都是新的开始' }}&rdquo;</p>
+                <div class="child-tags">
+                  {% for tag in (child.tags or '').split(',') %}
+                  {% if tag.strip() %}
+                  <span class="tag tag-accent">{{ tag.strip() }}</span>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="donation-empty is-visible">
+              <i data-lucide="users" style="width:40px;height:40px;margin-bottom:var(--space-3);" aria-hidden="true"></i>
+              <p>暂无学生风采信息</p>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- 侧边栏 -->
+      <aside class="detail-sidebar" aria-label="学校信息">
+        <div class="sidebar-card scroll-animate">
+          <h3>学校信息</h3>
+
+          <div class="school-switcher">
+            <label for="school-select">切换学校</label>
+            <select id="school-select" class="form-select" aria-label="选择要查看的学校" onchange="if(this.value) window.location.href='{{ url_for('main.school_detail', school_id=0) }}'.replace('0', this.value);">
+              {% for s in all_schools %}
+              <option value="{{ s.id }}" {% if s.id == school.id %}selected{% endif %}>{{ s.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="sidebar-stat-row">
+            <span class="key">学生人数</span>
+            <span class="val">{{ school.student_count or 0 }} 人</span>
+          </div>
+          <div class="sidebar-stat-row">
+            <span class="key">教职工</span>
+            <span class="val">{{ school.teacher_count or 0 }} 人</span>
+          </div>
+          <div class="sidebar-stat-row">
+            <span class="key">创校年份</span>
+            <span class="val">{{ school.founded_year or '-' }} 年</span>
+          </div>
+          <div class="sidebar-stat-row">
+            <span class="key">捐赠记录</span>
+            <span class="val">{{ donations|length }} 笔</span>
+          </div>
+          <div class="sidebar-stat-row">
+            <span class="key">动态更新</span>
+            <span class="val">{{ posts|length }} 篇</span>
+          </div>
+
+          <div class="sidebar-cta">
+            <a href="{{ url_for('main.dashboard', school_id=school.id) }}" class="btn btn-primary btn-full">
+              查看捐赠公示 <i data-lucide="arrow-right" style="width:16px;height:16px;" aria-hidden="true"></i>
+            </a>
+          </div>
+
+          <p class="sidebar-note">
+            所有数据均来自学校真实申报与捐赠系统记录，项目为公益展示原型，部分信息经脱敏处理。
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  // 学校切换
+  (function () {
+    const select = document.getElementById('school-select');
+    if (!select) return;
+    select.addEventListener('change', function () {
+      const id = this.value;
+      if (!id) return;
+      const base = "{{ url_for('main.school_detail', school_id=0) }}";
+      window.location.href = base.replace('/0', '/' + id);
+    });
+  })();
+
+  // Tab 可访问性增强
+  (function () {
+    const tabs = document.querySelectorAll('.detail-tab');
+    const panels = document.querySelectorAll('.tab-panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.setAttribute('aria-selected', 'false');
+          t.classList.remove('active');
+        });
+        tab.setAttribute('aria-selected', 'true');
+        tab.classList.add('active');
+        const target = tab.dataset.tab;
+        panels.forEach(p => {
+          const isTarget = p.dataset.tabContent === target;
+          p.classList.toggle('active', isTarget);
+        });
+      });
+    });
+  })();
+
+  // 捐赠状态筛选
+  (function () {
+    const group = document.querySelector('.filter-bar');
+    if (!group) return;
+    const tags = group.querySelectorAll('[data-filter]');
+    const items = document.querySelectorAll('.donation-card[data-status]');
+    const empty = document.getElementById('donationEmpty');
+    if (!tags.length || !items.length) return;
+
+    tags.forEach(tag => {
+      tag.addEventListener('click', () => {
+        const filter = tag.dataset.filter;
+        tags.forEach(t => t.classList.remove('filter-active'));
+        tag.classList.add('filter-active');
+        let visible = 0;
+        items.forEach(item => {
+          const show = filter === 'all' || item.dataset.status === filter;
+          item.style.display = show ? '' : 'none';
+          if (show) visible++;
+        });
+        if (empty) empty.classList.toggle('is-visible', visible === 0);
+      });
+    });
+  })();
+</script>
+{% endblock %}

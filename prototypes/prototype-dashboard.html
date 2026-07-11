@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="特殊学校公益展示网站捐赠透明公示数据大屏，追踪每一笔捐赠的来源与去向。">
+  <title>捐赠透明公示 · 数据大屏</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <style>
+    /* =========================================================
+       特殊学校公益展示网站 · 捐赠公示数据大屏原型
+       风格：温润人文 · 高级杂志诗学
+       ========================================================= */
+
+    :root {
+      /* Primitive Colors */
+      --color-ink-900: #1C1A18;
+      --color-ink-800: #2E2C29;
+      --color-ink-700: #4A4743;
+      --color-ink-600: #6B6560;
+      --color-ink-500: #8D867F;
+      --color-ink-400: #A09990;
+      --color-ink-300: #C4BEB6;
+      --color-ink-200: #DDD7CF;
+      --color-ink-100: #EDE8E0;
+      --color-ink-50:  #F7F5F0;
+      --color-paper:   #FAF8F5;
+
+      --color-terracotta-900: #5C2419;
+      --color-terracotta-800: #7A2F21;
+      --color-terracotta-700: #983B2A;
+      --color-terracotta-600: #A13D2D;
+      --color-terracotta-500: #B85A49;
+      --color-terracotta-400: #CD7D6E;
+      --color-terracotta-300: #E2A99E;
+      --color-terracotta-200: #F0D0CA;
+      --color-terracotta-100: #F9EBE8;
+      --color-terracotta-50:  #FDF7F6;
+
+      --color-moss-900: #1A2E26;
+      --color-moss-800: #243F34;
+      --color-moss-700: #2E4A3E;
+      --color-moss-600: #3D6353;
+      --color-moss-500: #527A68;
+      --color-moss-400: #7A9E8D;
+      --color-moss-300: #A8C4B8;
+      --color-moss-200: #D2E2D9;
+      --color-moss-100: #EAF3EE;
+      --color-moss-50:  #F5F9F7;
+
+      --color-gold-600: #A67C34;
+      --color-gold-500: #C4943F;
+      --color-gold-400: #D4A056;
+      --color-gold-300: #E3BE84;
+      --color-gold-200: #F0DAB2;
+      --color-gold-100: #F9F0E0;
+
+      --color-success: #3D6353;
+      --color-success-bg: #EAF3EE;
+      --color-warning: #C4943F;
+      --color-warning-bg: #F9F0E0;
+      --color-error: #B85A49;
+      --color-error-bg: #F9EBE8;
+      --color-info: #527A68;
+      --color-info-bg: #F5F9F7;
+
+      /* Semantic Colors */
+      --bg-page: var(--color-paper);
+      --bg-section: var(--color-ink-50);
+      --bg-card: #FFFFFF;
+      --bg-hero: var(--color-paper);
+      --bg-footer: var(--color-ink-900);
+
+      --text-primary: var(--color-ink-900);
+      --text-secondary: var(--color-ink-600);
+      --text-muted: var(--color-ink-400);
+      --text-inverse: #FFFFFF;
+      --text-link: var(--color-terracotta-700);
+      --text-link-hover: var(--color-terracotta-900);
+
+      --color-primary: var(--color-terracotta-600);
+      --color-primary-hover: var(--color-terracotta-700);
+      --color-primary-active: var(--color-terracotta-800);
+      --color-primary-bg: var(--color-terracotta-100);
+      --color-primary-subtle: rgba(161, 61, 45, 0.08);
+
+      --color-secondary: var(--color-moss-700);
+      --color-secondary-hover: var(--color-moss-800);
+      --color-secondary-bg: var(--color-moss-100);
+      --color-secondary-subtle: rgba(46, 74, 62, 0.08);
+
+      --color-accent: var(--color-gold-400);
+      --color-accent-bg: var(--color-gold-100);
+
+      --border-default: var(--color-ink-200);
+      --border-light: var(--color-ink-100);
+      --border-inverse: rgba(255, 255, 255, 0.12);
+
+      /* Typography */
+      --font-display: "Noto Serif SC", "Source Han Serif SC", "STSong", Georgia, serif;
+      --font-body: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --font-sans: "Inter", "Noto Sans SC", sans-serif;
+      --font-mono: "JetBrains Mono", "SF Mono", Consolas, monospace;
+
+      --text-hero: clamp(2.75rem, 5vw, 4.5rem);
+      --text-h1: clamp(2rem, 4vw, 3.5rem);
+      --text-h2: clamp(1.5rem, 3vw, 2.5rem);
+      --text-h3: clamp(1.25rem, 2vw, 1.75rem);
+      --text-h4: 1.125rem;
+      --text-body: 1rem;
+      --text-body-lg: 1.125rem;
+      --text-body-sm: 0.875rem;
+      --text-caption: 0.75rem;
+      --text-data: 2rem;
+
+      /* Spacing */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-20: 80px;
+      --space-24: 96px;
+      --space-32: 128px;
+
+      /* Container */
+      --container-max: 1200px;
+      --container-padding: var(--space-6);
+      --container-padding-md: var(--space-12);
+      --container-padding-lg: var(--space-16);
+
+      /* Radius */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+
+      /* Shadow */
+      --shadow-xs: 0 1px 2px rgba(28, 26, 24, 0.04);
+      --shadow-sm: 0 2px 8px rgba(28, 26, 24, 0.06);
+      --shadow-md: 0 8px 24px rgba(28, 26, 24, 0.08);
+      --shadow-lg: 0 16px 48px rgba(28, 26, 24, 0.10);
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --duration-fast: 150ms;
+      --duration-normal: 250ms;
+      --duration-slow: 400ms;
+
+      /* Breakpoints */
+      --bp-sm: 375px;
+      --bp-md: 768px;
+      --bp-lg: 1024px;
+      --bp-xl: 1440px;
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--text-body);
+      line-height: 1.75;
+      color: var(--text-primary);
+      background-color: var(--bg-page);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    a {
+      color: var(--text-link);
+      text-decoration: none;
+      transition: color var(--duration-fast) var(--ease-out);
+    }
+
+    a:hover {
+      color: var(--text-link-hover);
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      background: none;
+    }
+
+    /* Typography Helpers */
+    .eyebrow {
+      font-family: var(--font-sans);
+      font-size: var(--text-caption);
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: var(--space-3);
+    }
+
+    h1, h2, h3, h4 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--text-primary);
+    }
+
+    h1 {
+      font-size: var(--text-h1);
+    }
+
+    h2 {
+      font-size: var(--text-h2);
+    }
+
+    h3 {
+      font-size: var(--text-h3);
+    }
+
+    h4 {
+      font-size: var(--text-h4);
+    }
+
+    .section-desc {
+      color: var(--text-secondary);
+      font-size: var(--text-body-lg);
+      line-height: 1.8;
+      max-width: 640px;
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: var(--container-max);
+      margin: 0 auto;
+      padding-left: var(--container-padding);
+      padding-right: var(--container-padding);
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding-left: var(--container-padding-md);
+        padding-right: var(--container-padding-md);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        padding-left: var(--container-padding-lg);
+        padding-right: var(--container-padding-lg);
+      }
+    }
+
+    /* Navigation */
+    .site-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 56px;
+      background: rgba(250, 248, 245, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    @media (min-width: 1024px) {
+      .site-header {
+        height: 72px;
+      }
+    }
+
+    .site-header .container {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-family: var(--font-display);
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-full);
+      background: var(--color-primary);
+      display: grid;
+      place-items: center;
+      color: var(--text-inverse);
+    }
+
+    .logo-mark i {
+      width: 18px;
+      height: 18px;
+    }
+
+    @media (min-width: 1024px) {
+      .logo {
+        font-size: 1.25rem;
+      }
+      .logo-mark {
+        width: 36px;
+        height: 36px;
+      }
+      .logo-mark i {
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .main-nav {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .main-nav {
+        display: flex;
+        align-items: center;
+        gap: var(--space-8);
+      }
+    }
+
+    .main-nav a {
+      position: relative;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      padding: var(--space-2) 0;
+      transition: color var(--duration-fast) var(--ease-out);
+    }
+
+    .main-nav a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -2px;
+      height: 2px;
+      background: var(--color-primary);
+      transform: scaleX(0);
+      transition: transform var(--duration-normal) var(--ease-out);
+    }
+
+    .main-nav a:hover,
+    .main-nav a[aria-current="page"] {
+      color: var(--color-primary);
+    }
+
+    .main-nav a[aria-current="page"]::after {
+      transform: scaleX(1);
+    }
+
+    .nav-cta {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .nav-cta {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-2);
+      }
+    }
+
+    .mobile-menu-toggle {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      color: var(--text-primary);
+      border-radius: var(--radius-md);
+      transition: background var(--duration-fast) var(--ease-out);
+    }
+
+    .mobile-menu-toggle:hover,
+    .mobile-menu-toggle:focus {
+      background: var(--color-primary-subtle);
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-menu-toggle {
+        display: none;
+      }
+    }
+
+    /* Mobile Drawer */
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(320px, 85vw);
+      background: var(--bg-card);
+      z-index: 200;
+      padding: var(--space-6);
+      transform: translateX(100%);
+      transition: transform var(--duration-normal) var(--ease-out);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .mobile-drawer.is-open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-8);
+    }
+
+    .drawer-close {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      color: var(--text-primary);
+      border-radius: var(--radius-md);
+    }
+
+    .drawer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      flex: 1;
+    }
+
+    .drawer-nav a {
+      padding: var(--space-4) var(--space-3);
+      border-radius: var(--radius-md);
+      font-size: var(--text-body-lg);
+      font-weight: 500;
+      color: var(--text-primary);
+      transition: background var(--duration-fast) var(--ease-out);
+    }
+
+    .drawer-nav a:hover,
+    .drawer-nav a[aria-current="page"] {
+      background: var(--color-primary-subtle);
+      color: var(--color-primary);
+    }
+
+    .drawer-cta {
+      margin-top: auto;
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--border-light);
+    }
+
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(28, 26, 24, 0.4);
+      z-index: 150;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--duration-fast) var(--ease-out), visibility var(--duration-fast);
+    }
+
+    .drawer-overlay.is-visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      border-radius: var(--radius-full);
+      padding: 14px 28px;
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      line-height: 1;
+      transition: all var(--duration-fast) var(--ease-out);
+      white-space: nowrap;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: var(--text-inverse);
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      color: var(--text-inverse);
+    }
+
+    .btn-primary:active {
+      background: var(--color-primary-active);
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background: var(--color-ink-100);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-ink-200);
+      color: var(--text-primary);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--border-default);
+      color: var(--text-primary);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .btn-sm {
+      padding: 10px 18px;
+      font-size: 0.875rem;
+    }
+
+    /* Page Hero */
+    .page-hero {
+      padding-top: calc(56px + var(--space-16));
+      padding-bottom: var(--space-12);
+      background: var(--bg-hero);
+    }
+
+    @media (min-width: 1024px) {
+      .page-hero {
+        padding-top: calc(72px + var(--space-24));
+        padding-bottom: var(--space-16);
+      }
+    }
+
+    .page-hero h1 {
+      max-width: 720px;
+      margin-bottom: var(--space-5);
+    }
+
+    .page-hero .section-desc {
+      max-width: 640px;
+    }
+
+    /* KPI Cards */
+    .kpi-section {
+      padding-bottom: var(--space-16);
+    }
+
+    @media (min-width: 1024px) {
+      .kpi-section {
+        padding-bottom: var(--space-24);
+      }
+    }
+
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    @media (min-width: 768px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-5);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .kpi-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--space-6);
+      }
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      display: grid;
+      place-items: center;
+      margin-bottom: var(--space-5);
+    }
+
+    .kpi-icon i {
+      width: 22px;
+      height: 22px;
+    }
+
+    .kpi-icon.terracotta {
+      background: var(--color-terracotta-50);
+      color: var(--color-terracotta-600);
+    }
+
+    .kpi-icon.gold {
+      background: var(--color-gold-100);
+      color: var(--color-gold-600);
+    }
+
+    .kpi-icon.moss {
+      background: var(--color-moss-100);
+      color: var(--color-moss-700);
+    }
+
+    .kpi-value {
+      font-family: var(--font-mono);
+      font-size: var(--text-data);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--text-primary);
+      margin-bottom: var(--space-2);
+    }
+
+    .kpi-label {
+      font-size: var(--text-body-sm);
+      color: var(--text-secondary);
+    }
+
+    /* Filters */
+    .filter-section {
+      padding-bottom: var(--space-12);
+    }
+
+    .filter-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+    }
+
+    @media (min-width: 768px) {
+      .filter-card {
+        padding: var(--space-8);
+      }
+    }
+
+    .filter-group {
+      margin-bottom: var(--space-6);
+    }
+
+    .filter-group:last-child {
+      margin-bottom: 0;
+    }
+
+    .filter-label {
+      display: block;
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-3);
+    }
+
+    .filter-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    .filter-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 8px 14px;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      background: var(--color-primary-subtle);
+      color: var(--color-primary);
+      border: 1px solid transparent;
+      transition: all var(--duration-fast) var(--ease-out);
+      cursor: pointer;
+    }
+
+    .filter-tag:hover {
+      background: var(--color-primary-bg);
+    }
+
+    .filter-tag.is-active {
+      background: var(--color-primary);
+      color: var(--text-inverse);
+    }
+
+    .filter-tag:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    .filter-controls {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+      padding-top: var(--space-6);
+      border-top: 1px solid var(--border-light);
+    }
+
+    @media (min-width: 768px) {
+      .filter-controls {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .filter-controls {
+        grid-template-columns: 160px 160px 1fr auto;
+        align-items: end;
+      }
+    }
+
+    .filter-field {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .filter-field label {
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .form-control {
+      width: 100%;
+      min-height: 44px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      font-family: var(--font-body);
+      font-size: var(--text-body);
+      color: var(--text-primary);
+      transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .form-control:hover {
+      border-color: var(--color-ink-300);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-subtle);
+    }
+
+    select.form-control {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 40px;
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: var(--space-3);
+      padding-top: var(--space-2);
+    }
+
+    @media (min-width: 1024px) {
+      .filter-actions {
+        padding-top: 0;
+      }
+    }
+
+    /* Hint Card */
+    .hint-card {
+      display: flex;
+      gap: var(--space-4);
+      background: var(--color-secondary-bg);
+      border: 1px solid var(--color-moss-200);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      margin-bottom: var(--space-12);
+    }
+
+    .hint-icon {
+      flex-shrink: 0;
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      background: var(--color-secondary);
+      color: var(--text-inverse);
+      display: grid;
+      place-items: center;
+    }
+
+    .hint-icon i {
+      width: 18px;
+      height: 18px;
+    }
+
+    .hint-content strong {
+      font-family: var(--font-display);
+      font-size: var(--text-body);
+      color: var(--color-moss-900);
+    }
+
+    .hint-content p {
+      margin-top: var(--space-1);
+      font-size: var(--text-body-sm);
+      color: var(--color-moss-700);
+      line-height: 1.7;
+    }
+
+    /* Section Header */
+    .section-header {
+      margin-bottom: var(--space-8);
+    }
+
+    .section-header h2 {
+      margin-bottom: var(--space-3);
+    }
+
+    .section-header p {
+      color: var(--text-secondary);
+      max-width: 560px;
+    }
+
+    /* Donation Records */
+    .records-section {
+      padding-bottom: var(--space-24);
+    }
+
+    /* Mobile Cards */
+    .donation-cards {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+
+    .donation-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      padding: var(--space-5);
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+    }
+
+    .donation-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .donation-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .donation-card-donor {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .donor-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-full);
+      background: var(--color-primary-subtle);
+      color: var(--color-primary);
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .donor-name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .donor-item {
+      font-size: var(--text-body-sm);
+      color: var(--text-secondary);
+      margin-top: var(--space-1);
+    }
+
+    .donation-card-body {
+      display: grid;
+      gap: var(--space-3);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--border-light);
+    }
+
+    .donation-card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .donation-card-label {
+      font-size: var(--text-caption);
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .donation-card-value {
+      font-size: var(--text-body-sm);
+      color: var(--text-secondary);
+      text-align: right;
+    }
+
+    /* Desktop Table */
+    .donation-table-wrap {
+      display: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+
+    @media (min-width: 1024px) {
+      .donation-cards {
+        display: none;
+      }
+      .donation-table-wrap {
+        display: block;
+      }
+    }
+
+    .donation-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .donation-table thead {
+      background: var(--bg-section);
+    }
+
+    .donation-table th {
+      padding: var(--space-4) var(--space-5);
+      text-align: left;
+      font-family: var(--font-sans);
+      font-size: var(--text-caption);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-secondary);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .donation-table th:nth-child(1),
+    .donation-table th:nth-child(5),
+    .donation-table th:nth-child(6) {
+      text-align: center;
+    }
+
+    .donation-table td {
+      padding: var(--space-5);
+      border-bottom: 1px solid var(--border-light);
+      vertical-align: middle;
+    }
+
+    .donation-table tbody tr {
+      transition: background var(--duration-fast) var(--ease-out);
+    }
+
+    .donation-table tbody tr:hover {
+      background: var(--color-ink-50);
+    }
+
+    .donation-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .cell-serial {
+      width: 48px;
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-body-sm);
+      color: var(--text-muted);
+    }
+
+    .cell-donor {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+
+    .cell-donor .donor-name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .cell-item {
+      max-width: 280px;
+    }
+
+    .item-name {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+    }
+
+    .item-detail {
+      font-size: var(--text-body-sm);
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .cell-meta {
+      font-size: var(--text-body-sm);
+      color: var(--text-secondary);
+      text-align: center;
+    }
+
+    .cell-meta .meta-school {
+      color: var(--text-primary);
+      font-weight: 500;
+      margin-bottom: var(--space-1);
+    }
+
+    .cell-date {
+      text-align: center;
+      font-family: var(--font-mono);
+      font-size: var(--text-body-sm);
+      color: var(--text-secondary);
+    }
+
+    .cell-status {
+      text-align: center;
+    }
+
+    /* Status Badges */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .status-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: var(--radius-full);
+      flex-shrink: 0;
+    }
+
+    .status-received {
+      background: var(--color-secondary-bg);
+      color: var(--color-secondary);
+    }
+    .status-received::before {
+      background: var(--color-secondary);
+    }
+
+    .status-distributing {
+      background: var(--color-accent-bg);
+      color: var(--color-gold-600);
+    }
+    .status-distributing::before {
+      background: var(--color-gold-500);
+    }
+
+    .status-completed {
+      background: var(--color-success-bg);
+      color: var(--color-success);
+    }
+    .status-completed::before {
+      background: var(--color-success);
+    }
+
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: var(--space-16) var(--space-6);
+      color: var(--text-muted);
+    }
+
+    .empty-state i {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto var(--space-4);
+      opacity: 0.5;
+    }
+
+    .empty-state p {
+      font-size: var(--text-body-lg);
+      margin-bottom: var(--space-2);
+    }
+
+    /* Footer */
+    .site-footer {
+      background: var(--bg-footer);
+      color: var(--text-inverse);
+      padding: var(--space-16) 0 var(--space-8);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+      margin-bottom: var(--space-12);
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid {
+        grid-template-columns: 2fr 1fr 1fr;
+      }
+    }
+
+    .footer-brand .logo {
+      color: var(--text-inverse);
+      margin-bottom: var(--space-4);
+    }
+
+    .footer-brand p {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: var(--text-body-sm);
+      line-height: 1.8;
+      max-width: 320px;
+    }
+
+    .footer-links h4 {
+      color: var(--text-inverse);
+      font-family: var(--font-body);
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      margin-bottom: var(--space-4);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-links ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: var(--text-body-sm);
+      transition: color var(--duration-fast) var(--ease-out);
+    }
+
+    .footer-links a:hover {
+      color: var(--text-inverse);
+    }
+
+    .footer-bottom {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      padding-top: var(--space-8);
+      border-top: 1px solid var(--border-inverse);
+      color: rgba(255, 255, 255, 0.52);
+      font-size: var(--text-caption);
+    }
+
+    @media (min-width: 768px) {
+      .footer-bottom {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+
+    /* Scroll Reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity var(--duration-slow) var(--ease-out), transform var(--duration-slow) var(--ease-out);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
+
+    /* Stagger delays */
+    .reveal-delay-1 { transition-delay: 0ms; }
+    .reveal-delay-2 { transition-delay: 60ms; }
+    .reveal-delay-3 { transition-delay: 120ms; }
+    .reveal-delay-4 { transition-delay: 180ms; }
+
+    /* Focus Visible */
+    :focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Skip Link */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: var(--space-4);
+      background: var(--color-primary);
+      color: var(--text-inverse);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-sm);
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      z-index: 300;
+      transition: top var(--duration-fast) var(--ease-out);
+    }
+
+    .skip-link:focus {
+      top: var(--space-4);
+    }
+
+    /* Visually hidden */
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">跳转到主要内容</a>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+      <a href="#" class="logo" aria-label="特殊学校公益展示网站首页">
+        <span class="logo-mark" aria-hidden="true">
+          <i data-lucide="heart-handshake"></i>
+        </span>
+        <span>善意同行</span>
+      </a>
+
+      <nav class="main-nav" aria-label="主导航">
+        <a href="prototype-home.html">首页</a>
+        <a href="prototype-school.html">学校详情</a>
+        <a href="prototype-dashboard.html" aria-current="page">捐赠公示</a>
+        <a href="#">参与捐赠</a>
+      </nav>
+
+      <a href="#" class="btn btn-primary btn-sm nav-cta">
+        <i data-lucide="heart" style="width:16px;height:16px;"></i>
+        我要捐赠
+      </a>
+
+      <button class="mobile-menu-toggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobile-drawer">
+        <i data-lucide="menu" style="width:22px;height:22px;"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer -->
+  <div class="drawer-overlay" id="drawer-overlay" aria-hidden="true"></div>
+  <aside class="mobile-drawer" id="mobile-drawer" aria-label="移动端菜单">
+    <div class="drawer-header">
+      <span class="logo">
+        <span class="logo-mark" aria-hidden="true">
+          <i data-lucide="heart-handshake"></i>
+        </span>
+        <span>善意同行</span>
+      </span>
+      <button class="drawer-close" type="button" aria-label="关闭菜单">
+        <i data-lucide="x" style="width:22px;height:22px;"></i>
+      </button>
+    </div>
+    <nav class="drawer-nav" aria-label="移动端主导航">
+      <a href="prototype-home.html">首页</a>
+      <a href="prototype-school.html">学校详情</a>
+      <a href="prototype-dashboard.html" aria-current="page">捐赠公示</a>
+      <a href="#">参与捐赠</a>
+    </nav>
+    <div class="drawer-cta">
+      <a href="#" class="btn btn-primary" style="width:100%;">
+        <i data-lucide="heart" style="width:16px;height:16px;"></i>
+        我要捐赠
+      </a>
+    </div>
+  </aside>
+
+  <main id="main-content">
+    <!-- Hero -->
+    <section class="page-hero">
+      <div class="container">
+        <p class="eyebrow reveal">Transparency Dashboard</p>
+        <h1 class="reveal reveal-delay-1">捐赠透明公示</h1>
+        <p class="section-desc reveal reveal-delay-2">每一笔捐赠的来源与去向，都完整记录在案。透明，是我们对每一份善意的承诺。</p>
+      </div>
+    </section>
+
+    <!-- KPI Cards -->
+    <section class="kpi-section" aria-labelledby="kpi-heading">
+      <h2 id="kpi-heading" class="visually-hidden">核心数据指标</h2>
+      <div class="container">
+        <div class="kpi-grid">
+          <article class="kpi-card reveal">
+            <div class="kpi-icon terracotta" aria-hidden="true">
+              <i data-lucide="heart"></i>
+            </div>
+            <div class="kpi-value" data-target="1568">0</div>
+            <div class="kpi-label">爱心捐赠总笔数</div>
+          </article>
+
+          <article class="kpi-card reveal reveal-delay-1">
+            <div class="kpi-icon gold" aria-hidden="true">
+              <i data-lucide="users"></i>
+            </div>
+            <div class="kpi-value" data-target="892">0</div>
+            <div class="kpi-label">累计捐赠人次</div>
+          </article>
+
+          <article class="kpi-card reveal reveal-delay-2">
+            <div class="kpi-icon moss" aria-hidden="true">
+              <i data-lucide="banknote"></i>
+            </div>
+            <div class="kpi-value" data-target="428600" data-prefix="¥">0</div>
+            <div class="kpi-label">累计善款金额（元）</div>
+          </article>
+
+          <article class="kpi-card reveal reveal-delay-3">
+            <div class="kpi-icon moss" aria-hidden="true">
+              <i data-lucide="check-circle-2"></i>
+            </div>
+            <div class="kpi-value" data-target="1243">0</div>
+            <div class="kpi-label">已完成分发</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filters -->
+    <section class="filter-section" aria-labelledby="filter-heading">
+      <h2 id="filter-heading" class="visually-hidden">筛选与排序</h2>
+      <div class="container">
+        <div class="filter-card reveal">
+          <div class="filter-group">
+            <span class="filter-label">学校筛选</span>
+            <div class="filter-tags" role="group" aria-label="按学校筛选">
+              <button class="filter-tag is-active" type="button" data-filter="all">全部学校</button>
+              <button class="filter-tag" type="button" data-filter="1">杭州市启明星特殊教育学校</button>
+              <button class="filter-tag" type="button" data-filter="2">上海市阳光自闭症康复中心</button>
+              <button class="filter-tag" type="button" data-filter="3">广州市启聪聋哑学校</button>
+            </div>
+          </div>
+
+          <div class="filter-controls">
+            <div class="filter-field">
+              <label for="status-select">状态</label>
+              <select id="status-select" class="form-control" aria-label="按状态筛选">
+                <option value="">全部状态</option>
+                <option value="received">已接收</option>
+                <option value="distributing">分发中</option>
+                <option value="completed">已完成</option>
+              </select>
+            </div>
+
+            <div class="filter-field">
+              <label for="sort-select">排序</label>
+              <select id="sort-select" class="form-control" aria-label="排序方式">
+                <option value="date_desc">时间从新到旧</option>
+                <option value="date_asc">时间从旧到新</option>
+                <option value="amount_desc">金额从高到低</option>
+                <option value="amount_asc">金额从低到高</option>
+              </select>
+            </div>
+
+            <div class="filter-field">
+              <label for="search-input">搜索</label>
+              <input type="text" id="search-input" class="form-control" placeholder="捐赠人 / 物品名称" aria-label="搜索捐赠人或物品">
+            </div>
+
+            <div class="filter-actions">
+              <button type="button" class="btn btn-primary btn-sm" id="apply-filters">筛选</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="reset-filters">重置</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hint -->
+    <div class="container">
+      <div class="hint-card reveal" role="note" aria-label="使用提示">
+        <div class="hint-icon" aria-hidden="true">
+          <i data-lucide="info"></i>
+        </div>
+        <div class="hint-content">
+          <strong>如何使用本页</strong>
+          <p>点击上方学校标签可筛选对应学校的捐赠记录；每条记录右侧的状态标签显示物资当前进度，实时同步后台数据。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Records -->
+    <section class="records-section" aria-labelledby="records-heading">
+      <div class="container">
+        <header class="section-header reveal">
+          <p class="eyebrow">All Donations</p>
+          <h2 id="records-heading">全部捐赠记录</h2>
+          <p>实时更新展示所有捐赠记录，追踪每一份善意的旅程。</p>
+        </header>
+
+        <!-- Mobile Cards -->
+        <div class="donation-cards" id="donation-cards" aria-label="捐赠记录卡片列表">
+          <!-- Cards generated by JS -->
+        </div>
+
+        <!-- Desktop Table -->
+        <div class="donation-table-wrap reveal">
+          <table class="donation-table" aria-label="全部捐赠记录表格">
+            <thead>
+              <tr>
+                <th scope="col">序号</th>
+                <th scope="col">捐赠人</th>
+                <th scope="col">捐赠物品</th>
+                <th scope="col">接收班级 / 学校</th>
+                <th scope="col">日期</th>
+                <th scope="col">状态</th>
+              </tr>
+            </thead>
+            <tbody id="donation-table-body">
+              <!-- Rows generated by JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <div class="empty-state" id="empty-state" style="display:none;" role="status" aria-live="polite">
+          <i data-lucide="inbox"></i>
+          <p>暂无符合条件的捐赠记录</p>
+          <p>请尝试调整筛选条件</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo" aria-label="特殊学校公益展示网站首页">
+            <span class="logo-mark" aria-hidden="true">
+              <i data-lucide="heart-handshake"></i>
+            </span>
+            <span>善意同行</span>
+          </a>
+          <p>让每一份善意都被看见。我们致力于连接社会爱心与特殊教育学校，以透明、专业、有尊严的方式传递温暖。</p>
+        </div>
+
+        <div class="footer-links">
+          <h4>导航</h4>
+          <ul>
+            <li><a href="prototype-home.html">首页</a></li>
+            <li><a href="prototype-school.html">学校详情</a></li>
+            <li><a href="prototype-dashboard.html">捐赠公示</a></li>
+            <li><a href="#">参与捐赠</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-links">
+          <h4>关于</h4>
+          <ul>
+            <li><a href="#">项目介绍</a></li>
+            <li><a href="#">合作伙伴</a></li>
+            <li><a href="#">联系我们</a></li>
+            <li><a href="#">隐私政策</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>© 2026 特殊学校公益展示网站 · 本页面数据为演示用途</p>
+        <p>让善意可见，让温暖可及</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // =========================================================
+    // 捐赠公示数据大屏 · 交互脚本
+    // =========================================================
+
+    // 演示数据（源自 seed.py）
+    const SCHOOLS = [
+      { id: 1, name: '杭州市启明星特殊教育学校' },
+      { id: 2, name: '上海市阳光自闭症康复中心' },
+      { id: 3, name: '广州市启聪聋哑学校' }
+    ];
+
+    const CLASSES = ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '七年级', '八年级', '九年级', '学校统一'];
+    const DONORS = ['张女士', '李明远', '王女士', '陈志强', '阿里巴巴公益基金', '腾讯公益基金会', '周博文', '赵女士', '刘建国', '林小姐', '杨女士', '大学生志愿者联盟', '沈先生', '黄女士', '恒生电子企业社', '马万里', '吴女士', '郑先生', '孙女士', '钱阿姨'];
+    const ITEMS = [
+      { name: '冬季校服', detail: '加厚棉质冬季校服', qty: '200套', amount: 30000 },
+      { name: '儿童绘本', detail: '精选儿童绘本200册', qty: '200册', amount: 8000 },
+      { name: '美术教具套装', detail: '画笔+颜料+纸张套装', qty: '150套', amount: 12000 },
+      { name: '电子琴', detail: 'YAMAHA PSR系列电子琴', qty: '10台', amount: 15000 },
+      { name: '感统训练设备', detail: '综合感统训练器材套件', qty: '1套', amount: 5000 },
+      { name: '多媒体教学设备', detail: '投影仪+音响+白板', qty: '1套', amount: 20000 },
+      { name: '文具用品', detail: '水彩笔+笔记本+铅笔+橡皮', qty: '100套', amount: 6000 },
+      { name: '冬季保暖品', detail: '毛绒手套+围巾+帽子', qty: '200套', amount: 4000 },
+      { name: '投影设备', detail: '高清教学投影仪', qty: '5台', amount: 25000 },
+      { name: '康复器械', detail: '专业康复训练组合器械', qty: '15套', amount: 7500 },
+      { name: '学生校服', detail: '春秋季学生统一校服套装', qty: '30套', amount: 18000 },
+      { name: '空调', detail: '冷暖两用壁挂式空调', qty: '6台', amount: 24000 },
+      { name: '电脑', detail: '台式学习电脑', qty: '10台', amount: 35000 },
+      { name: '图书角', detail: '班级图书角套装', qty: '20套', amount: 40000 }
+    ];
+    const STATUSES = ['received', 'distributing', 'completed'];
+    const STATUS_LABELS = {
+      received: '已接收',
+      distributing: '分发中',
+      completed: '已完成'
+    };
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function randomChoice(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function formatDate(daysAgo) {
+      const d = new Date();
+      d.setDate(d.getDate() - daysAgo);
+      return d.toISOString().split('T')[0];
+    }
+
+    // 生成 40 条捐赠记录
+    function generateDonations() {
+      const donations = [];
+      for (let i = 1; i <= 40; i++) {
+        const item = randomChoice(ITEMS);
+        const status = randomChoice(STATUSES);
+        const school = randomChoice(SCHOOLS);
+        const daysAgo = randomInt(1, 180);
+        donations.push({
+          id: i,
+          serial: i,
+          donor: randomChoice(DONORS),
+          itemName: item.name,
+          itemDetail: item.detail,
+          quantity: item.qty,
+          amount: Math.round(item.amount * (0.8 + Math.random() * 0.4)),
+          schoolId: school.id,
+          schoolName: school.name,
+          receivedClass: randomChoice(CLASSES),
+          status: status,
+          date: formatDate(daysAgo)
+        });
+      }
+      // 默认按日期倒序
+      return donations.sort((a, b) => new Date(b.date) - new Date(a.date));
+    }
+
+    let allDonations = generateDonations();
+    let currentDonations = [...allDonations];
+
+    // 渲染表格行
+    function renderTableRows(donations) {
+      const tbody = document.getElementById('donation-table-body');
+      tbody.innerHTML = '';
+      donations.forEach(d => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="cell-serial">${d.serial}</td>
+          <td>
+            <div class="cell-donor">
+              <span class="donor-avatar" aria-hidden="true">${d.donor.charAt(0)}</span>
+              <span class="donor-name">${d.donor}</span>
+            </div>
+          </td>
+          <td class="cell-item">
+            <div class="item-name">${d.itemName}</div>
+            <div class="item-detail">${d.itemDetail} · ${d.quantity}</div>
+          </td>
+          <td class="cell-meta">
+            <div class="meta-school">${d.schoolName}</div>
+            <div>${d.receivedClass}</div>
+          </td>
+          <td class="cell-date">${d.date}</td>
+          <td class="cell-status">
+            <span class="status-badge status-${d.status}">${STATUS_LABELS[d.status]}</span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // 渲染卡片
+    function renderCards(donations) {
+      const container = document.getElementById('donation-cards');
+      container.innerHTML = '';
+      donations.forEach((d, idx) => {
+        const card = document.createElement('article');
+        card.className = 'donation-card';
+        card.style.transitionDelay = `${(idx % 5) * 60}ms`;
+        card.innerHTML = `
+          <div class="donation-card-header">
+            <div class="donation-card-donor">
+              <span class="donor-avatar" aria-hidden="true">${d.donor.charAt(0)}</span>
+              <div>
+                <div class="donor-name">${d.donor}</div>
+                <div class="donor-item">${d.itemName} · ${d.quantity}</div>
+              </div>
+            </div>
+            <span class="status-badge status-${d.status}">${STATUS_LABELS[d.status]}</span>
+          </div>
+          <div class="donation-card-body">
+            <div class="donation-card-row">
+              <span class="donation-card-label">接收方</span>
+              <span class="donation-card-value">${d.schoolName}<br>${d.receivedClass}</span>
+            </div>
+            <div class="donation-card-row">
+              <span class="donation-card-label">日期</span>
+              <span class="donation-card-value" style="font-family:var(--font-mono);">${d.date}</span>
+            </div>
+            <div class="donation-card-row">
+              <span class="donation-card-label">物品详情</span>
+              <span class="donation-card-value">${d.itemDetail}</span>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderAll(donations) {
+      const empty = document.getElementById('empty-state');
+      if (donations.length === 0) {
+        document.getElementById('donation-cards').style.display = 'none';
+        document.querySelector('.donation-table-wrap').style.display = 'none';
+        empty.style.display = 'block';
+      } else {
+        document.getElementById('donation-cards').style.display = 'grid';
+        document.querySelector('.donation-table-wrap').style.display = 'block';
+        empty.style.display = 'none';
+        renderTableRows(donations);
+        renderCards(donations);
+        lucide.createIcons();
+      }
+    }
+
+    // 筛选逻辑
+    function applyFilters() {
+      const activeTag = document.querySelector('.filter-tag.is-active');
+      const schoolFilter = activeTag ? activeTag.dataset.filter : 'all';
+      const statusFilter = document.getElementById('status-select').value;
+      const sortValue = document.getElementById('sort-select').value;
+      const searchValue = document.getElementById('search-input').value.trim().toLowerCase();
+
+      let filtered = allDonations.filter(d => {
+        if (schoolFilter !== 'all' && d.schoolId !== parseInt(schoolFilter)) return false;
+        if (statusFilter && d.status !== statusFilter) return false;
+        if (searchValue) {
+          const text = `${d.donor} ${d.itemName} ${d.itemDetail}`.toLowerCase();
+          if (!text.includes(searchValue)) return false;
+        }
+        return true;
+      });
+
+      // 排序
+      switch (sortValue) {
+        case 'date_asc':
+          filtered.sort((a, b) => new Date(a.date) - new Date(b.date));
+          break;
+        case 'date_desc':
+          filtered.sort((a, b) => new Date(b.date) - new Date(a.date));
+          break;
+        case 'amount_asc':
+          filtered.sort((a, b) => a.amount - b.amount);
+          break;
+        case 'amount_desc':
+          filtered.sort((a, b) => b.amount - a.amount);
+          break;
+      }
+
+      // 重新编号
+      filtered.forEach((d, i) => d.serial = i + 1);
+      currentDonations = filtered;
+      renderAll(filtered);
+    }
+
+    function resetFilters() {
+      document.querySelectorAll('.filter-tag').forEach(tag => tag.classList.remove('is-active'));
+      document.querySelector('[data-filter="all"]').classList.add('is-active');
+      document.getElementById('status-select').value = '';
+      document.getElementById('sort-select').value = 'date_desc';
+      document.getElementById('search-input').value = '';
+      applyFilters();
+    }
+
+    // 事件绑定
+    document.querySelectorAll('.filter-tag').forEach(tag => {
+      tag.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tag').forEach(t => t.classList.remove('is-active'));
+        tag.classList.add('is-active');
+        applyFilters();
+      });
+    });
+
+    document.getElementById('status-select').addEventListener('change', applyFilters);
+    document.getElementById('sort-select').addEventListener('change', applyFilters);
+    document.getElementById('apply-filters').addEventListener('click', applyFilters);
+    document.getElementById('reset-filters').addEventListener('click', resetFilters);
+    document.getElementById('search-input').addEventListener('input', debounce(applyFilters, 250));
+
+    function debounce(fn, wait) {
+      let t;
+      return function(...args) {
+        clearTimeout(t);
+        t = setTimeout(() => fn.apply(this, args), wait);
+      };
+    }
+
+    // 数字滚动动画
+    function animateCounters() {
+      const counters = document.querySelectorAll('.kpi-value[data-target]');
+      counters.forEach(counter => {
+        const target = parseInt(counter.dataset.target, 10);
+        const prefix = counter.dataset.prefix || '';
+        const duration = 1500;
+        const start = performance.now();
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (prefersReduced) {
+          counter.textContent = prefix + target.toLocaleString();
+          return;
+        }
+
+        function update(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const ease = 1 - Math.pow(1 - progress, 3);
+          const current = Math.floor(ease * target);
+          counter.textContent = prefix + current.toLocaleString();
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+      });
+    }
+
+    // 滚动 reveal
+    function initReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+
+    // 移动菜单
+    function initMobileMenu() {
+      const toggle = document.querySelector('.mobile-menu-toggle');
+      const drawer = document.getElementById('mobile-drawer');
+      const overlay = document.getElementById('drawer-overlay');
+      const closeBtn = drawer.querySelector('.drawer-close');
+
+      function open() {
+        drawer.classList.add('is-open');
+        overlay.classList.add('is-visible');
+        toggle.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function close() {
+        drawer.classList.remove('is-open');
+        overlay.classList.remove('is-visible');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      toggle.addEventListener('click', open);
+      closeBtn.addEventListener('click', close);
+      overlay.addEventListener('click', close);
+
+      drawer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', close);
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && drawer.classList.contains('is-open')) close();
+      });
+    }
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      renderAll(currentDonations);
+      animateCounters();
+      initReveal();
+      initMobileMenu();
+    });
+  </script>
+</body>
+</html>

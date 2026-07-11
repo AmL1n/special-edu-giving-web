@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}{{ '编辑' if item else '新增' }}学校 - 特殊学校公益平台{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container-narrow">
+    <div class="section-header">
+      <p class="eyebrow">{{ '编辑' if item else '新增' }}学校</p>
+      <h1 style="font-size:var(--text-h2);">{{ item.name if item else '新增学校' }}</h1>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('admin.edit_school', school_id=item.id) if item else url_for('admin.new_school') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+          <div class="form-group">
+            <label class="form-label" for="name">学校名称 *</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ item.name if item else '' }}" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="location">地址</label>
+            <input type="text" class="form-control" id="location" name="location" value="{{ item.location if item else '' }}">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="description">学校简介</label>
+            <textarea class="form-textarea" id="description" name="description" rows="5">{{ item.description if item else '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cover_image">封面图片</label>
+            <input type="text" class="form-control image-url-input" id="cover_image" name="cover_image" value="{{ item.cover_image if item else '' }}" placeholder="可输入图片地址或点击下方上传">
+            <input type="file" class="image-upload-input" data-target="cover_image" accept="image/png,image/jpg,image/jpeg,image/gif,image/webp" aria-label="上传封面图片" style="margin-top:var(--space-3);">
+            <img id="preview_cover_image" class="image-preview" src="{{ item.cover_image if item else '' }}" alt="" style="margin-top:var(--space-3);max-width:240px;max-height:150px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--border-light);display:{{ 'block' if item and item.cover_image else 'none' }};">
+          </div>
+
+          <!-- 多媒体展示栏 -->
+          <div class="form-group media-gallery-group">
+            <label class="form-label">学校相册 / 视频</label>
+            <p class="form-help">支持上传多张图片或视频，可拖拽排序、选择展示栏目、添加说明文字。</p>
+
+            <input type="hidden" name="media_json" id="media_json" value='{{ item.media_json if item and item.media_json else "[]" }}'>
+
+            <div class="media-toolbar">
+              <select id="new_media_section" class="form-control form-control-sm" aria-label="选择媒体栏目">
+                <option value="gallery">校园相册</option>
+                <option value="activities">活动剪影</option>
+                <option value="donation_scene">捐赠现场</option>
+                <option value="classroom">课堂瞬间</option>
+              </select>
+              <label class="btn btn-secondary btn-sm" style="margin:0;">
+                上传图片 / 视频
+                <input type="file" id="media_upload_input" accept="image/png,image/jpg,image/jpeg,image/gif,image/webp,video/mp4,video/webm,video/quicktime" multiple aria-label="上传图片或视频" style="display:none;">
+              </label>
+            </div>
+
+            <div class="media-list" id="media_list">
+              <!-- JS 渲染媒体项 -->
+            </div>
+            <p class="media-empty" id="media_empty">暂无媒体，请点击上方按钮上传</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="student_count">学生人数</label>
+            <input type="number" class="form-control" id="student_count" name="student_count" value="{{ item.student_count if item else '0' }}">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="teacher_count">教师人数</label>
+            <input type="number" class="form-control" id="teacher_count" name="teacher_count" value="{{ item.teacher_count if item else '0' }}">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="founded_year">成立年份</label>
+            <input type="number" class="form-control" id="founded_year" name="founded_year" value="{{ item.founded_year if item else '' }}">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="contact_phone">联系电话</label>
+            <input type="text" class="form-control" id="contact_phone" name="contact_phone" value="{{ item.contact_phone if item else '' }}">
+          </div>
+
+          <div class="btn-group" style="margin-top:var(--space-8);">
+            <button type="submit" class="btn btn-primary">保存</button>
+            <a href="{{ url_for('admin.list_schools') }}" class="btn btn-secondary">取消</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.MEDIA_SECTIONS = {
+  gallery: '校园相册',
+  activities: '活动剪影',
+  donation_scene: '捐赠现场',
+  classroom: '课堂瞬间'
+};
+window.UPLOAD_URL = "{{ url_for('admin.upload') }}";
+window.MEDIA_ITEMS = {{ item.get_media() | tojson if item else '[]' }};
+</script>
+{% endblock %}

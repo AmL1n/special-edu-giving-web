@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}特殊学校公益展示{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}特殊学校公益展示平台，让每一份善意被看见。{% endblock %}">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <!-- App Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <a href="#main-content" class="sr-only">跳转到主要内容</a>
+
+  <!-- 顶部固定导航 -->
+  <header class="site-nav" id="siteNav">
+    <div class="container">
+      <a href="{{ url_for('main.index') }}" class="nav-logo" aria-label="特殊学校公益平台 首页">
+        <span class="nav-logo-mark" aria-hidden="true">
+          <i data-lucide="heart-handshake" style="width:18px;height:18px;"></i>
+        </span>
+        <span class="nav-logo-full">特殊学校公益平台</span>
+        <span class="nav-logo-short" aria-hidden="true">公益平台</span>
+      </a>
+
+      <nav class="nav-links" aria-label="主导航">
+        <a href="{{ url_for('main.index') }}" {% if request.endpoint == 'main.index' %}aria-current="page"{% endif %}>
+          <i data-lucide="home" style="width:16px;height:16px;" aria-hidden="true"></i>
+          首页
+        </a>
+        <a href="{{ url_for('main.school_detail', school_id=schools[0].id if schools else 1) }}" {% if request.endpoint == 'main.school_detail' %}aria-current="page"{% endif %}>
+          <i data-lucide="school" style="width:16px;height:16px;" aria-hidden="true"></i>
+          学校详情
+        </a>
+        <a href="{{ url_for('main.dashboard') }}" {% if request.endpoint == 'main.dashboard' %}aria-current="page"{% endif %}>
+          <i data-lucide="layout-dashboard" style="width:16px;height:16px;" aria-hidden="true"></i>
+          捐赠公示
+        </a>
+      </nav>
+
+      <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-sm nav-cta">
+        参与捐赠
+        <i data-lucide="arrow-right" style="width:16px;height:16px;" aria-hidden="true"></i>
+      </a>
+
+      <button type="button" class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navDrawer" aria-label="打开导航菜单">
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 移动端抽屉遮罩 -->
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+
+  <!-- 移动端导航抽屉 -->
+  <aside class="nav-drawer" id="navDrawer" aria-label="移动端导航">
+    <div class="drawer-header">
+      <span class="nav-logo">
+        <span class="nav-logo-mark" aria-hidden="true">
+          <i data-lucide="heart-handshake" style="width:18px;height:18px;"></i>
+        </span>
+        菜单
+      </span>
+      <button type="button" class="drawer-close" id="drawerClose" aria-label="关闭导航菜单">
+        <i data-lucide="x" style="width:20px;height:20px;" aria-hidden="true"></i>
+      </button>
+    </div>
+
+    <nav class="drawer-links" aria-label="移动端主导航">
+      <a href="{{ url_for('main.index') }}" {% if request.endpoint == 'main.index' %}aria-current="page"{% endif %}>
+        <i data-lucide="home" style="width:18px;height:18px;" aria-hidden="true"></i>
+        首页
+      </a>
+      <a href="{{ url_for('main.school_detail', school_id=schools[0].id if schools else 1) }}" {% if request.endpoint == 'main.school_detail' %}aria-current="page"{% endif %}>
+        <i data-lucide="school" style="width:18px;height:18px;" aria-hidden="true"></i>
+        学校详情
+      </a>
+      <a href="{{ url_for('main.dashboard') }}" {% if request.endpoint == 'main.dashboard' %}aria-current="page"{% endif %}>
+        <i data-lucide="layout-dashboard" style="width:18px;height:18px;" aria-hidden="true"></i>
+        捐赠公示
+      </a>
+    </nav>
+
+    <div class="drawer-cta">
+      <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary btn-full">
+        参与捐赠
+        <i data-lucide="arrow-right" style="width:16px;height:16px;" aria-hidden="true"></i>
+      </a>
+    </div>
+  </aside>
+
+  <!-- 主内容区 -->
+  <main id="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages" role="alert" aria-live="polite">
+          {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <p class="footer-brand-title">特殊学校公益平台</p>
+          <p class="footer-brand-desc">我们致力于为特殊教育学校搭建透明、高效的捐赠展示平台，让每一份善意都能被看见、被追踪、被感恩。本项目为大创实践作品，数据均为虚拟演示内容。</p>
+        </div>
+        <div class="footer-column">
+          <p class="footer-column-title">快速链接</p>
+          <ul class="footer-links">
+            <li><a href="{{ url_for('main.index') }}">首页</a></li>
+            <li><a href="{{ url_for('main.school_detail', school_id=schools[0].id if schools else 1) }}">学校详情</a></li>
+            <li><a href="{{ url_for('main.dashboard') }}">捐赠公示</a></li>
+            <li><a href="{% if session.get('admin_id') %}/admin/dashboard{% else %}/admin/login{% endif %}">管理后台</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <p class="footer-column-title">联系方式</p>
+          <ul class="footer-links">
+            <li><a href="mailto:contact@special-school.org">contact@special-school.org</a></li>
+            <li><a href="tel:4008889999">400-888-9999</a></li>
+            <li><span>浙江省杭州市西湖区</span></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <p class="footer-column-title">关注我们</p>
+          <ul class="footer-links">
+            <li><a href="#" target="_blank" rel="noopener noreferrer">微信公众号</a></li>
+            <li><a href="#" target="_blank" rel="noopener noreferrer">微博</a></li>
+            <li><a href="#" target="_blank" rel="noopener noreferrer">抖音</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 特殊学校公益平台 · 大创项目</span>
+        <span>用透明守护每一份善意</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  <script>
+    // 移动端抽屉与导航滚动阴影
+    (function () {
+      const toggle = document.getElementById('navToggle');
+      const closeBtn = document.getElementById('drawerClose');
+      const drawer = document.getElementById('navDrawer');
+      const overlay = document.getElementById('navOverlay');
+      const siteNav = document.getElementById('siteNav');
+
+      function setOpen(open) {
+        if (!drawer || !overlay || !toggle) return;
+        drawer.classList.toggle('is-open', open);
+        overlay.classList.toggle('is-open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+
+      toggle?.addEventListener('click', function () {
+        const isOpen = drawer?.classList.contains('is-open');
+        setOpen(!isOpen);
+      });
+
+      closeBtn?.addEventListener('click', function () {
+        setOpen(false);
+      });
+
+      overlay?.addEventListener('click', function () {
+        setOpen(false);
+      });
+
+      drawer?.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          setOpen(false);
+        });
+      });
+
+      window.addEventListener('resize', function () {
+        if (window.innerWidth >= 1024) setOpen(false);
+      });
+
+      // 导航滚动阴影
+      function onScroll() {
+        if (siteNav) {
+          siteNav.classList.toggle('is-scrolled', window.scrollY > 4);
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // 初始化 Lucide 图标
+      if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+      }
+    })();
+  </script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

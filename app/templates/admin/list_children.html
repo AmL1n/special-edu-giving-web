@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}学生管理 - 特殊学校公益平台{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container-wide">
+    <div class="section-header flex justify-between items-center" style="flex-wrap:wrap;gap:var(--space-4);">
+      <div>
+        <p class="eyebrow">数据管理</p>
+        <h1>受助学生</h1>
+      </div>
+      <a href="{{ url_for('admin.new_child') }}" class="btn btn-primary btn-sm">新增学生</a>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>所属学校</th>
+            <th>兴趣标签</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for child in children %}
+          <tr>
+            <td class="font-mono">{{ child.id }}</td>
+            <td><strong>{{ child.name }}</strong></td>
+            <td>{{ child.age or '-' }} 岁</td>
+            <td>{{ child.school.name if child.school else '-' }}</td>
+            <td>
+              {% if child.tags %}
+                {% for tag in child.tags.split(',') %}
+                  <span class="tag tag-gold" style="margin-right:var(--space-1);">{{ tag }}</span>
+                {% endfor %}
+              {% else %}
+                -
+              {% endif %}
+            </td>
+            <td>
+              <div class="flex gap-2" style="flex-wrap:wrap;">
+                <a href="{{ url_for('admin.edit_child', child_id=child.id) }}" class="btn btn-sm btn-secondary">编辑</a>
+                <form method="POST" action="{{ url_for('admin.delete_child', child_id=child.id) }}" style="display:inline;">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                  <button type="submit" class="btn btn-sm btn-outline" onclick="return confirm('确定删除吗？该操作不可恢复。')">删除</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="6" class="text-center" style="padding:var(--space-10);color:var(--text-muted);">暂无数据</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-6">
+      <a href="{{ url_for('admin.dashboard') }}">&larr; 返回概览</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

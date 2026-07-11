@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}动态管理 - 特殊学校公益平台{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container-wide">
+    <div class="section-header flex justify-between items-center" style="flex-wrap:wrap;gap:var(--space-4);">
+      <div>
+        <p class="eyebrow">数据管理</p>
+        <h1>校园动态</h1>
+      </div>
+      <a href="{{ url_for('admin.new_post') }}" class="btn btn-primary btn-sm">新增动态</a>
+    </div>
+
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>标题</th>
+            <th>所属学校</th>
+            <th>类型</th>
+            <th>发布时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for post in posts %}
+          <tr>
+            <td class="font-mono">{{ post.id }}</td>
+            <td><strong>{{ post.title or '(无标题)' }}</strong></td>
+            <td>{{ post.school.name if post.school else '-' }}</td>
+            <td>
+              {% if post.post_type == 'daily' %}
+                <span class="tag tag-navy">日常</span>
+              {% elif post.post_type == 'distribution' %}
+                <span class="tag tag-green">捐赠分发</span>
+              {% else %}
+                <span class="tag">{{ post.post_type or '-' }}</span>
+              {% endif %}
+            </td>
+            <td>{{ post.created_at.strftime('%Y-%m-%d') if post.created_at else '-' }}</td>
+            <td>
+              <div class="flex gap-2" style="flex-wrap:wrap;">
+                <a href="{{ url_for('admin.edit_post', post_id=post.id) }}" class="btn btn-sm btn-secondary">编辑</a>
+                <form method="POST" action="{{ url_for('admin.delete_post', post_id=post.id) }}" style="display:inline;">
+                  <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                  <button type="submit" class="btn btn-sm btn-outline" onclick="return confirm('确定删除这条动态吗？')">删除</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="6" class="text-center" style="padding:var(--space-10);color:var(--text-muted);">暂无数据</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-6">
+      <a href="{{ url_for('admin.dashboard') }}">&larr; 返回概览</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

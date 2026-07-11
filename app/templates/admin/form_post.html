@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}{{ '编辑' if item else '新增' }}动态 - 特殊学校公益平台{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container-narrow">
+    <div class="section-header">
+      <p class="eyebrow">{{ '编辑' if item else '新增' }}动态</p>
+      <h1 style="font-size:var(--text-h2);">{{ item.title if item else '新增校园动态' }}</h1>
+    </div>
+
+    <div class="card">
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('admin.edit_post', post_id=item.id) if item else url_for('admin.new_post') }}">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+          <div class="form-group">
+            <label class="form-label" for="school_id">所属学校 *</label>
+            <select class="form-select" id="school_id" name="school_id" required>
+              <option value="">请选择学校</option>
+              {% for school in schools %}
+                <option value="{{ school.id }}" {% if item and item.school_id == school.id %}selected{% endif %}>{{ school.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="title">标题</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{ item.title if item else '' }}">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="post_type">动态类型</label>
+            <select class="form-select" id="post_type" name="post_type">
+              <option value="daily" {% if item and item.post_type == 'daily' %}selected{% endif %}>日常记录</option>
+              <option value="distribution" {% if item and item.post_type == 'distribution' %}selected{% endif %}>捐赠分发</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="content">内容</label>
+            <textarea class="form-textarea" id="content" name="content" rows="6">{{ item.content if item else '' }}</textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="image_url">主配图</label>
+            <input type="text" class="form-control image-url-input" id="image_url" name="image_url" value="{{ item.image_url if item else '' }}" placeholder="可输入图片地址或点击下方上传">
+            <input type="file" class="image-upload-input" data-target="image_url" accept="image/png,image/jpg,image/jpeg,image/gif,image/webp" aria-label="上传主配图" style="margin-top:var(--space-3);">
+            <img id="preview_image_url" class="image-preview" src="{{ item.image_url if item else '' }}" alt="" style="margin-top:var(--space-3);max-width:240px;max-height:150px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--border-light);display:{{ 'block' if item and item.image_url else 'none' }};">
+          </div>
+
+          <!-- 多媒体展示栏 -->
+          <div class="form-group media-gallery-group">
+            <label class="form-label">更多图片 / 视频</label>
+            <p class="form-help">支持上传多张图片或视频，作为动态的扩展展示。</p>
+
+            <input type="hidden" name="media_json" id="media_json" value='{{ item.media_json if item and item.media_json else "[]" }}'>
+
+            <div class="media-toolbar">
+              <select id="new_media_section" class="form-control form-control-sm" aria-label="选择媒体栏目">
+                <option value="gallery">更多现场</option>
+                <option value="featured">精选展示</option>
+                <option value="video_clip">视频片段</option>
+              </select>
+              <label class="btn btn-secondary btn-sm" style="margin:0;">
+                上传图片 / 视频
+                <input type="file" id="media_upload_input" accept="image/png,image/jpg,image/jpeg,image/gif,image/webp,video/mp4,video/webm,video/quicktime" multiple aria-label="上传图片或视频" style="display:none;">
+              </label>
+            </div>
+
+            <div class="media-list" id="media_list">
+              <!-- JS 渲染媒体项 -->
+            </div>
+            <p class="media-empty" id="media_empty">暂无媒体，请点击上方按钮上传</p>
+          </div>
+
+          <div class="btn-group" style="margin-top:var(--space-8);">
+            <button type="submit" class="btn btn-primary">保存</button>
+            <a href="{{ url_for('admin.list_posts') }}" class="btn btn-secondary">取消</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+window.MEDIA_SECTIONS = {
+  gallery: '更多现场',
+  featured: '精选展示',
+  video_clip: '视频片段'
+};
+window.UPLOAD_URL = "{{ url_for('admin.upload') }}";
+window.MEDIA_ITEMS = {{ item.get_media() | tojson if item else '[]' }};
+</script>
+{% endblock %}

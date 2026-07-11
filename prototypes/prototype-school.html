@@ -1,0 +1,1883 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="杭州市启明星特殊教育学校详情页，展示学校简介、日常动态、捐赠公示与学生风采。">
+  <title>杭州市启明星特殊教育学校 · 学校详情</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23A13D2D'/%3E%3Cpath d='M16 8c-3.5 0-6.2 2.6-6.2 6 0 3.8 3.1 8.2 6.2 10 3.1-1.8 6.2-6.2 6.2-10C22.2 10.6 19.5 8 16 8z' fill='%23fff'/%3E%3C/svg%3E">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  <style>
+    /* ============================================================
+       Design Tokens — 温润人文 · 高级杂志诗学
+       严格引用 design-system.md 变量，禁止硬编码色值
+       ============================================================ */
+    :root {
+      /* Primitive Colors */
+      --color-ink-900: #1C1A18;
+      --color-ink-800: #2E2C29;
+      --color-ink-700: #4A4743;
+      --color-ink-600: #6B6560;
+      --color-ink-500: #8D867F;
+      --color-ink-400: #A09990;
+      --color-ink-300: #C4BEB6;
+      --color-ink-200: #DDD7CF;
+      --color-ink-100: #EDE8E0;
+      --color-ink-50:  #F7F5F0;
+      --color-paper:   #FAF8F5;
+
+      --color-terracotta-900: #5C2419;
+      --color-terracotta-800: #7A2F21;
+      --color-terracotta-700: #983B2A;
+      --color-terracotta-600: #A13D2D;
+      --color-terracotta-500: #B85A49;
+      --color-terracotta-400: #CD7D6E;
+      --color-terracotta-300: #E2A99E;
+      --color-terracotta-200: #F0D0CA;
+      --color-terracotta-100: #F9EBE8;
+      --color-terracotta-50:  #FDF7F6;
+
+      --color-moss-900: #1A2E26;
+      --color-moss-800: #243F34;
+      --color-moss-700: #2E4A3E;
+      --color-moss-600: #3D6353;
+      --color-moss-500: #527A68;
+      --color-moss-400: #7A9E8D;
+      --color-moss-300: #A8C4B8;
+      --color-moss-200: #D2E2D9;
+      --color-moss-100: #EAF3EE;
+      --color-moss-50:  #F5F9F7;
+
+      --color-gold-600: #A67C34;
+      --color-gold-500: #C4943F;
+      --color-gold-400: #D4A056;
+      --color-gold-300: #E3BE84;
+      --color-gold-200: #F0DAB2;
+      --color-gold-100: #F9F0E0;
+
+      --color-success: #3D6353;
+      --color-success-bg: #EAF3EE;
+      --color-warning: #C4943F;
+      --color-warning-bg: #F9F0E0;
+      --color-error: #B85A49;
+      --color-error-bg: #F9EBE8;
+      --color-info: #527A68;
+      --color-info-bg: #F5F9F7;
+
+      /* Semantic Colors */
+      --bg-page: var(--color-paper);
+      --bg-section: var(--color-ink-50);
+      --bg-card: #FFFFFF;
+      --bg-hero: var(--color-paper);
+      --bg-footer: var(--color-ink-900);
+
+      --text-primary: var(--color-ink-900);
+      --text-secondary: var(--color-ink-600);
+      --text-muted: var(--color-ink-400);
+      --text-inverse: #FFFFFF;
+      --text-link: var(--color-terracotta-700);
+      --text-link-hover: var(--color-terracotta-900);
+
+      --color-primary: var(--color-terracotta-600);
+      --color-primary-hover: var(--color-terracotta-700);
+      --color-primary-active: var(--color-terracotta-800);
+      --color-primary-bg: var(--color-terracotta-100);
+      --color-primary-subtle: rgba(161, 61, 45, 0.08);
+
+      --color-secondary: var(--color-moss-700);
+      --color-secondary-hover: var(--color-moss-800);
+      --color-secondary-bg: var(--color-moss-100);
+      --color-secondary-subtle: rgba(46, 74, 62, 0.08);
+
+      --color-accent: var(--color-gold-400);
+      --color-accent-bg: var(--color-gold-100);
+
+      --border-default: var(--color-ink-200);
+      --border-light: var(--color-ink-100);
+      --border-inverse: rgba(255, 255, 255, 0.12);
+
+      /* Typography */
+      --font-display: "Noto Serif SC", "Source Han Serif SC", "STSong", Georgia, serif;
+      --font-body: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      --font-sans: "Inter", "Noto Sans SC", sans-serif;
+      --font-mono: "JetBrains Mono", "SF Mono", Consolas, monospace;
+
+      --text-hero: clamp(2.75rem, 5vw, 4.5rem);
+      --text-h1: clamp(2rem, 4vw, 3.5rem);
+      --text-h2: clamp(1.5rem, 3vw, 2.5rem);
+      --text-h3: clamp(1.25rem, 2vw, 1.75rem);
+      --text-h4: 1.125rem;
+      --text-body: 1rem;
+      --text-body-lg: 1.125rem;
+      --text-body-sm: 0.875rem;
+      --text-caption: 0.75rem;
+      --text-data: 2rem;
+
+      /* Spacing */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      --space-16: 64px;
+      --space-20: 80px;
+      --space-24: 96px;
+      --space-32: 128px;
+
+      /* Container */
+      --container-max: 1200px;
+      --container-padding: 24px;
+      --container-padding-md: 48px;
+      --container-padding-lg: 64px;
+
+      /* Radius */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --radius-full: 9999px;
+
+      /* Shadow */
+      --shadow-xs: 0 1px 2px rgba(28, 26, 24, 0.04);
+      --shadow-sm: 0 2px 8px rgba(28, 26, 24, 0.06);
+      --shadow-md: 0 8px 24px rgba(28, 26, 24, 0.08);
+      --shadow-lg: 0 16px 48px rgba(28, 26, 24, 0.10);
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --duration-fast: 150ms;
+      --duration-normal: 250ms;
+      --duration-slow: 400ms;
+
+      /* Breakpoints (reference only) */
+      --bp-sm: 375px;
+      --bp-md: 768px;
+      --bp-lg: 1024px;
+      --bp-xl: 1440px;
+
+      /* Layout */
+      --nav-height: 56px;
+      --nav-height-lg: 72px;
+    }
+
+    /* Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-page);
+      color: var(--text-primary);
+      line-height: 1.7;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-top: var(--nav-height);
+    }
+
+    @media (min-width: 1024px) {
+      body { padding-top: var(--nav-height-lg); }
+    }
+
+    ::selection {
+      background: var(--color-primary-subtle);
+      color: var(--color-primary);
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    a {
+      color: var(--text-link);
+      text-decoration: none;
+      transition: color var(--duration-fast) var(--ease-out);
+    }
+
+    a:hover { color: var(--text-link-hover); }
+
+    a:focus-visible,
+    button:focus-visible,
+    select:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    h4, h5, h6 {
+      font-family: var(--font-body);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    h1 { font-size: var(--text-h1); }
+    h2 { font-size: var(--text-h2); }
+    h3 { font-size: var(--text-h3); }
+    h4 { font-size: var(--text-h4); }
+
+    p {
+      font-family: var(--font-body);
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+
+    .eyebrow {
+      font-family: var(--font-sans);
+      font-size: var(--text-caption);
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-primary);
+    }
+
+    .font-mono { font-family: var(--font-mono); }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: var(--container-max);
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: var(--container-padding);
+      padding-right: var(--container-padding);
+    }
+
+    @media (min-width: 768px) {
+      .container {
+        padding-left: var(--container-padding-md);
+        padding-right: var(--container-padding-md);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .container {
+        padding-left: var(--container-padding-lg);
+        padding-right: var(--container-padding-lg);
+      }
+    }
+
+    /* Top Navigation */
+    .site-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background: rgba(250, 248, 245, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-light);
+      z-index: 1000;
+      transition: box-shadow var(--duration-normal) var(--ease-out);
+    }
+
+    .site-nav.is-scrolled {
+      box-shadow: var(--shadow-sm);
+    }
+
+    @media (min-width: 1024px) {
+      .site-nav { height: var(--nav-height-lg); }
+    }
+
+    .site-nav-inner {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .nav-logo-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      background: var(--color-primary);
+      color: var(--text-inverse);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (min-width: 1024px) {
+      .nav-logo { font-size: 1.15rem; }
+      .nav-logo-mark { width: 36px; height: 36px; }
+    }
+
+    .nav-menu {
+      display: none;
+      list-style: none;
+      align-items: center;
+      gap: var(--space-2);
+    }
+
+    @media (min-width: 1024px) {
+      .nav-menu { display: flex; }
+    }
+
+    .nav-menu a {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-4);
+      border-radius: var(--radius-full);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      position: relative;
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+
+    .nav-menu a:hover {
+      color: var(--text-primary);
+      background: var(--color-ink-50);
+    }
+
+    .nav-menu a[aria-current="page"] {
+      color: var(--color-primary);
+      background: var(--color-primary-subtle);
+      font-weight: 600;
+    }
+
+    .nav-cta {
+      display: none;
+    }
+
+    @media (min-width: 1024px) {
+      .nav-cta { display: inline-flex; }
+    }
+
+    /* Mobile Nav Toggle */
+    .nav-toggle {
+      width: 44px;
+      height: 44px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      border-radius: var(--radius-md);
+      transition: background var(--duration-fast) var(--ease-out);
+    }
+
+    .nav-toggle:hover { background: var(--color-ink-50); }
+
+    @media (min-width: 1024px) {
+      .nav-toggle { display: none; }
+    }
+
+    .nav-toggle span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--text-primary);
+      border-radius: 2px;
+      transition: transform var(--duration-fast) var(--ease-out), opacity var(--duration-fast) var(--ease-out);
+    }
+
+    .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Mobile Drawer */
+    .nav-drawer {
+      position: fixed;
+      top: var(--nav-height);
+      right: 0;
+      bottom: 0;
+      width: min(320px, 85vw);
+      background: var(--bg-card);
+      border-left: 1px solid var(--border-light);
+      padding: var(--space-6);
+      transform: translateX(100%);
+      transition: transform var(--duration-normal) var(--ease-out);
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .nav-drawer.is-open { transform: translateX(0); }
+
+    @media (min-width: 1024px) {
+      .nav-drawer { display: none; }
+    }
+
+    .nav-drawer-menu {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      flex: 1;
+    }
+
+    .nav-drawer-menu a {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+
+    .nav-drawer-menu a:hover {
+      color: var(--text-primary);
+      background: var(--color-ink-50);
+    }
+
+    .nav-drawer-menu a[aria-current="page"] {
+      color: var(--color-primary);
+      background: var(--color-primary-subtle);
+      font-weight: 600;
+    }
+
+    .nav-overlay {
+      position: fixed;
+      inset: var(--nav-height) 0 0 0;
+      background: rgba(28, 26, 24, 0.35);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity var(--duration-normal) var(--ease-out), visibility var(--duration-normal) var(--ease-out);
+      z-index: 999;
+    }
+
+    .nav-overlay.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    @media (min-width: 1024px) {
+      .nav-overlay { display: none; }
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: 14px 28px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.9375rem;
+      line-height: 1;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease-out;
+      text-decoration: none;
+      min-height: 48px;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--color-primary);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-hover);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      color: #FFFFFF;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+      background: var(--color-primary-active);
+    }
+
+    .btn-secondary {
+      background: var(--color-ink-100);
+      color: var(--text-primary);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-ink-200);
+      color: var(--text-primary);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--border-default);
+      color: var(--text-primary);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .btn-sm { padding: 10px 22px; font-size: 0.875rem; min-height: 40px; }
+    .btn-lg { padding: 18px 40px; font-size: 1.05rem; }
+    .btn-full { width: 100%; }
+
+    .btn .arrow {
+      display: inline-block;
+      transition: transform var(--duration-fast) var(--ease-out);
+    }
+
+    .btn:hover .arrow { transform: translateX(4px); }
+
+    /* Tags & Badges */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      line-height: 1;
+      background: var(--color-primary-subtle);
+      color: var(--color-primary);
+    }
+
+    .tag-moss {
+      background: var(--color-secondary-subtle);
+      color: var(--color-secondary);
+    }
+
+    .tag-gold {
+      background: var(--color-accent-bg);
+      color: var(--color-gold-600);
+    }
+
+    .tag-navy {
+      background: rgba(62, 92, 118, 0.1);
+      color: var(--color-info);
+    }
+
+    .tag-green {
+      background: var(--color-success-bg);
+      color: var(--color-success);
+    }
+
+    .tag-interactive {
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: all var(--duration-fast) var(--ease-out);
+    }
+
+    .tag-interactive:hover,
+    .tag-interactive.is-active {
+      border-color: currentColor;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.8125rem;
+      font-weight: 500;
+    }
+
+    .badge-received { background: var(--color-secondary-bg); color: var(--color-secondary); }
+    .badge-distributing { background: var(--color-warning-bg); color: var(--color-warning); }
+    .badge-completed { background: var(--color-success-bg); color: var(--color-success); }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+    }
+
+    .badge-received .badge-dot { background: var(--color-secondary); }
+    .badge-distributing .badge-dot { background: var(--color-warning); }
+    .badge-completed .badge-dot { background: var(--color-success); }
+
+    /* Hero */
+    .detail-hero {
+      position: relative;
+      width: 100%;
+      height: 360px;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .detail-hero { height: 420px; }
+    }
+
+    @media (min-width: 1024px) {
+      .detail-hero { height: 480px; }
+    }
+
+    .detail-hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .detail-hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        180deg,
+        rgba(28, 26, 24, 0) 35%,
+        rgba(28, 26, 24, 0.45) 70%,
+        rgba(28, 26, 24, 0.78) 100%
+      );
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: var(--space-8) var(--container-padding);
+    }
+
+    @media (min-width: 768px) {
+      .detail-hero-overlay {
+        padding-left: var(--container-padding-md);
+        padding-right: var(--container-padding-md);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .detail-hero-overlay {
+        padding-left: var(--container-padding-lg);
+        padding-right: var(--container-padding-lg);
+      }
+    }
+
+    .detail-hero-content {
+      width: 100%;
+      max-width: var(--container-max);
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .detail-hero h1 {
+      color: var(--text-inverse);
+      font-size: clamp(1.75rem, 4vw, 2.8rem);
+      margin-bottom: var(--space-2);
+      text-shadow: 0 2px 12px rgba(28, 26, 24, 0.25);
+    }
+
+    .detail-hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-3);
+      color: rgba(255, 255, 255, 0.88);
+      font-size: 0.9375rem;
+    }
+
+    .detail-hero-meta .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Layout */
+    .detail-section {
+      padding-top: var(--space-12);
+      padding-bottom: var(--space-16);
+    }
+
+    @media (min-width: 1024px) {
+      .detail-section {
+        padding-top: var(--space-16);
+        padding-bottom: var(--space-24);
+      }
+    }
+
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-10);
+    }
+
+    @media (min-width: 1024px) {
+      .detail-layout {
+        grid-template-columns: 1fr 340px;
+        gap: var(--space-12);
+      }
+    }
+
+    @media (min-width: 1440px) {
+      .detail-layout { gap: var(--space-16); }
+    }
+
+    .detail-main { min-width: 0; }
+
+    /* Intro */
+    .school-intro {
+      margin-bottom: var(--space-10);
+    }
+
+    .school-intro h2 {
+      font-size: var(--text-h3);
+      margin-bottom: var(--space-4);
+    }
+
+    .school-intro p {
+      font-size: var(--text-body-lg);
+      line-height: 1.85;
+      color: var(--text-secondary);
+    }
+
+    /* Tabs */
+    .detail-tabs {
+      display: flex;
+      gap: var(--space-1);
+      margin-bottom: var(--space-8);
+      padding: var(--space-1);
+      background: var(--bg-section);
+      border-radius: var(--radius-full);
+      width: fit-content;
+      max-width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .detail-tabs::-webkit-scrollbar { display: none; }
+
+    .detail-tab {
+      flex-shrink: 0;
+      padding: 10px 20px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-out);
+      min-height: 44px;
+    }
+
+    @media (min-width: 768px) {
+      .detail-tab { padding: 10px 24px; }
+    }
+
+    .detail-tab:hover:not([aria-selected="true"]) {
+      color: var(--text-primary);
+    }
+
+    .detail-tab[aria-selected="true"] {
+      background: var(--bg-card);
+      color: var(--text-primary);
+      box-shadow: var(--shadow-xs);
+      font-weight: 600;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.is-active { display: block; }
+
+    /* Masonry Posts */
+    .masonry {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    @media (min-width: 768px) {
+      .masonry { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (min-width: 1024px) {
+      .masonry { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .masonry-item {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+    }
+
+    .masonry-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .masonry-image-wrap {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background: var(--bg-section);
+    }
+
+    .masonry-image-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s var(--ease-out);
+    }
+
+    .masonry-item:hover .masonry-image-wrap img { transform: scale(1.04); }
+
+    .masonry-type-tag {
+      position: absolute;
+      top: var(--space-3);
+      left: var(--space-3);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .masonry-item-body { padding: var(--space-5); }
+
+    .post-date {
+      font-size: var(--text-caption);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: var(--space-2);
+    }
+
+    .masonry-item h4 {
+      font-family: var(--font-body);
+      font-size: var(--text-h4);
+      font-weight: 600;
+      line-height: 1.4;
+      margin-bottom: var(--space-2);
+      color: var(--text-primary);
+    }
+
+    .masonry-item p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Donation Filter */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-6);
+      padding: var(--space-4);
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+    }
+
+    .filter-bar-label {
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      color: var(--text-secondary);
+      flex-shrink: 0;
+    }
+
+    .filter-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+    }
+
+    /* Donation List */
+    .donation-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .donation-card {
+      display: grid;
+      grid-template-columns: 40px 1fr auto;
+      gap: var(--space-4);
+      align-items: center;
+      padding: var(--space-4);
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-md);
+      transition: background var(--duration-fast) var(--ease-out);
+    }
+
+    @media (min-width: 768px) {
+      .donation-card {
+        grid-template-columns: 48px 1fr 140px 120px;
+        padding: var(--space-5);
+      }
+    }
+
+    .donation-card:hover { background: var(--color-ink-50); }
+
+    .donation-serial {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--bg-section);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    @media (min-width: 768px) {
+      .donation-serial { width: 40px; height: 40px; }
+    }
+
+    .donation-info .donor {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .donation-info .item {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .donation-meta {
+      display: none;
+      font-size: var(--text-body-sm);
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    @media (min-width: 768px) {
+      .donation-meta { display: block; }
+    }
+
+    .donation-status {
+      justify-self: end;
+    }
+
+    .donation-empty {
+      display: none;
+      text-align: center;
+      padding: var(--space-12) var(--space-6);
+      color: var(--text-muted);
+    }
+
+    .donation-empty.is-visible { display: block; }
+
+    /* Children Grid */
+    .children-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+    }
+
+    @media (min-width: 768px) {
+      .children-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .child-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      padding: var(--space-8) var(--space-6) var(--space-6);
+      text-align: center;
+      transition: transform var(--duration-normal) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .child-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .child-avatar {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto var(--space-5);
+      border: 3px solid var(--border-light);
+      background: var(--bg-section);
+    }
+
+    .child-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .child-name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: var(--space-1);
+    }
+
+    .child-age {
+      font-size: var(--text-body-sm);
+      color: var(--text-muted);
+      margin-bottom: var(--space-3);
+    }
+
+    .child-bio {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: var(--space-3);
+    }
+
+    .child-quote {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--color-primary);
+      line-height: 1.6;
+      margin-bottom: var(--space-4);
+      padding: 0 var(--space-2);
+    }
+
+    .child-tags {
+      display: flex;
+      gap: var(--space-2);
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* Sidebar */
+    .detail-sidebar {
+      order: -1;
+    }
+
+    @media (min-width: 1024px) {
+      .detail-sidebar {
+        order: 0;
+        position: sticky;
+        top: calc(var(--nav-height-lg) + var(--space-6));
+        align-self: start;
+      }
+    }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-light);
+      padding: var(--space-6);
+    }
+
+    @media (min-width: 1024px) {
+      .sidebar-card { padding: var(--space-8); }
+    }
+
+    .sidebar-card h3 {
+      font-family: var(--font-body);
+      font-size: var(--text-h4);
+      font-weight: 600;
+      margin-bottom: var(--space-5);
+      color: var(--text-primary);
+    }
+
+    .school-switcher {
+      margin-bottom: var(--space-5);
+      padding-bottom: var(--space-5);
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .form-label {
+      display: block;
+      font-size: var(--text-body-sm);
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: var(--space-2);
+    }
+
+    .form-select {
+      width: 100%;
+      padding: 12px 40px 12px 16px;
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-sm);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: var(--text-body);
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236B6560' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+      min-height: 48px;
+    }
+
+    .form-select:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px var(--color-primary-subtle);
+    }
+
+    .sidebar-stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: var(--space-3) 0;
+      border-bottom: 1px solid var(--border-light);
+      font-size: 0.9375rem;
+    }
+
+    .sidebar-stat-row:last-of-type { border-bottom: none; }
+
+    .sidebar-stat-row .key { color: var(--text-secondary); }
+    .sidebar-stat-row .val {
+      font-weight: 600;
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+    }
+
+    .sidebar-cta {
+      margin-top: var(--space-6);
+    }
+
+    .sidebar-note {
+      margin-top: var(--space-4);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--border-light);
+      font-size: var(--text-caption);
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--bg-footer);
+      color: rgba(255, 255, 255, 0.7);
+      padding: var(--space-16) 0 var(--space-8);
+      margin-top: var(--space-16);
+    }
+
+    @media (min-width: 1024px) {
+      .footer { margin-top: var(--space-24); }
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+      margin-bottom: var(--space-12);
+    }
+
+    @media (min-width: 768px) {
+      .footer-grid { grid-template-columns: 2fr 1fr 1fr; }
+    }
+
+    @media (min-width: 1024px) {
+      .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
+    }
+
+    .footer h3 {
+      color: var(--text-inverse);
+      font-family: var(--font-body);
+      font-size: var(--text-body);
+      font-weight: 600;
+      margin-bottom: var(--space-4);
+    }
+
+    .footer p {
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.88rem;
+      transition: color var(--duration-fast) var(--ease-out);
+    }
+
+    .footer-links a:hover { color: var(--text-inverse); }
+
+    .footer-bottom {
+      border-top: 1px solid var(--border-inverse);
+      padding-top: var(--space-6);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+      font-size: var(--text-caption);
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    @media (min-width: 768px) {
+      .footer-bottom {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+    }
+
+    /* Scroll Reveal Animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity var(--duration-slow) var(--ease-out), transform var(--duration-slow) var(--ease-out);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .masonry-item,
+      .child-card,
+      .donation-card,
+      .btn,
+      .tag-interactive,
+      .masonry-image-wrap img,
+      .school-switcher,
+      .sidebar-card {
+        transition: none;
+      }
+
+      .masonry-item:hover,
+      .child-card:hover,
+      .donation-card:hover {
+        transform: none;
+      }
+    }
+
+    /* Utility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 顶部固定导航 -->
+  <header class="site-nav" id="siteNav" role="banner">
+    <div class="container site-nav-inner">
+      <a href="index.html" class="nav-logo" aria-label="特殊学校公益平台首页">
+        <span class="nav-logo-mark" aria-hidden="true">
+          <i data-lucide="heart-handshake" style="width:18px;height:18px;"></i>
+        </span>
+        <span>特殊学校公益平台</span>
+      </a>
+
+      <nav class="nav-menu" aria-label="主导航">
+        <a href="index.html"><i data-lucide="home" style="width:16px;height:16px;"></i> 首页</a>
+        <a href="prototype-school.html" aria-current="page"><i data-lucide="school" style="width:16px;height:16px;"></i> 学校详情</a>
+        <a href="prototype-dashboard.html"><i data-lucide="bar-chart-3" style="width:16px;height:16px;"></i> 捐赠公示</a>
+      </nav>
+
+      <a href="prototype-dashboard.html" class="btn btn-primary btn-sm nav-cta">
+        参与捐赠 <span class="arrow" aria-hidden="true">→</span>
+      </a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="打开导航菜单" aria-expanded="false" aria-controls="navDrawer">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 移动端抽屉导航 -->
+  <div class="nav-overlay" id="navOverlay" aria-hidden="true"></div>
+  <aside class="nav-drawer" id="navDrawer" aria-label="移动端导航">
+    <nav class="nav-drawer-menu" aria-label="移动端主导航">
+      <a href="index.html"><i data-lucide="home" style="width:18px;height:18px;"></i> 首页</a>
+      <a href="prototype-school.html" aria-current="page"><i data-lucide="school" style="width:18px;height:18px;"></i> 学校详情</a>
+      <a href="prototype-dashboard.html"><i data-lucide="bar-chart-3" style="width:18px;height:18px;"></i> 捐赠公示</a>
+    </nav>
+    <a href="prototype-dashboard.html" class="btn btn-primary btn-full">
+      参与捐赠 <span class="arrow" aria-hidden="true">→</span>
+    </a>
+  </aside>
+
+  <main id="main-content">
+    <!-- 学校 Hero -->
+    <section class="detail-hero" aria-labelledby="school-name">
+      <img src="https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600&q=85" alt="杭州市启明星特殊教育学校教学楼与户外活动空间">
+      <div class="detail-hero-overlay">
+        <div class="detail-hero-content">
+          <p class="eyebrow" style="color: rgba(255,255,255,0.85); margin-bottom: var(--space-2);">学校详情</p>
+          <h1 id="school-name">杭州市启明星特殊教育学校</h1>
+          <div class="detail-hero-meta">
+            <span><i data-lucide="map-pin" style="width:14px;height:14px; vertical-align:-2px; margin-right:4px;" aria-hidden="true"></i>浙江省杭州市西湖区文二西路268号</span>
+            <span class="dot" aria-hidden="true"></span>
+            <span>创校 2008 年</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 主体内容 -->
+    <section class="detail-section">
+      <div class="container">
+        <div class="detail-layout">
+          <div class="detail-main">
+            <!-- 学校简介 -->
+            <div class="school-intro reveal">
+              <h2>学校简介</h2>
+              <p>
+                杭州市启明星特殊教育学校成立于 2008 年，是一所为智力障碍、自闭症谱系障碍儿童提供九年义务教育的特殊教育学校。学校秉持「让每一朵花都绽放」的办学理念，设有专业康复训练室、感统训练室、多媒体教学室等功能教室。在这里，每一位孩子都被温柔以待，每一次进步都被认真记录。
+              </p>
+            </div>
+
+            <!-- Tab 切换 -->
+            <div class="detail-tabs" role="tablist" aria-label="学校详情分类">
+              <button class="detail-tab" id="tab-daily" role="tab" aria-selected="true" aria-controls="panel-daily" data-tab="daily">日常动态</button>
+              <button class="detail-tab" id="tab-donations" role="tab" aria-selected="false" aria-controls="panel-donations" data-tab="donations">捐赠公示</button>
+              <button class="detail-tab" id="tab-children" role="tab" aria-selected="false" aria-controls="panel-children" data-tab="children">学生风采</button>
+            </div>
+
+            <!-- 日常动态 -->
+            <div class="tab-panel is-active" id="panel-daily" role="tabpanel" aria-labelledby="tab-daily" data-tab-content="daily">
+              <div class="masonry">
+                <article class="masonry-item reveal">
+                  <div class="masonry-image-wrap">
+                    <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?w=800&q=80" alt="孩子们在课堂上认真听讲的温暖瞬间">
+                    <span class="tag tag-moss masonry-type-tag">校园日常</span>
+                  </div>
+                  <div class="masonry-item-body">
+                    <p class="post-date">2026 年 6 月 1 日</p>
+                    <h4>六一儿童节文艺汇演精彩纷呈</h4>
+                    <p>全校师生齐聚礼堂，共同庆祝六一儿童节。孩子们表演了合唱、舞蹈、诗朗诵等精彩节目，展现了自信与风采。</p>
+                  </div>
+                </article>
+
+                <article class="masonry-item reveal">
+                  <div class="masonry-image-wrap">
+                    <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?w=800&q=80" alt="新校服整齐叠放在课桌上等待发放">
+                    <span class="tag tag-gold masonry-type-tag">捐赠分发</span>
+                  </div>
+                  <div class="masonry-item-body">
+                    <p class="post-date">2026 年 5 月 28 日</p>
+                    <h4>爱心人士捐赠的冬季校服已全部发放</h4>
+                    <p>感谢社会各界爱心人士的慷慨捐赠，200 套冬季校服已全部分发到每一位孩子手中。看到孩子们穿上新校服的笑容，我们知道所有的努力都值得。</p>
+                  </div>
+                </article>
+
+                <article class="masonry-item reveal">
+                  <div class="masonry-image-wrap">
+                    <img src="https://images.unsplash.com/photo-1560969184-10fe8719e047?w=800&q=80" alt="烘焙课上孩子们专注制作饼干">
+                    <span class="tag tag-moss masonry-type-tag">校园日常</span>
+                  </div>
+                  <div class="masonry-item-body">
+                    <p class="post-date">2026 年 5 月 15 日</p>
+                    <h4>烘焙课上的甜蜜时光</h4>
+                    <p>本周的烘焙课上，孩子们亲手制作了蔓越莓饼干。从称量面粉到装饰成品，每一步都充满认真与期待。烘焙不仅是一门技能，更是一段被爱包裹的时光。</p>
+                  </div>
+                </article>
+
+                <article class="masonry-item reveal">
+                  <div class="masonry-image-wrap">
+                    <img src="https://images.unsplash.com/photo-1544776193-352d25ca82cd?w=800&q=80" alt="崭新的电子琴摆放在音乐教室">
+                    <span class="tag tag-gold masonry-type-tag">捐赠分发</span>
+                  </div>
+                  <div class="masonry-item-body">
+                    <p class="post-date">2026 年 5 月 8 日</p>
+                    <h4>爱心企业捐赠音乐教室乐器</h4>
+                    <p>YAMAHA 电子琴、非洲鼓、铃鼓等共计 15 件乐器已送达学校。音乐老师已经开始为孩子们编排新的音乐课程，让旋律成为传递希望的另一种语言。</p>
+                  </div>
+                </article>
+
+                <article class="masonry-item reveal">
+                  <div class="masonry-image-wrap">
+                    <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80" alt="秋季写生活动中孩子们围坐绘画">
+                    <span class="tag tag-moss masonry-type-tag">校园日常</span>
+                  </div>
+                  <div class="masonry-item-body">
+                    <p class="post-date">2026 年 4 月 22 日</p>
+                    <h4>春季运动会圆满落幕</h4>
+                    <p>学校举办了「快乐运动 健康成长」春季趣味运动会。拔河、接力跑、袋鼠跳……每一个项目孩子们都全心投入，收获了欢笑与友谊。</p>
+                  </div>
+                </article>
+
+                <article class="masonry-item reveal">
+                  <div class="masonry-image-wrap">
+                    <img src="https://images.unsplash.com/photo-1484820540004-14229fe36ca4?w=800&q=80" alt="家长开放日家长与孩子共同完成手工作品">
+                    <span class="tag tag-moss masonry-type-tag">校园日常</span>
+                  </div>
+                  <div class="masonry-item-body">
+                    <p class="post-date">2026 年 4 月 10 日</p>
+                    <h4>家长开放日见证成长的力量</h4>
+                    <p>本学期第一次家长开放日如约而至。家长们走进课堂，近距离感受孩子的学习状态。当看到孩子独立完成手工作品时，许多家长眼中闪着骄傲的泪光。</p>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <!-- 捐赠公示 -->
+            <div class="tab-panel" id="panel-donations" role="tabpanel" aria-labelledby="tab-donations" data-tab-content="donations">
+              <div class="filter-bar reveal">
+                <span class="filter-bar-label">按状态筛选：</span>
+                <div class="filter-tags" role="group" aria-label="捐赠状态筛选">
+                  <button class="tag tag-interactive is-active" data-filter="all">全部 <span class="font-mono">8</span></button>
+                  <button class="tag tag-moss tag-interactive" data-filter="received">已接收</button>
+                  <button class="tag tag-gold tag-interactive" data-filter="distributing">分发中</button>
+                  <button class="tag tag-green tag-interactive" data-filter="completed">已完成</button>
+                </div>
+              </div>
+
+              <div class="donation-list" id="donationList">
+                <article class="donation-card reveal" data-status="completed">
+                  <div class="donation-serial" aria-label="第 1 条">1</div>
+                  <div class="donation-info">
+                    <div class="donor">张女士</div>
+                    <div class="item">冬季校服 · 200 套</div>
+                  </div>
+                  <div class="donation-meta">学校统一</div>
+                  <div class="donation-status">
+                    <span class="badge badge-completed"><span class="badge-dot" aria-hidden="true"></span>已完成</span>
+                  </div>
+                </article>
+
+                <article class="donation-card reveal" data-status="completed">
+                  <div class="donation-serial" aria-label="第 2 条">2</div>
+                  <div class="donation-info">
+                    <div class="donor">腾讯公益基金会</div>
+                    <div class="item">儿童绘本 · 200 册</div>
+                  </div>
+                  <div class="donation-meta">一年级</div>
+                  <div class="donation-status">
+                    <span class="badge badge-completed"><span class="badge-dot" aria-hidden="true"></span>已完成</span>
+                  </div>
+                </article>
+
+                <article class="donation-card reveal" data-status="distributing">
+                  <div class="donation-serial" aria-label="第 3 条">3</div>
+                  <div class="donation-info">
+                    <div class="donor">李明远</div>
+                    <div class="item">美术教具套装 · 150 套</div>
+                  </div>
+                  <div class="donation-meta">三年级</div>
+                  <div class="donation-status">
+                    <span class="badge badge-distributing"><span class="badge-dot" aria-hidden="true"></span>分发中</span>
+                  </div>
+                </article>
+
+                <article class="donation-card reveal" data-status="received">
+                  <div class="donation-serial" aria-label="第 4 条">4</div>
+                  <div class="donation-info">
+                    <div class="donor">阿里巴巴公益基金</div>
+                    <div class="item">多媒体教学设备 · 1 套</div>
+                  </div>
+                  <div class="donation-meta">学校统一</div>
+                  <div class="donation-status">
+                    <span class="badge badge-received"><span class="badge-dot" aria-hidden="true"></span>已接收</span>
+                  </div>
+                </article>
+
+                <article class="donation-card reveal" data-status="completed">
+                  <div class="donation-serial" aria-label="第 5 条">5</div>
+                  <div class="donation-info">
+                    <div class="donor">大学生志愿者联盟</div>
+                    <div class="item">文具用品 · 100 套</div>
+                  </div>
+                  <div class="donation-meta">二年级</div>
+                  <div class="donation-status">
+                    <span class="badge badge-completed"><span class="badge-dot" aria-hidden="true"></span>已完成</span>
+                  </div>
+                </article>
+
+                <article class="donation-card reveal" data-status="distributing">
+                  <div class="donation-serial" aria-label="第 6 条">6</div>
+                  <div class="donation-info">
+                    <div class="donor">陈志强</div>
+                    <div class="item">冬季保暖品 · 200 套</div>
+                  </div>
+                  <div class="donation-meta">四年级</div>
+                  <div class="donation-status">
+                    <span class="badge badge-distributing"><span class="badge-dot" aria-hidden="true"></span>分发中</span>
+                  </div>
+                </article>
+
+                <article class="donation-card reveal" data-status="received">
+                  <div class="donation-serial" aria-label="第 7 条">7</div>
+                  <div class="donation-info">
+                    <div class="donor">恒生电子企业社</div>
+                    <div class="item">电脑 · 10 台</div>
+                  </div>
+                  <div class="donation-meta">职业教育部</div>
+                  <div class="donation-status">
+                    <span class="badge badge-received"><span class="badge-dot" aria-hidden="true"></span>已接收</span>
+                  </div>
+                </article>
+
+                <article class="donation-card reveal" data-status="completed">
+                  <div class="donation-serial" aria-label="第 8 条">8</div>
+                  <div class="donation-info">
+                    <div class="donor">王女士</div>
+                    <div class="item">感统训练设备 · 1 套</div>
+                  </div>
+                  <div class="donation-meta">康复训练室</div>
+                  <div class="donation-status">
+                    <span class="badge badge-completed"><span class="badge-dot" aria-hidden="true"></span>已完成</span>
+                  </div>
+                </article>
+              </div>
+
+              <div class="donation-empty" id="donationEmpty" role="status" aria-live="polite">
+                <i data-lucide="inbox" style="width:40px;height:40px;margin-bottom:var(--space-3);" aria-hidden="true"></i>
+                <p>当前筛选条件下暂无捐赠记录</p>
+              </div>
+            </div>
+
+            <!-- 学生风采 -->
+            <div class="tab-panel" id="panel-children" role="tabpanel" aria-labelledby="tab-children" data-tab-content="children">
+              <div class="children-grid">
+                <article class="child-card reveal">
+                  <div class="child-avatar">
+                    <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=400&q=80" alt="小明在绘画课上专注作画的侧影">
+                  </div>
+                  <h3 class="child-name">小明</h3>
+                  <p class="child-age">10 岁 · 杭州市启明星特殊教育学校</p>
+                  <p class="child-bio">热爱绘画的安静小男孩</p>
+                  <p class="child-quote">「我想画一座桥，让所有人都能走到我心里来。」</p>
+                  <div class="child-tags">
+                    <span class="tag">绘画</span>
+                    <span class="tag">手工</span>
+                    <span class="tag tag-gold">希望之星</span>
+                  </div>
+                </article>
+
+                <article class="child-card reveal">
+                  <div class="child-avatar">
+                    <img src="https://images.unsplash.com/photo-1489710437720-ebb67ec84dd2?w=400&q=80" alt="小花在舞蹈课上露出灿烂笑容">
+                  </div>
+                  <h3 class="child-name">小花</h3>
+                  <p class="child-age">8 岁 · 杭州市启明星特殊教育学校</p>
+                  <p class="child-bio">笑容灿烂的活力小女孩</p>
+                  <p class="child-quote">「虽然我听不见风，但我可以看见树叶在跳舞。」</p>
+                  <div class="child-tags">
+                    <span class="tag">舞蹈</span>
+                    <span class="tag">音乐</span>
+                    <span class="tag tag-gold">乐观天使</span>
+                  </div>
+                </article>
+
+                <article class="child-card reveal">
+                  <div class="child-avatar">
+                    <img src="https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=400&q=80" alt="小宇坐在图书角认真阅读">
+                  </div>
+                  <h3 class="child-name">小宇</h3>
+                  <p class="child-age">12 岁 · 杭州市启明星特殊教育学校</p>
+                  <p class="child-bio">喜欢阅读和写作的少年</p>
+                  <p class="child-quote">「书本里有另一个世界，那里每个人都一样。」</p>
+                  <div class="child-tags">
+                    <span class="tag">阅读</span>
+                    <span class="tag">写作</span>
+                    <span class="tag tag-gold">成长</span>
+                  </div>
+                </article>
+
+                <article class="child-card reveal">
+                  <div class="child-avatar">
+                    <img src="https://images.unsplash.com/photo-1602507343582-9c2b7f3b0a1e?w=400&q=80" alt="小杰展示自己制作的手工作品">
+                  </div>
+                  <h3 class="child-name">小杰</h3>
+                  <p class="child-age">11 岁 · 杭州市启明星特殊教育学校</p>
+                  <p class="child-bio">擅长手工制作的巧手男孩</p>
+                  <p class="child-quote">「我做的纸飞机可以飞很远，梦想也是。」</p>
+                  <div class="child-tags">
+                    <span class="tag">手工</span>
+                    <span class="tag">创造</span>
+                    <span class="tag tag-gold">梦想家</span>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </div>
+
+          <!-- 侧边栏 -->
+          <aside class="detail-sidebar" aria-label="学校信息">
+            <div class="sidebar-card reveal">
+              <h3>学校信息</h3>
+
+              <div class="school-switcher">
+                <label class="form-label" for="school-select">切换学校</label>
+                <select id="school-select" class="form-select" aria-label="选择要查看的学校">
+                  <option value="prototype-school.html" selected>杭州市启明星特殊教育学校</option>
+                  <option value="prototype-school-shanghai.html">上海市阳光自闭症康复中心</option>
+                  <option value="prototype-school-guangzhou.html">广州市启聪聋哑学校</option>
+                </select>
+              </div>
+
+              <div class="sidebar-stat-row">
+                <span class="key">学生人数</span>
+                <span class="val">86 人</span>
+              </div>
+              <div class="sidebar-stat-row">
+                <span class="key">教职工</span>
+                <span class="val">32 人</span>
+              </div>
+              <div class="sidebar-stat-row">
+                <span class="key">创校年份</span>
+                <span class="val">2008 年</span>
+              </div>
+              <div class="sidebar-stat-row">
+                <span class="key">捐赠记录</span>
+                <span class="val">8 笔</span>
+              </div>
+              <div class="sidebar-stat-row">
+                <span class="key">动态更新</span>
+                <span class="val">6 篇</span>
+              </div>
+
+              <div class="sidebar-cta">
+                <a href="prototype-dashboard.html" class="btn btn-primary btn-full">
+                  查看捐赠公示 <span class="arrow" aria-hidden="true">→</span>
+                </a>
+              </div>
+
+              <p class="sidebar-note">
+                所有数据均来自学校真实申报与捐赠系统记录，项目为公益展示原型，部分信息经脱敏处理。
+              </p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3>特殊学校公益平台</h3>
+          <p>我们致力于为特殊教育学校搭建透明、高效的捐赠展示平台，让每一份善意都能被看见、被追踪、被感恩。本项目为大创实践作品，数据均为虚拟演示内容。</p>
+        </div>
+        <div>
+          <h3>快速链接</h3>
+          <ul class="footer-links">
+            <li><a href="index.html">首页</a></li>
+            <li><a href="prototype-school.html">学校详情</a></li>
+            <li><a href="prototype-dashboard.html">捐赠公示</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>联系方式</h3>
+          <ul class="footer-links">
+            <li><a href="mailto:contact@special-school.org">contact@special-school.org</a></li>
+            <li><a href="tel:4008889999">400-888-9999</a></li>
+            <li><a href="#">浙江省杭州市西湖区</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>关注我们</h3>
+          <ul class="footer-links">
+            <li><a href="#">微信公众号</a></li>
+            <li><a href="#">微博</a></li>
+            <li><a href="#">抖音</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 特殊学校公益平台 · 大创项目</span>
+        <span>用透明守护每一份善意</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // Mobile navigation
+    (function initMobileNav() {
+      const nav = document.getElementById('siteNav');
+      const toggle = document.getElementById('navToggle');
+      const drawer = document.getElementById('navDrawer');
+      const overlay = document.getElementById('navOverlay');
+
+      function setOpen(open) {
+        toggle.setAttribute('aria-expanded', String(open));
+        drawer.classList.toggle('is-open', open);
+        overlay.classList.toggle('is-open', open);
+        overlay.setAttribute('aria-hidden', String(!open));
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+
+      toggle.addEventListener('click', () => {
+        const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+        setOpen(!isOpen);
+      });
+
+      overlay.addEventListener('click', () => setOpen(false));
+
+      drawer.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => setOpen(false));
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 1024) setOpen(false);
+      });
+
+      // Scroll shadow
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('is-scrolled', window.scrollY > 8);
+      }, { passive: true });
+    })();
+
+    // Tab switching
+    (function initTabs() {
+      const tabs = document.querySelectorAll('.detail-tab');
+      const panels = document.querySelectorAll('.tab-panel');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const target = tab.dataset.tab;
+
+          tabs.forEach(t => {
+            t.setAttribute('aria-selected', 'false');
+            t.classList.remove('is-active');
+          });
+          tab.setAttribute('aria-selected', 'true');
+          tab.classList.add('is-active');
+
+          panels.forEach(panel => {
+            const isTarget = panel.dataset.tabContent === target;
+            panel.classList.toggle('is-active', isTarget);
+            panel.hidden = !isTarget;
+          });
+        });
+      });
+
+      // Set initial hidden states for accessibility
+      panels.forEach(panel => {
+        panel.hidden = !panel.classList.contains('is-active');
+      });
+    })();
+
+    // Donation status filter
+    (function initDonationFilter() {
+      const filterTags = document.querySelectorAll('[data-filter]');
+      const donationCards = document.querySelectorAll('#donationList .donation-card');
+      const emptyState = document.getElementById('donationEmpty');
+
+      filterTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+          const filter = tag.dataset.filter;
+
+          filterTags.forEach(t => t.classList.remove('is-active'));
+          tag.classList.add('is-active');
+
+          let visibleCount = 0;
+          donationCards.forEach(card => {
+            const matches = filter === 'all' || card.dataset.status === filter;
+            card.hidden = !matches;
+            card.style.display = matches ? '' : 'none';
+            if (matches) visibleCount++;
+          });
+
+          if (emptyState) {
+            emptyState.classList.toggle('is-visible', visibleCount === 0);
+          }
+        });
+      });
+    })();
+
+    // School switcher
+    (function initSchoolSwitcher() {
+      const select = document.getElementById('school-select');
+      if (!select) return;
+      select.addEventListener('change', () => {
+        const value = select.value;
+        if (value && value !== window.location.pathname.split('/').pop()) {
+          // In a multi-file prototype, this would navigate to the selected page.
+          // For a single prototype demo, we keep the current page.
+          console.log('切换到学校：', value);
+        }
+      });
+    })();
+
+    // Scroll reveal animation (respects reduced motion via CSS)
+    (function initScrollReveal() {
+      const revealElements = document.querySelectorAll('.reveal');
+      if (!revealElements.length) return;
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      revealElements.forEach(el => observer.observe(el));
+    })();
+  </script>
+</body>
+</html>
