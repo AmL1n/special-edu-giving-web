@@ -21,3 +21,5 @@ services:
         value: admin
       - key: ADMIN_PASSWORD
         value: admin2026
+      - key: UI_PREVIEW
+        value: "1"
