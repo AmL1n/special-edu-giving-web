@@ -162,6 +162,34 @@ server {
 
 ---
 
+## 7. Render 一键部署（适合快速上线 / 演示）
+
+如果只需要一个免费、可公网访问的演示地址，推荐使用 [Render](https://render.com)。
+
+### 7.1 已提供的文件
+
+- `render.yaml`：Render Blueprint，定义了构建命令、启动命令与环境变量。
+- `wsgi.py`：Gunicorn 的 WSGI 入口。
+- `requirements.txt`：已包含 `gunicorn`。
+
+### 7.2 部署步骤
+
+1. 把当前代码 push 到 GitHub（已完成）。
+2. 访问 https://dashboard.render.com/blueprints ，点击 **New Blueprint Instance**。
+3. 选择你的 GitHub 仓库 `AmL1n/special-edu-giving-web`。
+4. Render 会自动识别 `render.yaml`，保持默认配置，点击 **Apply**。
+5. 等待构建完成（首次构建会下载约 80MB 媒体素材）。
+6. 构建成功后，Render 会分配一个类似 `https://special-edu-giving-web.onrender.com` 的公网地址。
+
+### 7.3 注意事项
+
+- Render 免费实例会在一段时间无访问后进入休眠，首次打开可能需要等待 30 秒左右唤醒。
+- 免费实例的磁盘是临时的，每次部署后 SQLite 数据库会被重置（`seed.py` 会在启动时重新注入演示数据）。如果要保留真实数据，请在 Render 中创建 **PostgreSQL** 并通过环境变量 `DATABASE_URL` 连接。
+- 默认管理员账号密码由 `ADMIN_USERNAME` / `ADMIN_PASSWORD` 环境变量控制，部署后建议到 Render Dashboard → Environment 中修改为强密码。
+- 如果不再需要 UI 变体，上线前请删除 `app/templates/ui_variants/`、`app/static/css/ui_variants/`、`download_media.py` 与 `render.yaml` 中的 `python download_media.py` 步骤。
+
+---
+
 ## 6. 联系我们 / 维护
 
 - 项目入口：`run.py`
