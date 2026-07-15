@@ -1,0 +1,250 @@
+/* 测试专用 UI 变体：charitywater — 上线前删除 */
+
+/* ========================================
+   Charity Water 风格变量
+   极简通透 / 玻璃拟态 / 柔和蓝白治愈系
+   ======================================== */
+:root {
+  --cw-primary: #2563EB;
+  --cw-primary-soft: #3B82F6;
+  --cw-sky: #0EA5E9;
+  --cw-cyan: #22D3EE;
+  --cw-bg: #F8FAFC;
+  --cw-surface: rgba(255, 255, 255, 0.72);
+  --cw-surface-strong: rgba(255, 255, 255, 0.88);
+  --cw-text: #0F172A;
+  --cw-text-muted: #64748B;
+  --cw-border: rgba(255, 255, 255, 0.65);
+  --cw-shadow: 0 8px 32px rgba(30, 64, 175, 0.10);
+  --cw-shadow-hover: 0 24px 60px rgba(30, 64, 175, 0.18);
+  --cw-radius: 1.25rem;
+}
+
+/* 柔和渐变背景层 */
+.cw-gradient-bg {
+  background:
+    radial-gradient(ellipse at 10% 20%, rgba(59, 130, 246, 0.12) 0%, transparent 45%),
+    radial-gradient(ellipse at 90% 80%, rgba(14, 165, 233, 0.10) 0%, transparent 45%),
+    linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 50%, #F8FAFC 100%);
+}
+
+.cw-hero-gradient {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.22) 0%, transparent 55%),
+    linear-gradient(180deg, #DBEAFE 0%, #F0F9FF 40%, #F8FAFC 100%);
+}
+
+/* 玻璃卡片基础 */
+.cw-glass {
+  background: var(--cw-surface);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--cw-border);
+  box-shadow: var(--cw-shadow);
+}
+
+.cw-glass-strong {
+  background: var(--cw-surface-strong);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+}
+
+/* 悬浮折射光效 */
+.cw-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cw-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.45) 45%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.cw-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--cw-shadow-hover);
+}
+
+.cw-card:hover::before {
+  transform: translateX(120%);
+}
+
+/* 按钮光效 */
+.cw-btn-primary {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cw-btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 70%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.7s ease;
+}
+
+.cw-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
+}
+
+.cw-btn-primary:hover::after {
+  transform: translateX(130%);
+}
+
+/* 液态渐变进度条 */
+.cw-progress-track {
+  background: rgba(203, 213, 225, 0.45);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.cw-progress-fill {
+  position: relative;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2563EB 0%, #0EA5E9 50%, #22D3EE 100%);
+  background-size: 200% 100%;
+  animation: cw-liquid-flow 3s ease-in-out infinite;
+  box-shadow: 0 0 18px rgba(14, 165, 233, 0.35);
+}
+
+.cw-progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.35) 0%,
+    transparent 45%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+}
+
+@keyframes cw-liquid-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* 数据数字 */
+.cw-stat-number {
+  font-family: 'JetBrains Mono', 'Inter', monospace;
+  background: linear-gradient(135deg, #1E40AF 0%, #0EA5E9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 柱状图 */
+.cw-bar {
+  background: linear-gradient(180deg, #BFDBFE 0%, #60A5FA 100%);
+  border-radius: 6px 6px 0 0;
+  transition: height 1.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.3s ease;
+}
+
+.cw-bar:hover {
+  filter: brightness(1.1);
+}
+
+/* 状态标签 */
+.cw-status-received {
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+
+.cw-status-distributing {
+  background: #FEF3C7;
+  color: #92400E;
+}
+
+.cw-status-completed {
+  background: #D1FAE5;
+  color: #065F46;
+}
+
+/* 滚动动画初始态 */
+.cw-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cw-reveal.cw-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.cw-reveal-delay-1 { transition-delay: 0.1s; }
+.cw-reveal-delay-2 { transition-delay: 0.2s; }
+.cw-reveal-delay-3 { transition-delay: 0.3s; }
+.cw-reveal-delay-4 { transition-delay: 0.4s; }
+
+/* 视差容器 */
+.cw-parallax {
+  will-change: transform;
+}
+
+/* 导航栏模糊 */
+.cw-nav {
+  background: rgba(248, 250, 252, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* 图片处理 */
+.cw-img-cover {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* 减弱动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .cw-progress-fill {
+    animation: none;
+  }
+  .cw-card,
+  .cw-card::before,
+  .cw-btn-primary,
+  .cw-btn-primary::after,
+  .cw-reveal {
+    transition: none;
+    animation: none;
+  }
+  .cw-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 移动端微调 */
+@media (max-width: 640px) {
+  :root {
+    --cw-radius: 1rem;
+  }
+}

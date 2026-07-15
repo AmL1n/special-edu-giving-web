@@ -1,0 +1,598 @@
+{% extends "ui_variants/_shell.html" %}
+
+{% block title %}Charity Water 风格预览{% endblock %}
+{% block body_class %}cw-gradient-bg min-h-screen text-slate-800{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ui_variants/charitywater.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- 1. 顶部导航栏 -->
+<header class="cw-nav fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-18 md:h-20">
+      <!-- 品牌 Logo -->
+      <a href="{{ url_for('main.index', ui='charitywater') }}" class="flex items-center gap-2 group">
+        <div class="w-10 h-10 rounded-full cw-btn-primary flex items-center justify-center text-white">
+          <i data-lucide="droplets" class="w-5 h-5"></i>
+        </div>
+        <span class="text-lg md:text-xl font-semibold tracking-tight text-slate-800">
+          清泉公益 <span class="text-blue-500 font-light">Spring</span>
+        </span>
+      </a>
+
+      <!-- 桌面主导航 -->
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#schools" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">帮扶学校</a>
+        <a href="#progress" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">项目进度</a>
+        <a href="#stories" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">儿童故事</a>
+        <a href="#donations" class="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">捐赠记录</a>
+      </nav>
+
+      <!-- 醒目的 Give Now CTA -->
+      <div class="flex items-center gap-3">
+        <a href="#donate" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-full cw-btn-primary text-white text-sm font-semibold">
+          <i data-lucide="heart" class="w-4 h-4"></i>
+          立即捐赠 Give Now
+        </a>
+        <button id="cw-mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors" aria-label="打开菜单">
+          <i data-lucide="menu" class="w-6 h-6 text-slate-700"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 移动端菜单 -->
+  <div id="cw-mobile-menu" class="hidden md:hidden border-t border-white/60 bg-white/80 backdrop-blur-xl">
+    <div class="px-6 py-4 space-y-3">
+      <a href="#schools" class="block text-sm font-medium text-slate-600 hover:text-blue-600">帮扶学校</a>
+      <a href="#progress" class="block text-sm font-medium text-slate-600 hover:text-blue-600">项目进度</a>
+      <a href="#stories" class="block text-sm font-medium text-slate-600 hover:text-blue-600">儿童故事</a>
+      <a href="#donations" class="block text-sm font-medium text-slate-600 hover:text-blue-600">捐赠记录</a>
+      <a href="#donate" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full cw-btn-primary text-white text-sm font-semibold">
+        <i data-lucide="heart" class="w-4 h-4"></i>
+        立即捐赠
+      </a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- 2. Hero 区域 -->
+  <section class="relative min-h-[90vh] flex items-center cw-hero-gradient pt-20 overflow-hidden">
+    <!-- 装饰光斑 -->
+    <div class="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-300/20 rounded-full blur-3xl cw-parallax" data-speed="0.05"></div>
+    <div class="absolute bottom-1/4 right-1/6 w-96 h-96 bg-cyan-300/20 rounded-full blur-3xl cw-parallax" data-speed="-0.04"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-8 py-16 md:py-24 grid lg:grid-cols-2 gap-12 items-center">
+      <div class="cw-reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full cw-glass text-blue-700 text-xs font-semibold mb-6">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          100% 透明 · 每一笔捐赠都可追踪
+        </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight text-slate-900 mb-6">
+          让每一份善意，<br>
+          <span class="bg-gradient-to-r from-blue-600 to-cyan-500 bg-clip-text text-transparent">如清泉般抵达。</span>
+        </h1>
+        <p class="text-lg md:text-xl text-slate-600 leading-relaxed mb-8 max-w-xl">
+          我们为特殊教育学校带去教具、康复器材与温暖的陪伴。您捐赠的每一件物品，都会被记录、被送达、被看见。
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="#donate" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full cw-btn-primary text-white text-base font-semibold">
+            <i data-lucide="heart" class="w-5 h-5"></i>
+            立即捐赠 Give Now
+          </a>
+          <a href="#progress" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white/70 hover:bg-white border border-white/80 text-slate-700 text-base font-semibold transition-all hover:shadow-lg">
+            <i data-lucide="play-circle" class="w-5 h-5 text-blue-500"></i>
+            查看项目进度
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero 视觉卡片 -->
+      <div class="relative cw-reveal cw-reveal-delay-2">
+        <div class="relative rounded-[2rem] overflow-hidden shadow-2xl aspect-[4/3]">
+          <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1200&q=80"
+               alt="孩子们在特殊教育课堂互动" class="cw-img-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent"></div>
+        </div>
+        <!-- 悬浮数据卡 -->
+        <div class="absolute -bottom-6 -left-6 md:-left-10 cw-glass-strong rounded-2xl p-4 md:p-5 shadow-xl max-w-[220px]">
+          <p class="text-xs text-slate-500 font-medium mb-1">本月已送达学校</p>
+          <p class="text-2xl md:text-3xl font-bold text-slate-800">{{ schools|length }} <span class="text-sm font-normal text-slate-500">所</span></p>
+          <div class="mt-3 h-2 cw-progress-track rounded-full overflow-hidden">
+            <div class="cw-progress-fill" style="width: 78%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部波浪过渡 -->
+    <div class="absolute bottom-0 left-0 right-0">
+      <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto">
+        <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z"
+              fill="#F8FAFC"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- 3. 数据概览 -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+        <div class="cw-glass cw-card rounded-2xl p-6 md:p-8 text-center cw-reveal">
+          <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+            <i data-lucide="school" class="w-6 h-6"></i>
+          </div>
+          <p class="text-3xl md:text-4xl font-bold cw-stat-number" data-count="{{ schools|length }}">0</p>
+          <p class="text-sm text-slate-500 mt-1">合作学校</p>
+        </div>
+
+        <div class="cw-glass cw-card rounded-2xl p-6 md:p-8 text-center cw-reveal cw-reveal-delay-1">
+          <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-sky-50 flex items-center justify-center text-sky-600">
+            <i data-lucide="gift" class="w-6 h-6"></i>
+          </div>
+          <p class="text-3xl md:text-4xl font-bold cw-stat-number" data-count="{{ total_donations }}">0</p>
+          <p class="text-sm text-slate-500 mt-1">捐赠笔数</p>
+        </div>
+
+        <div class="cw-glass cw-card rounded-2xl p-6 md:p-8 text-center cw-reveal cw-reveal-delay-2">
+          <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-cyan-50 flex items-center justify-center text-cyan-600">
+            <i data-lucide="banknote" class="w-6 h-6"></i>
+          </div>
+          <p class="text-3xl md:text-4xl font-bold cw-stat-number" data-count="{{ total_amount|int }}">0</p>
+          <p class="text-sm text-slate-500 mt-1">累计金额（元）</p>
+        </div>
+
+        <div class="cw-glass cw-card rounded-2xl p-6 md:p-8 text-center cw-reveal cw-reveal-delay-3">
+          <div class="w-12 h-12 mx-auto mb-4 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600">
+            <i data-lucide="smile" class="w-6 h-6"></i>
+          </div>
+          <p class="text-3xl md:text-4xl font-bold cw-stat-number" data-count="{{ children|length }}">0</p>
+          <p class="text-sm text-slate-500 mt-1">受助儿童</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 项目/学校卡片网格 -->
+  <section id="schools" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="max-w-2xl mx-auto text-center mb-12 md:mb-16 cw-reveal">
+        <span class="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold mb-4">PROJECTS</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">正在帮扶的学校</h2>
+        <p class="text-slate-600">每一所学校都是一个希望站点，您的捐赠将直接转化为教具、书籍与康复资源。</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        {% for school in schools %}
+        <article class="cw-glass cw-card rounded-2xl overflow-hidden flex flex-col cw-reveal" style="transition-delay: {{ loop.index0 % 3 * 0.1 }}s">
+          <div class="relative h-52 overflow-hidden">
+            <img src="{{ school.image_url or 'https://images.unsplash.com/photo-1529390079861-591b7c1a7f1b?auto=format&fit=crop&w=800&q=80' }}"
+                 alt="{{ school.name }}" class="cw-img-cover transition-transform duration-700 group-hover:scale-105">
+            <div class="absolute top-4 left-4">
+              <span class="px-3 py-1 rounded-full cw-glass-strong text-xs font-semibold text-slate-700">
+                {{ school.location }}
+              </span>
+            </div>
+          </div>
+          <div class="p-6 flex-1 flex flex-col">
+            <h3 class="text-xl font-bold text-slate-900 mb-2">{{ school.name }}</h3>
+            <p class="text-sm text-slate-600 line-clamp-2 mb-4 flex-1">{{ school.description or '一所致力于为特殊儿童提供优质教育与关怀的学校。' }}</p>
+
+            <div class="grid grid-cols-3 gap-2 mb-4 text-center">
+              <div class="bg-white/50 rounded-lg p-2">
+                <p class="text-lg font-bold text-slate-800">{{ school.student_count or '-' }}</p>
+                <p class="text-[10px] text-slate-500 uppercase tracking-wide">学生</p>
+              </div>
+              <div class="bg-white/50 rounded-lg p-2">
+                <p class="text-lg font-bold text-slate-800">{{ school.teacher_count or '-' }}</p>
+                <p class="text-[10px] text-slate-500 uppercase tracking-wide">教师</p>
+              </div>
+              <div class="bg-white/50 rounded-lg p-2">
+                <p class="text-lg font-bold text-slate-800">{{ school.founding_year or '-' }}</p>
+                <p class="text-[10px] text-slate-500 uppercase tracking-wide">成立</p>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mt-auto">
+              <div class="flex-1 mr-4">
+                <div class="flex justify-between text-xs mb-1.5">
+                  <span class="text-slate-500">项目进度</span>
+                  <span class="font-semibold text-blue-600">{{ 60 + (loop.index0 * 7) % 35 }}%</span>
+                </div>
+                <div class="h-2 cw-progress-track">
+                  <div class="cw-progress-fill" style="width: {{ 60 + (loop.index0 * 7) % 35 }}%"></div>
+                </div>
+              </div>
+              <a href="{{ url_for('main.school_detail', school_id=school.id, ui='charitywater') }}"
+                 class="w-10 h-10 rounded-full bg-blue-50 hover:bg-blue-100 flex items-center justify-center text-blue-600 transition-colors"
+                 aria-label="查看 {{ school.name }} 详情">
+                <i data-lucide="arrow-right" class="w-5 h-5"></i>
+              </a>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 筹款/捐赠进度可视化 -->
+  <section id="progress" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+        <!-- 液态进度条 -->
+        <div class="cw-glass cw-card rounded-3xl p-8 md:p-10 cw-reveal">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+              <i data-lucide="target" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900">年度筹款目标</h3>
+              <p class="text-sm text-slate-500">每一笔捐赠都在推动目标达成</p>
+            </div>
+          </div>
+
+          <div class="mb-8">
+            <div class="flex justify-between items-end mb-3">
+              <span class="text-4xl md:text-5xl font-bold cw-stat-number">¥{{ "{:,.0f}".format(total_amount) }}</span>
+              <span class="text-sm text-slate-500 mb-1">目标 ¥500,000</span>
+            </div>
+            {% set percent = ((total_amount / 500000) * 100)|round|int %}
+            {% set percent = [percent, 100]|min %}
+            <div class="h-5 cw-progress-track">
+              <div class="cw-progress-fill" style="width: {{ percent }}%"></div>
+            </div>
+            <p class="text-sm text-slate-500 mt-3">已完成 <span class="font-semibold text-blue-600">{{ percent }}%</span>，感谢每一位捐赠人。</p>
+          </div>
+
+          <div class="grid grid-cols-3 gap-4">
+            <div class="bg-white/50 rounded-xl p-4 text-center">
+              <p class="text-xl font-bold text-slate-800">{{ total_donations }}</p>
+              <p class="text-xs text-slate-500">捐赠人次</p>
+            </div>
+            <div class="bg-white/50 rounded-xl p-4 text-center">
+              <p class="text-xl font-bold text-slate-800">{{ schools|length }}</p>
+              <p class="text-xs text-slate-500">覆盖学校</p>
+            </div>
+            <div class="bg-white/50 rounded-xl p-4 text-center">
+              <p class="text-xl font-bold text-slate-800">{{ children|length }}</p>
+              <p class="text-xs text-slate-500">受益儿童</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 项目进度柱状图 -->
+        <div class="cw-glass cw-card rounded-3xl p-8 md:p-10 cw-reveal cw-reveal-delay-1">
+          <div class="flex items-center gap-3 mb-8">
+            <div class="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-600">
+              <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900">各校物资完成度</h3>
+              <p class="text-sm text-slate-500">实时追踪每所学校的捐赠落实进度</p>
+            </div>
+          </div>
+
+          <div class="h-64 flex items-end justify-between gap-3 md:gap-4">
+            {% for school in schools[:6] %}
+            {% set bar_h = 35 + (loop.index0 * 12) % 50 %}
+            <div class="flex-1 flex flex-col items-center gap-2 group">
+              <div class="relative w-full h-full flex items-end">
+                <div class="cw-bar w-full" style="height: {{ bar_h }}%" aria-label="{{ school.name }} 完成度 {{ bar_h }}%"></div>
+                <div class="absolute -top-8 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-800 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                  {{ bar_h }}%
+                </div>
+              </div>
+              <p class="text-[10px] md:text-xs text-slate-500 text-center truncate w-full" title="{{ school.name }}">
+                {{ school.name[:4] }}{% if school.name|length > 4 %}…{% endif %}
+              </p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 故事/儿童风采卡片 -->
+  <section id="stories" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="max-w-2xl mx-auto text-center mb-12 md:mb-16 cw-reveal">
+        <span class="inline-block px-3 py-1 rounded-full bg-cyan-50 text-cyan-600 text-xs font-semibold mb-4">STORIES</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">孩子的声音</h2>
+        <p class="text-slate-600">他们用小手描绘世界，我们用爱托住每一份不同。</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {% for child in children %}
+        <article class="cw-glass cw-card rounded-2xl p-5 text-center cw-reveal" style="transition-delay: {{ loop.index0 % 4 * 0.1 }}s">
+          <div class="relative w-24 h-24 mx-auto mb-4 rounded-full p-1 bg-gradient-to-br from-blue-200 to-cyan-200">
+            <img src="{{ child.avatar_url or 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=300&q=80' }}"
+                 alt="{{ child.name }}" class="w-full h-full rounded-full object-cover border-2 border-white">
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 mb-1">{{ child.name }}</h3>
+          <p class="text-xs text-slate-500 mb-3">{{ child.age }} 岁</p>
+          {% if child.quote %}
+          <blockquote class="text-sm text-slate-600 italic mb-4 leading-relaxed">“{{ child.quote }}”</blockquote>
+          {% endif %}
+          {% if child.tags %}
+          <div class="flex flex-wrap justify-center gap-1.5">
+            {% for tag in child.tags %}
+            <span class="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-[10px] font-medium">{{ tag }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- 捐赠人实时追踪照片墙 -->
+  <section class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="cw-glass cw-card rounded-3xl p-8 md:p-12 cw-reveal overflow-hidden">
+        <div class="grid lg:grid-cols-2 gap-10 items-center">
+          <div>
+            <span class="inline-block px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-xs font-semibold mb-4">TRANSPARENCY</span>
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">捐赠人可实时追踪项目实拍</h2>
+            <p class="text-slate-600 mb-6 leading-relaxed">
+              每一件物资送达后，我们都会在学校现场拍摄签收与使用照片，让捐赠人看到自己的善意如何落地生根。
+            </p>
+            <ul class="space-y-3">
+              <li class="flex items-center gap-3 text-sm text-slate-700">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500"></i>
+                物资签收现场照片同步
+              </li>
+              <li class="flex items-center gap-3 text-sm text-slate-700">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500"></i>
+                受助儿童使用反馈
+              </li>
+              <li class="flex items-center gap-3 text-sm text-slate-700">
+                <i data-lucide="check-circle-2" class="w-5 h-5 text-blue-500"></i>
+                资金流向全公开
+              </li>
+            </ul>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=600&q=80"
+                 alt="课堂实拍" class="rounded-2xl shadow-lg object-cover h-40 md:h-48 w-full cw-parallax" data-speed="0.03">
+            <img src="https://images.unsplash.com/photo-1497486751825-1233686d5d80?auto=format&fit=crop&w=600&q=80"
+                 alt="物资分发" class="rounded-2xl shadow-lg object-cover h-40 md:h-48 w-full mt-6 cw-parallax" data-speed="-0.02">
+            <img src="https://images.unsplash.com/photo-1526634332515-d56c5fd16991?auto=format&fit=crop&w=600&q=80"
+                 alt="师生互动" class="rounded-2xl shadow-lg object-cover h-40 md:h-48 w-full cw-parallax" data-speed="-0.03">
+            <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=600&q=80"
+                 alt="康复训练" class="rounded-2xl shadow-lg object-cover h-40 md:h-48 w-full mt-6 cw-parallax" data-speed="0.02">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 近期捐赠记录 -->
+  <section id="donations" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="max-w-2xl mx-auto text-center mb-12 md:mb-16 cw-reveal">
+        <span class="inline-block px-3 py-1 rounded-full bg-indigo-50 text-indigo-600 text-xs font-semibold mb-4">DONORS</span>
+        <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">近期爱心捐赠</h2>
+        <p class="text-slate-600">感谢每一位选择相信的人，您的名字将被孩子们记住。</p>
+      </div>
+
+      <div class="cw-glass-strong rounded-3xl overflow-hidden cw-reveal">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left hidden md:table">
+            <thead class="bg-slate-50/70 border-b border-slate-100">
+              <tr>
+                <th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">捐赠人</th>
+                <th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">物品</th>
+                <th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">受助学校</th>
+                <th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">金额 / 数量</th>
+                <th class="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">状态</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {% for d in recent_donations[:8] %}
+              <tr class="hover:bg-white/40 transition-colors">
+                <td class="px-6 py-4 text-sm font-medium text-slate-800">{{ d.donor_name or '爱心人士' }}</td>
+                <td class="px-6 py-4 text-sm text-slate-600">{{ d.item_name }}{% if d.item_detail %} <span class="text-slate-400">· {{ d.item_detail }}</span>{% endif %}</td>
+                <td class="px-6 py-4 text-sm text-slate-600">{{ d.school.name if d.school else '待定' }}</td>
+                <td class="px-6 py-4 text-sm text-slate-700">
+                  {% if d.amount %}¥{{ "{:,.0f}".format(d.amount) }}{% else %}{{ d.quantity or '-' }}{% endif %}
+                </td>
+                <td class="px-6 py-4">
+                  {% if d.status == 'received' %}
+                  <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium cw-status-received">已接收</span>
+                  {% elif d.status == 'distributing' %}
+                  <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium cw-status-distributing">发放中</span>
+                  {% else %}
+                  <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium cw-status-completed">已完成</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 移动端卡片列表 -->
+        <div class="md:hidden divide-y divide-slate-100">
+          {% for d in recent_donations[:6] %}
+          <div class="p-5 hover:bg-white/40 transition-colors">
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <p class="text-sm font-semibold text-slate-800">{{ d.donor_name or '爱心人士' }}</p>
+                <p class="text-xs text-slate-500">{{ d.school.name if d.school else '待定学校' }}</p>
+              </div>
+              {% if d.status == 'received' %}
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-medium cw-status-received">已接收</span>
+              {% elif d.status == 'distributing' %}
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-medium cw-status-distributing">发放中</span>
+              {% else %}
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-medium cw-status-completed">已完成</span>
+              {% endif %}
+            </div>
+            <p class="text-sm text-slate-600 mb-1">{{ d.item_name }}{% if d.item_detail %} · {{ d.item_detail }}{% endif %}</p>
+            <p class="text-sm font-medium text-blue-600">
+              {% if d.amount %}¥{{ "{:,.0f}".format(d.amount) }}{% else %}数量 {{ d.quantity or '-' }}{% endif %}
+            </p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA 底部 -->
+  <section id="donate" class="py-20 md:py-28 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-cyan-500"></div>
+    <div class="absolute inset-0 opacity-20">
+      <div class="absolute top-0 left-1/4 w-96 h-96 bg-white/30 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 right-1/4 w-80 h-80 bg-cyan-300/30 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative max-w-3xl mx-auto px-6 text-center">
+      <h2 class="text-3xl md:text-5xl font-bold text-white mb-6 cw-reveal">成为改变的源头</h2>
+      <p class="text-lg text-blue-50 mb-10 cw-reveal cw-reveal-delay-1">您的每一笔捐赠，都会化作一件教具、一本书、一次康复训练，真实抵达需要的孩子手中。</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center cw-reveal cw-reveal-delay-2">
+        <a href="#" class="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full bg-white text-blue-600 text-base font-bold hover:bg-blue-50 transition-colors shadow-xl">
+          <i data-lucide="heart" class="w-5 h-5"></i>
+          立即捐赠 Give Now
+        </a>
+        <a href="#" class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-white/15 hover:bg-white/25 text-white border border-white/30 text-base font-semibold transition-colors">
+          <i data-lucide="share-2" class="w-5 h-5"></i>
+          分享给朋友
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 8. 页脚 -->
+<footer class="bg-slate-900 text-slate-300 py-14 md:py-18">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+      <div>
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-9 h-9 rounded-full bg-blue-600 flex items-center justify-center text-white">
+            <i data-lucide="droplets" class="w-4 h-4"></i>
+          </div>
+          <span class="text-lg font-semibold text-white">清泉公益</span>
+        </div>
+        <p class="text-sm text-slate-400 leading-relaxed">为特殊教育学校带去透明的物资支持与持续的温暖陪伴。</p>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-4">关于</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white transition-colors">我们的使命</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">项目学校</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">财务公开</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-4">参与</h4>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#" class="hover:text-white transition-colors">立即捐赠</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">成为志愿者</a></li>
+          <li><a href="#" class="hover:text-white transition-colors">企业合作</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="text-white font-semibold mb-4">关注我们</h4>
+        <div class="flex gap-3">
+          <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-blue-600 flex items-center justify-center transition-colors" aria-label="微信">
+            <i data-lucide="message-circle" class="w-4 h-4"></i>
+          </a>
+          <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-blue-600 flex items-center justify-center transition-colors" aria-label="微博">
+            <i data-lucide="at-sign" class="w-4 h-4"></i>
+          </a>
+          <a href="#" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-blue-600 flex items-center justify-center transition-colors" aria-label="邮箱">
+            <i data-lucide="mail" class="w-4 h-4"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
+      <p>© 2026 清泉公益 Spring Charity. 测试专用 UI 变体：charitywater</p>
+      <p>本页面为设计风格预览，数据均为演示用途。</p>
+    </div>
+  </div>
+</footer>
+{% endblock %}
+
+{% block body_scripts %}
+<script>
+(function() {
+  'use strict';
+
+  // 移动端菜单
+  const menuBtn = document.getElementById('cw-mobile-menu-btn');
+  const mobileMenu = document.getElementById('cw-mobile-menu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', function() {
+      mobileMenu.classList.toggle('hidden');
+    });
+  }
+
+  // 滚动 reveal 动画
+  const revealEls = document.querySelectorAll('.cw-reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('cw-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => observer.observe(el));
+
+  // 数字滚动动画
+  const statNumbers = document.querySelectorAll('[data-count]');
+  const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseFloat(el.dataset.count) || 0;
+        const duration = 1500;
+        const start = performance.now();
+        const startVal = 0;
+
+        function update(now) {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          const current = Math.floor(startVal + (target - startVal) * eased);
+          el.textContent = current.toLocaleString('zh-CN');
+          if (progress < 1) requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
+        countObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  statNumbers.forEach(el => countObserver.observe(el));
+
+  // 视差效果（仅非 reduced-motion）
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!prefersReduced) {
+    const parallaxEls = document.querySelectorAll('.cw-parallax');
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          parallaxEls.forEach(el => {
+            const speed = parseFloat(el.dataset.speed) || 0;
+            el.style.transform = 'translateY(' + (scrollY * speed) + 'px)';
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+})();
+</script>
+{% endblock %}

@@ -58,9 +58,12 @@
 │   │   ├── base.html             # 新顶部固定导航 + 主内容 + 页脚
 │   │   ├── index.html            # 首页
 │   │   ├── school_detail.html    # 学校详情页
-│   │   └── dashboard.html        # 捐赠公示数据大屏
+│   │   ├── dashboard.html        # 捐赠公示数据大屏
+│   │   ├── partials/             # 可复用片段（如 UI 预览切换浮窗）
+│   │   └── ui_variants/          # 测试阶段 UI 风格变体（上线前删除）
 │   └── static/                   # 静态资源
 │       ├── css/app.css           # 全局样式（温润人文杂志诗学、暖色调、响应式）
+│       ├── css/ui_variants/      # 各变体独立样式（上线前随 ui_variants 删除）
 │       └── js/app.js             # 滚动动画、Tab 切换、数字滚动动画、移动端抽屉
 ├── config.py                     # Flask 配置类
 ├── run.py                        # 启动脚本：创建应用、建表、运行开发服务器
@@ -375,6 +378,9 @@ location /static/ {
 | 启动开发服务器 | `python run.py` |
 | 进入 Flask Shell | `flask shell` |
 | 初始化迁移 | `flask db init` |
+| 开启 UI 风格预览（默认页显示切换浮窗） | `set UI_PREVIEW=1`（Windows CMD）或 `export UI_PREVIEW=1`（Bash） |
+| 预览 Charity: Water 风格 | `http://localhost:5000/?ui=charitywater` |
+| 预览 JustGiving / DonorSee / WWF / GoFundMe 风格 | `?ui=justgiving`、`?ui=donorsee`、`?ui=wwf`、`?ui=gofundme` |
 
 ---
 

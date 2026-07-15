@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}UI 预览{% endblock %} · 特殊学校公益平台</title>
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+  {# 测试/截图兼容：headless 或减弱动画时强制显示 reveal 内容 #}
+  <script>
+    if (navigator.webdriver || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('headless-preview');
+    }
+  </script>
+  <style>
+    .headless-preview [class*="reveal"] {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+    }
+    .headless-preview [class*="reveal"]::before,
+    .headless-preview [class*="reveal"]::after {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  </style>
+
+  {% block head_extra %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+
+  {% block content %}{% endblock %}
+
+  <!-- UI 预览切换器（测试专用） -->
+  {% set ui_preview_mode = true %}
+  {% include "partials/_ui_switcher.html" %}
+
+  <script>
+    lucide.createIcons();
+  </script>
+  {% block body_scripts %}{% endblock %}
+</body>
+</html>

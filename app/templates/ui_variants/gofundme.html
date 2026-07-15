@@ -1,0 +1,454 @@
+{% extends "ui_variants/_shell.html" %}
+
+{% block title %}GoFundMe 风格预览{% endblock %}
+{% block body_class %}gofundme-theme{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ui_variants/gofundme.css') }}">
+{% endblock %}
+
+{% block content %}
+<header class="gf-glass sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 lg:h-20">
+      <a href="{{ url_for('main.index', ui='gofundme') }}" class="flex items-center gap-2 group">
+        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-white shadow-md group-hover:shadow-lg transition">
+          <i data-lucide="heart" class="w-5 h-5"></i>
+        </div>
+        <span class="text-xl font-bold text-gray-900 tracking-tight">特教公益</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
+        <a href="#schools" class="hover:text-green-700 transition">学校项目</a>
+        <a href="#children" class="hover:text-green-700 transition">儿童风采</a>
+        <a href="#progress" class="hover:text-green-700 transition">筹款进度</a>
+        <a href="#donations" class="hover:text-green-700 transition">捐赠记录</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="#donate" class="hidden sm:inline-flex gf-btn-primary px-5 py-2.5 text-sm">
+          立即捐赠
+        </a>
+        <button id="gf-mobile-menu" class="md:hidden p-2 rounded-lg hover:bg-gray-100" aria-label="打开菜单">
+          <i data-lucide="menu" class="w-5 h-5 text-gray-700"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="gf-mobile-nav" class="hidden md:hidden border-t border-gray-100 bg-white/95 backdrop-blur px-4 py-3">
+    <nav class="flex flex-col gap-2 text-sm font-medium text-gray-700">
+      <a href="#schools" class="px-3 py-2 rounded-lg hover:bg-gray-50">学校项目</a>
+      <a href="#children" class="px-3 py-2 rounded-lg hover:bg-gray-50">儿童风采</a>
+      <a href="#progress" class="px-3 py-2 rounded-lg hover:bg-gray-50">筹款进度</a>
+      <a href="#donations" class="px-3 py-2 rounded-lg hover:bg-gray-50">捐赠记录</a>
+      <a href="#donate" class="gf-btn-primary px-4 py-2.5 text-center text-sm mt-1">立即捐赠</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <section class="gf-hero relative pt-16 pb-20 lg:pt-24 lg:pb-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="gf-reveal">
+          <span class="gf-label mb-4">特殊教育公益平台</span>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight mt-4 mb-6">
+            每一次捐赠，<br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-teal-500">都是一份希望</span>
+          </h1>
+          <p class="text-lg text-gray-600 mb-8 max-w-xl leading-relaxed">
+            我们连接爱心与特殊教育学校，让每一笔善款透明可追溯，让每一个孩子都能被看见、被支持。
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#donate" class="gf-btn-primary px-8 py-3.5 text-base inline-flex items-center gap-2">
+              <i data-lucide="heart-handshake" class="w-5 h-5"></i>
+              立即捐赠
+            </a>
+            <a href="#schools" class="gf-btn-outline px-6 py-3.5 text-base inline-flex items-center gap-2">
+              <i data-lucide="search" class="w-5 h-5"></i>
+              浏览项目
+            </a>
+          </div>
+          <div class="mt-10 flex items-center gap-4 text-sm text-gray-500">
+            <div class="flex -space-x-2">
+              <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=64&h=64&fit=crop&crop=face" alt="" class="w-8 h-8 rounded-full border-2 border-white">
+              <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=64&h=64&fit=crop&crop=face" alt="" class="w-8 h-8 rounded-full border-2 border-white">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=64&h=64&fit=crop&crop=face" alt="" class="w-8 h-8 rounded-full border-2 border-white">
+            </div>
+            <span>已有 <strong class="text-gray-900">{{ total_donations }}</strong> 位爱心人士参与</span>
+          </div>
+        </div>
+
+        <div class="gf-reveal" data-delay="2">
+          <div class="relative">
+            <div class="absolute -inset-4 bg-gradient-to-r from-green-200/40 to-teal-200/40 rounded-3xl blur-2xl"></div>
+            <div class="gf-card relative overflow-hidden rounded-2xl">
+              <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&h=600&fit=crop" alt="孩子们在课堂上学习" class="w-full h-80 lg:h-[28rem] object-cover">
+              <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/60 to-transparent">
+                <p class="text-white font-semibold text-lg">为特殊儿童点亮未来</p>
+                <p class="text-white/80 text-sm mt-1">透明 · 温暖 · 可追溯</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats overview -->
+  <section class="py-12 lg:py-16 -mt-8 relative z-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        <div class="gf-stat-card p-6 text-center gf-reveal">
+          <div class="w-11 h-11 mx-auto rounded-full bg-green-50 flex items-center justify-center text-green-600 mb-3">
+            <i data-lucide="school" class="w-5 h-5"></i>
+          </div>
+          <div class="text-3xl font-bold text-gray-900">{{ schools|length }}</div>
+          <div class="text-sm text-gray-500 mt-1">合作学校</div>
+        </div>
+        <div class="gf-stat-card p-6 text-center gf-reveal" data-delay="1">
+          <div class="w-11 h-11 mx-auto rounded-full bg-green-50 flex items-center justify-center text-green-600 mb-3">
+            <i data-lucide="gift" class="w-5 h-5"></i>
+          </div>
+          <div class="text-3xl font-bold text-gray-900">{{ total_donations }}</div>
+          <div class="text-sm text-gray-500 mt-1">捐赠笔数</div>
+        </div>
+        <div class="gf-stat-card p-6 text-center gf-reveal" data-delay="2">
+          <div class="w-11 h-11 mx-auto rounded-full bg-green-50 flex items-center justify-center text-green-600 mb-3">
+            <i data-lucide="banknote" class="w-5 h-5"></i>
+          </div>
+          <div class="text-3xl font-bold text-gray-900">¥{{ "%.0f"|format(total_amount) }}</div>
+          <div class="text-sm text-gray-500 mt-1">累计金额</div>
+        </div>
+        <div class="gf-stat-card p-6 text-center gf-reveal" data-delay="3">
+          <div class="w-11 h-11 mx-auto rounded-full bg-green-50 flex items-center justify-center text-green-600 mb-3">
+            <i data-lucide="users" class="w-5 h-5"></i>
+          </div>
+          <div class="text-3xl font-bold text-gray-900">{{ children|length }}</div>
+          <div class="text-sm text-gray-500 mt-1">受助儿童</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Schools grid -->
+  <section id="schools" class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12 gf-reveal">
+        <span class="gf-label justify-center">正在筹款的项目</span>
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mt-3 mb-4">支持一所学校，改变一群孩子</h2>
+        <p class="text-gray-600">浏览各合作特殊教育学校的实际需求，选择您想支持的项目。</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {% for school in schools %}
+        {% set progress = ((loop.index * 17 + 23) % 88) + 12 %}
+        <article class="gf-card flex flex-col overflow-hidden gf-reveal" data-delay="{{ loop.index % 4 }}">
+          <div class="gf-img-zoom h-52 relative">
+            <img src="{{ school.image_url or 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=600&h=400&fit=crop' }}" alt="{{ school.name }}">
+            <div class="absolute top-3 left-3">
+              <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-white/90 text-green-700 backdrop-blur">
+                <i data-lucide="map-pin" class="w-3 h-3"></i>
+                {{ school.location }}
+              </span>
+            </div>
+          </div>
+          <div class="p-5 flex-1 flex flex-col">
+            <h3 class="text-lg font-bold text-gray-900 mb-2">{{ school.name }}</h3>
+            <p class="text-sm text-gray-600 line-clamp-2 mb-4 flex-1">{{ school.description }}</p>
+
+            <div class="mb-3">
+              <div class="flex justify-between text-sm mb-1.5">
+                <span class="font-semibold text-gray-900">已筹 ¥{{ "%.0f"|format(progress * 1200) }}</span>
+                <span class="text-gray-500">目标 ¥120,000</span>
+              </div>
+              <div class="gf-progress">
+                <div class="gf-progress-bar" style="width: {{ progress }}%" data-width="{{ progress }}%"></div>
+              </div>
+              <div class="flex justify-between text-xs text-gray-500 mt-1.5">
+                <span>{{ progress }}% 完成</span>
+                <span>{{ school.student_count }} 名学生</span>
+              </div>
+            </div>
+
+            <a href="{{ url_for('main.school_detail', school_id=school.id, ui='gofundme') }}" class="gf-btn-outline w-full py-2.5 text-sm text-center">
+              查看详情
+            </a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Progress visualization -->
+  <section id="progress" class="py-16 lg:py-24 bg-white relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-green-200 to-transparent"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
+        <div class="gf-reveal">
+          <span class="gf-label">筹款进度</span>
+          <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mt-3 mb-4">您的每一分善款都公开透明</h2>
+          <p class="text-gray-600 mb-8 leading-relaxed">
+            我们承诺所有捐赠记录实时可查，资金流向全程透明。以下是本年度整体筹款进度与资金用途分布。
+          </p>
+
+          <div class="space-y-5">
+            <div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="font-medium text-gray-700">教学物资采购</span>
+                <span class="font-semibold text-gray-900">68%</span>
+              </div>
+              <div class="gf-progress">
+                <div class="gf-progress-bar" style="width: 68%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="font-medium text-gray-700">儿童康复辅助设备</span>
+                <span class="font-semibold text-gray-900">45%</span>
+              </div>
+              <div class="gf-progress">
+                <div class="gf-progress-bar" style="width: 45%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="font-medium text-gray-700">教师培训与津贴</span>
+                <span class="font-semibold text-gray-900">82%</span>
+              </div>
+              <div class="gf-progress">
+                <div class="gf-progress-bar" style="width: 82%"></div>
+              </div>
+            </div>
+            <div>
+              <div class="flex justify-between text-sm mb-2">
+                <span class="font-medium text-gray-700">校园环境改善</span>
+                <span class="font-semibold text-gray-900">33%</span>
+              </div>
+              <div class="gf-progress">
+                <div class="gf-progress-bar" style="width: 33%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gf-reveal" data-delay="2">
+          <div class="gf-card p-6 lg:p-8" id="donate">
+            <h3 class="text-xl font-bold text-gray-900 mb-2">选择捐赠金额</h3>
+            <p class="text-sm text-gray-500 mb-6">所有档位均可选择，100% 用于公益项目。</p>
+
+            <div class="grid grid-cols-3 gap-3 mb-6">
+              <button class="gf-tier py-3 rounded-xl border border-gray-200 text-center hover:border-green-400 active">
+                <div class="text-lg font-bold text-gray-900">¥50</div>
+                <div class="text-xs text-gray-500 mt-0.5">学习用品</div>
+              </button>
+              <button class="gf-tier py-3 rounded-xl border border-gray-200 text-center hover:border-green-400">
+                <div class="text-lg font-bold text-gray-900">¥100</div>
+                <div class="text-xs text-gray-500 mt-0.5">康复教具</div>
+              </button>
+              <button class="gf-tier py-3 rounded-xl border border-gray-200 text-center hover:border-green-400">
+                <div class="text-lg font-bold text-gray-900">¥200</div>
+                <div class="text-xs text-gray-500 mt-0.5">助学金</div>
+              </button>
+              <button class="gf-tier py-3 rounded-xl border border-gray-200 text-center hover:border-green-400">
+                <div class="text-lg font-bold text-gray-900">¥500</div>
+                <div class="text-xs text-gray-500 mt-0.5">设备支持</div>
+              </button>
+              <button class="gf-tier py-3 rounded-xl border border-gray-200 text-center hover:border-green-400">
+                <div class="text-lg font-bold text-gray-900">¥1000</div>
+                <div class="text-xs text-gray-500 mt-0.5">月度结对</div>
+              </button>
+              <button class="gf-tier py-3 rounded-xl border border-gray-200 text-center hover:border-green-400">
+                <div class="text-lg font-bold text-gray-900">自定义</div>
+                <div class="text-xs text-gray-500 mt-0.5">其他金额</div>
+              </button>
+            </div>
+
+            <div class="mb-6">
+              <label for="gf-donor-name" class="block text-sm font-medium text-gray-700 mb-1.5">您的称呼</label>
+              <input id="gf-donor-name" type="text" placeholder="爱心人士" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-green-500 focus:ring-2 focus:ring-green-100 outline-none transition text-sm">
+            </div>
+
+            <button class="gf-btn-primary w-full py-3.5 text-base flex items-center justify-center gap-2">
+              <i data-lucide="heart" class="w-5 h-5"></i>
+              立即捐赠
+            </button>
+
+            <p class="text-xs text-gray-400 text-center mt-4 flex items-center justify-center gap-1">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+              安全支付 · 公开透明 · 可开具捐赠凭证
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Children stories -->
+  <section id="children" class="py-16 lg:py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12 gf-reveal">
+        <span class="gf-label justify-center">儿童风采</span>
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mt-3 mb-4">每一个孩子都值得被看见</h2>
+        <p class="text-gray-600">他们的笑容、梦想与成长，是我们坚持前行的力量。</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        {% for child in children[:8] %}
+        <article class="gf-card p-4 text-center gf-reveal" data-delay="{{ loop.index % 4 }}">
+          <div class="w-20 h-20 mx-auto rounded-full p-0.5 bg-gradient-to-br from-green-400 to-teal-400 mb-4">
+            <img src="{{ child.avatar_url or 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=120&h=120&fit=crop&crop=face' }}" alt="{{ child.name }}" class="w-full h-full rounded-full object-cover border-2 border-white">
+          </div>
+          <h3 class="text-base font-bold text-gray-900">{{ child.name }}</h3>
+          <p class="text-xs text-gray-500 mb-3">{{ child.age }} 岁</p>
+          <p class="text-sm text-gray-600 line-clamp-2 mb-3">"{{ child.quote or '谢谢叔叔阿姨，我会努力成长' }}"</p>
+          {% if child.tags %}
+          <div class="flex flex-wrap justify-center gap-1.5">
+            {% for tag in child.tags.split(',')[:3] %}
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-green-50 text-green-700">{{ tag.strip() }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- Recent donations -->
+  <section id="donations" class="py-16 lg:py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12 gf-reveal">
+        <span class="gf-label justify-center">爱心足迹</span>
+        <h2 class="text-3xl lg:text-4xl font-bold text-gray-900 mt-3 mb-4">近期捐赠记录</h2>
+        <p class="text-gray-600">实时更新的捐赠公示，让善意有迹可循。</p>
+      </div>
+
+      <div class="gf-card overflow-hidden gf-reveal">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="bg-gray-50 text-gray-500 font-medium">
+              <tr>
+                <th class="px-5 py-3.5">捐赠人</th>
+                <th class="px-5 py-3.5">项目 / 学校</th>
+                <th class="px-5 py-3.5">捐赠内容</th>
+                <th class="px-5 py-3.5">金额</th>
+                <th class="px-5 py-3.5">状态</th>
+                <th class="px-5 py-3.5 hidden sm:table-cell">时间</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              {% for donation in recent_donations[:10] %}
+              <tr class="gf-donation-item">
+                <td class="px-5 py-4 font-medium text-gray-900">{{ donation.donor_name }}</td>
+                <td class="px-5 py-4 text-gray-600">{{ donation.school.name }}</td>
+                <td class="px-5 py-4 text-gray-600">{{ donation.item_name }}{% if donation.item_detail %} · {{ donation.item_detail }}{% endif %}</td>
+                <td class="px-5 py-4 font-semibold text-green-700">¥{{ "%.0f"|format(donation.amount or 0) }}</td>
+                <td class="px-5 py-4">
+                  <span class="gf-status {{ donation.status }}">
+                    {% if donation.status == 'received' %}已接收{% elif donation.status == 'distributing' %}分发中{% else %}已完成{% endif %}
+                  </span>
+                </td>
+                <td class="px-5 py-4 text-gray-400 hidden sm:table-cell">{{ donation.created_at.strftime('%m-%d') if donation.created_at else '--' }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="gf-footer py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid md:grid-cols-4 gap-8 mb-10">
+      <div class="md:col-span-2">
+        <div class="flex items-center gap-2 mb-4">
+          <div class="w-9 h-9 rounded-full bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center text-white">
+            <i data-lucide="heart" class="w-5 h-5"></i>
+          </div>
+          <span class="text-xl font-bold text-gray-900">特教公益</span>
+        </div>
+        <p class="text-gray-500 text-sm max-w-sm leading-relaxed">
+          致力于为特殊教育学校搭建透明、温暖的公益展示平台，让每一份爱心都被看见，让每一次帮助都落到实处。
+        </p>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-900 mb-3">导航</h4>
+        <ul class="space-y-2 text-sm text-gray-500">
+          <li><a href="#schools" class="hover:text-green-700 transition">学校项目</a></li>
+          <li><a href="#children" class="hover:text-green-700 transition">儿童风采</a></li>
+          <li><a href="#progress" class="hover:text-green-700 transition">筹款进度</a></li>
+          <li><a href="#donations" class="hover:text-green-700 transition">捐赠记录</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-semibold text-gray-900 mb-3">联系我们</h4>
+        <ul class="space-y-2 text-sm text-gray-500">
+          <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4"></i> contact@example.org</li>
+          <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4"></i> 400-000-0000</li>
+          <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4"></i> 中国 · 公益市</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-200 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-400">
+      <p>© 2026 特殊学校公益展示网站 · 测试用 GoFundMe 风格变体</p>
+      <p>本页面为 UI 变体测试，数据均为演示用途</p>
+    </div>
+  </div>
+</footer>
+{% endblock %}
+
+{% block body_scripts %}
+<script>
+(function() {
+  // Mobile menu toggle
+  const menuBtn = document.getElementById('gf-mobile-menu');
+  const mobileNav = document.getElementById('gf-mobile-nav');
+  if (menuBtn && mobileNav) {
+    menuBtn.addEventListener('click', () => {
+      mobileNav.classList.toggle('hidden');
+    });
+  }
+
+  // Tier selector
+  document.querySelectorAll('.gf-tier').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.gf-tier').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.gf-reveal').forEach(el => observer.observe(el));
+
+  // Animate progress bars once in view
+  const progressObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const bar = entry.target;
+        const width = bar.getAttribute('data-width') || bar.style.width;
+        bar.style.width = '0%';
+        setTimeout(() => { bar.style.width = width; }, 100);
+        progressObserver.unobserve(bar);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  document.querySelectorAll('.gf-progress-bar').forEach(bar => progressObserver.observe(bar));
+})();
+</script>
+{% endblock %}

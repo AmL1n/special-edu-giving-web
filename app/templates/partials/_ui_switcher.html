@@ -1,0 +1,102 @@
+{# 测试专用 UI 切换浮窗：config.UI_PREVIEW 开启，或在 UI 变体页面中强制显示 #}
+{% if config.UI_PREVIEW or ui_preview_mode %}
+<style>
+  .ui-switcher {
+    position: fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 9999;
+    width: 15rem;
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  }
+  .ui-switcher summary { list-style: none; cursor: pointer; }
+  .ui-switcher summary::-webkit-details-marker { display: none; }
+  .ui-switcher-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 1rem;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+    overflow: hidden;
+  }
+  .ui-switcher-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1f2937;
+    background: rgba(0,0,0,0.03);
+  }
+  .ui-switcher-body {
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .ui-switcher-body a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    color: #374151;
+    text-decoration: none;
+    transition: background 0.15s ease;
+  }
+  .ui-switcher-body a:hover { background: rgba(0,0,0,0.05); }
+  .ui-switcher-body a.active {
+    background: #eff6ff;
+    color: #2563eb;
+    font-weight: 600;
+  }
+  .ui-switcher-hint {
+    padding: 0.4rem 0.75rem 0;
+    font-size: 0.65rem;
+    color: #6b7280;
+    border-top: 1px solid rgba(0,0,0,0.06);
+    margin-top: 0.25rem;
+  }
+</style>
+
+<details class="ui-switcher" open>
+  <summary class="ui-switcher-card">
+    <div class="ui-switcher-header">
+      <span>UI 风格切换</span>
+      <i data-lucide="layers" style="width:14px;height:14px;"></i>
+    </div>
+  </summary>
+  <div class="ui-switcher-body">
+    <a href="{{ url_for('main.index') }}" class="{% if not ui_variant %}active{% endif %}">
+      <i data-lucide="home" style="width:14px;height:14px;"></i>
+      默认版
+    </a>
+    <a href="{{ url_for('main.index', ui='charitywater') }}" class="{% if ui_variant == 'charitywater' %}active{% endif %}">
+      <i data-lucide="droplets" style="width:14px;height:14px;"></i>
+      Charity: Water
+    </a>
+    <a href="{{ url_for('main.index', ui='justgiving') }}" class="{% if ui_variant == 'justgiving' %}active{% endif %}">
+      <i data-lucide="heart-handshake" style="width:14px;height:14px;"></i>
+      JustGiving
+    </a>
+    <a href="{{ url_for('main.index', ui='donorsee') }}" class="{% if ui_variant == 'donorsee' %}active{% endif %}">
+      <i data-lucide="video" style="width:14px;height:14px;"></i>
+      DonorSee
+    </a>
+    <a href="{{ url_for('main.index', ui='wwf') }}" class="{% if ui_variant == 'wwf' %}active{% endif %}">
+      <i data-lucide="leaf" style="width:14px;height:14px;"></i>
+      WWF
+    </a>
+    <a href="{{ url_for('main.index', ui='gofundme') }}" class="{% if ui_variant == 'gofundme' %}active{% endif %}">
+      <i data-lucide="trending-up" style="width:14px;height:14px;"></i>
+      GoFundMe
+    </a>
+    <div class="ui-switcher-hint">
+      测试结束后删除 <code>app/templates/ui_variants</code> 与 <code>app/static/css/ui_variants</code>。
+    </div>
+  </div>
+</details>
+{% endif %}

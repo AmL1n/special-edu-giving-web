@@ -18,6 +18,10 @@ class Config:
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'webp', 'mp4', 'webm', 'mov'}
 
+    # UI 预览开关：仅在测试阶段开启，方便对比多套 UI 风格
+    # 设置为 "1"/"true"/"yes" 时，页面右下角显示 UI 切换浮窗
+    UI_PREVIEW = os.environ.get('UI_PREVIEW', '').lower() in ('1', 'true', 'yes')
+
 
 # 安全警告：若使用默认密钥或默认管理员密码，启动时提醒开发者
 if not os.environ.get('SECRET_KEY'):

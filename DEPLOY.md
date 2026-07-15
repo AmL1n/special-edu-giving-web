@@ -150,6 +150,7 @@ server {
 - [ ] CORS 已配置白名单。
 - [ ] 已在 1280px+ 与 390px 宽度下截图验收。
 - [ ] 已通过键盘 Tab 操作与屏幕阅读器（或浏览器可访问性检查）验证主要流程。
+- [ ] 测试阶段 UI 变体已清理：删除 `app/templates/ui_variants/`、`app/static/css/ui_variants/`、`app/templates/partials/_ui_switcher.html`，并确保未设置 `UI_PREVIEW`。
 
 ---
 

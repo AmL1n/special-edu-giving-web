@@ -10,6 +10,10 @@ def inject_schools():
     return {'schools': School.query.all()}
 
 
+# 测试阶段 UI 变体白名单，对应 app/templates/ui_variants/<key>.html
+UI_VARIANTS = ('charitywater', 'justgiving', 'donorsee', 'wwf', 'gofundme')
+
+
 @main.route('/')
 def index():
     schools = School.query.all()
@@ -18,6 +22,18 @@ def index():
     recent_donations = Donation.query.order_by(Donation.created_at.desc()).limit(8).all()
     total_donations = db.session.query(db.func.count(Donation.id)).scalar() or 0
     total_amount = db.session.query(db.func.sum(Donation.amount)).scalar() or 0
+
+    ui = request.args.get('ui', '').strip().lower()
+    if ui in UI_VARIANTS:
+        return render_template(f'ui_variants/{ui}.html',
+                               schools=schools,
+                               children=children,
+                               recent_posts=recent_posts,
+                               recent_donations=recent_donations,
+                               total_donations=total_donations,
+                               total_amount=total_amount,
+                               ui_variant=ui)
+
     return render_template('index.html',
                            schools=schools,
                            children=children,
