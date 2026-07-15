@@ -1,175 +1,313 @@
 /* 测试专用 UI 变体：charitywater — 上线前删除 */
 
 /* ========================================
-   Charity Water 风格变量
-   极简通透 / 玻璃拟态 / 柔和蓝白治愈系
+   charitywater · 电影感全幅叙事页
+   清水蓝 / 柔白 / 浅灰 · 柔和光晕 · 轻微视差
    ======================================== */
+
 :root {
-  --cw-primary: #2563EB;
-  --cw-primary-soft: #3B82F6;
-  --cw-sky: #0EA5E9;
-  --cw-cyan: #22D3EE;
-  --cw-bg: #F8FAFC;
-  --cw-surface: rgba(255, 255, 255, 0.72);
-  --cw-surface-strong: rgba(255, 255, 255, 0.88);
-  --cw-text: #0F172A;
-  --cw-text-muted: #64748B;
-  --cw-border: rgba(255, 255, 255, 0.65);
-  --cw-shadow: 0 8px 32px rgba(30, 64, 175, 0.10);
-  --cw-shadow-hover: 0 24px 60px rgba(30, 64, 175, 0.18);
-  --cw-radius: 1.25rem;
+  --cw-water: #4A9BB8;
+  --cw-water-deep: #2E7A96;
+  --cw-water-soft: #A8D4E6;
+  --cw-mist: #F4F8FA;
+  --cw-cloud: #FFFFFF;
+  --cw-stone: #E2E8F0;
+  --cw-text: #1E293B;
+  --cw-text-soft: #64748B;
+  --cw-glass: rgba(255, 255, 255, 0.78);
+  --cw-glass-dark: rgba(15, 23, 42, 0.42);
+  --cw-radius: 1.5rem;
+  --cw-shadow: 0 24px 60px rgba(30, 58, 138, 0.10);
+  --cw-shadow-soft: 0 8px 30px rgba(30, 58, 138, 0.08);
 }
 
-/* 柔和渐变背景层 */
-.cw-gradient-bg {
-  background:
-    radial-gradient(ellipse at 10% 20%, rgba(59, 130, 246, 0.12) 0%, transparent 45%),
-    radial-gradient(ellipse at 90% 80%, rgba(14, 165, 233, 0.10) 0%, transparent 45%),
-    linear-gradient(180deg, #F8FAFC 0%, #EFF6FF 50%, #F8FAFC 100%);
+html {
+  scroll-behavior: smooth;
 }
 
-.cw-hero-gradient {
-  background:
-    radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.22) 0%, transparent 55%),
-    linear-gradient(180deg, #DBEAFE 0%, #F0F9FF 40%, #F8FAFC 100%);
+.cw-cinematic {
+  background-color: var(--cw-mist);
+  font-family: 'Noto Sans SC', 'Inter', sans-serif;
 }
 
-/* 玻璃卡片基础 */
-.cw-glass {
-  background: var(--cw-surface);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--cw-border);
-  box-shadow: var(--cw-shadow);
+.cw-serif {
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
 }
 
-.cw-glass-strong {
-  background: var(--cw-surface-strong);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.8);
+/* 顶部导航 */
+.cw-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.6);
 }
 
-/* 悬浮折射光效 */
-.cw-card {
+.cw-nav-link {
+  font-size: 0.875rem;
+  color: #475569;
+  transition: color 0.25s ease;
+}
+
+.cw-nav-link:hover {
+  color: var(--cw-water-deep);
+}
+
+/* 全屏沉浸式 Hero */
+.cw-hero {
   position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.cw-card::before {
-  content: '';
+.cw-hero-bg {
+  position: absolute;
+  inset: -5% 0;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+  transform: scale(1.08);
+}
+
+.cw-hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    115deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.45) 45%,
-    transparent 60%
-  );
-  transform: translateX(-120%);
-  transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.42) 0%, rgba(15, 23, 42, 0.18) 50%, rgba(15, 23, 42, 0.55) 100%),
+    radial-gradient(ellipse at 50% 0%, rgba(74, 155, 184, 0.25) 0%, transparent 55%);
+}
+
+.cw-hero-title {
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  letter-spacing: -0.02em;
+  text-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+}
+
+.cw-hero-kicker {
+  font-family: 'Inter', sans-serif;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+}
+
+.cw-hero-lead {
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.cw-hero-cta {
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.cw-hero-cta:hover {
+  border-color: rgba(255, 255, 255, 0.85);
+}
+
+/* 横向使命带 */
+.cw-mission-band {
+  position: relative;
+  z-index: 20;
+  background: var(--cw-cloud);
+  box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.04);
+}
+
+.cw-mission-item {
+  transition: background 0.35s ease;
+}
+
+.cw-mission-item:hover {
+  background: #F8FAFC;
+}
+
+/* 全幅学校特写 */
+.cw-school-feature {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.cw-school-bg {
+  position: absolute;
+  inset: -5% 0;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+  transform: scale(1.08);
+}
+
+.cw-school-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(15, 23, 42, 0.72) 0%, rgba(15, 23, 42, 0.28) 60%, rgba(15, 23, 42, 0.12) 100%),
+    linear-gradient(180deg, rgba(15, 23, 42, 0.25) 0%, transparent 40%, rgba(15, 23, 42, 0.45) 100%);
+}
+
+.cw-float-stat {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--cw-radius);
+  padding: 1.25rem 1.75rem;
+  min-width: 8.5rem;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.15);
+}
+
+.cw-float-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cw-float-label {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.05em;
+}
+
+.cw-school-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  transition: background 0.25s ease, border-color 0.25s ease;
+}
+
+.cw-school-chip:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* 儿童引言带 */
+.cw-quote-band {
+  background: #F8FAFC;
+}
+
+.cw-quote-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #CBD5E1 transparent;
+}
+
+.cw-quote-scroll::-webkit-scrollbar {
+  height: 6px;
+}
+
+.cw-quote-scroll::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 999px;
+}
+
+.cw-quote-card {
+  position: relative;
+  background: #fff;
+  border-radius: var(--cw-radius);
+  padding: 2.5rem;
+  box-shadow: var(--cw-shadow-soft);
+  border: 1px solid #F1F5F9;
+}
+
+.cw-quote-mark {
+  position: absolute;
+  top: 0.5rem;
+  left: 1.5rem;
+  font-family: 'Noto Serif SC', serif;
+  font-size: 6rem;
+  line-height: 1;
+  opacity: 0.35;
   pointer-events: none;
-  z-index: 2;
 }
 
-.cw-card:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--cw-shadow-hover);
+.cw-quote-text {
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
 }
 
-.cw-card:hover::before {
-  transform: translateX(120%);
+/* 透明日志时间线 */
+.cw-log-section {
+  background: #fff;
 }
 
-/* 按钮光效 */
-.cw-btn-primary {
+.cw-timeline {
   position: relative;
-  overflow: hidden;
-  background: linear-gradient(135deg, #2563EB 0%, #0EA5E9 100%);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.cw-btn-primary::after {
-  content: '';
+.cw-timeline-line {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    115deg,
-    transparent 30%,
-    rgba(255, 255, 255, 0.35) 50%,
-    transparent 70%
-  );
-  transform: translateX(-130%);
-  transition: transform 0.7s ease;
+  top: 0.75rem;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #CBD5E1 10%, #CBD5E1 90%, transparent 100%);
 }
 
-.cw-btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.35);
-}
-
-.cw-btn-primary:hover::after {
-  transform: translateX(130%);
-}
-
-/* 液态渐变进度条 */
-.cw-progress-track {
-  background: rgba(203, 213, 225, 0.45);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.cw-progress-fill {
+.cw-timeline-track {
   position: relative;
-  height: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #2563EB 0%, #0EA5E9 50%, #22D3EE 100%);
-  background-size: 200% 100%;
-  animation: cw-liquid-flow 3s ease-in-out infinite;
-  box-shadow: 0 0 18px rgba(14, 165, 233, 0.35);
 }
 
-.cw-progress-fill::after {
-  content: '';
+.cw-timeline-node {
+  position: relative;
+}
+
+.cw-timeline-dot {
   position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: linear-gradient(
-    180deg,
-    rgba(255, 255, 255, 0.35) 0%,
-    transparent 45%,
-    rgba(255, 255, 255, 0.15) 100%
-  );
+  top: 0.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--cw-water);
+  box-shadow: 0 0 0 4px rgba(74, 155, 184, 0.12);
 }
 
-@keyframes cw-liquid-flow {
-  0%, 100% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
+.cw-timeline-card {
+  background: #F8FAFC;
+  border: 1px solid #F1F5F9;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  margin-top: 2rem;
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
 }
 
-/* 数据数字 */
-.cw-stat-number {
-  font-family: 'JetBrains Mono', 'Inter', monospace;
-  background: linear-gradient(135deg, #1E40AF 0%, #0EA5E9 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.cw-timeline-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--cw-shadow-soft);
 }
 
-/* 柱状图 */
-.cw-bar {
-  background: linear-gradient(180deg, #BFDBFE 0%, #60A5FA 100%);
-  border-radius: 6px 6px 0 0;
-  transition: height 1.2s cubic-bezier(0.22, 1, 0.36, 1), filter 0.3s ease;
+.cw-timeline-date {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--cw-water-deep);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.05em;
 }
 
-.cw-bar:hover {
-  filter: brightness(1.1);
+.cw-status-pill {
+  display: inline-flex;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 600;
 }
 
-/* 状态标签 */
 .cw-status-received {
   background: #DBEAFE;
   color: #1E40AF;
@@ -185,12 +323,12 @@
   color: #065F46;
 }
 
-/* 滚动动画初始态 */
+/* 滚动揭示 */
 .cw-reveal {
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .cw-reveal.cw-visible {
@@ -198,53 +336,63 @@
   transform: translateY(0);
 }
 
-.cw-reveal-delay-1 { transition-delay: 0.1s; }
-.cw-reveal-delay-2 { transition-delay: 0.2s; }
-.cw-reveal-delay-3 { transition-delay: 0.3s; }
-.cw-reveal-delay-4 { transition-delay: 0.4s; }
-
-/* 视差容器 */
-.cw-parallax {
-  will-change: transform;
+/* 页脚 */
+.cw-footer {
+  background: #0F172A;
 }
 
-/* 导航栏模糊 */
-.cw-nav {
-  background: rgba(248, 250, 252, 0.78);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.6);
+.cw-footer a:hover {
+  color: #fff;
 }
 
-/* 图片处理 */
-.cw-img-cover {
-  object-fit: cover;
-  width: 100%;
-  height: 100%;
+/* 移动端时间线改为左侧竖线 */
+@media (max-width: 767px) {
+  .cw-timeline-line {
+    top: 0;
+    left: 1.25rem;
+    right: auto;
+    bottom: 0;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, transparent 0%, #CBD5E1 5%, #CBD5E1 95%, transparent 100%);
+  }
+
+  .cw-timeline-dot {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    transform: translateX(-50%);
+  }
+
+  .cw-timeline-card {
+    margin-top: 0;
+    margin-left: 2.75rem;
+  }
+
+  .cw-float-stat {
+    min-width: 7rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .cw-float-number {
+    font-size: 1.5rem;
+  }
 }
 
 /* 减弱动画偏好 */
 @media (prefers-reduced-motion: reduce) {
-  .cw-progress-fill {
-    animation: none;
+  html {
+    scroll-behavior: auto;
   }
-  .cw-card,
-  .cw-card::before,
-  .cw-btn-primary,
-  .cw-btn-primary::after,
-  .cw-reveal {
-    transition: none;
-    animation: none;
-  }
-  .cw-reveal {
-    opacity: 1;
-    transform: none;
-  }
-}
 
-/* 移动端微调 */
-@media (max-width: 640px) {
-  :root {
-    --cw-radius: 1rem;
+  .cw-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .cw-hero-bg,
+  .cw-school-bg {
+    transform: none !important;
   }
 }

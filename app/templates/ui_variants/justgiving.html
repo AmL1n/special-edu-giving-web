@@ -2,497 +2,208 @@
 
 {% block title %}JustGiving 风格预览{% endblock %}
 
-{% block body_class %}jg-page{% endblock %}
+{% block body_class %}jg-magazine{% endblock %}
 
 {% block head_extra %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/ui_variants/justgiving.css') }}">
 {% endblock %}
 
 {% block content %}
-<div class="jg-aurora"></div>
+<main class="jg-wrapper">
 
-<div class="jg-container">
+  <!-- 1. 杂志刊头 -->
+  <header class="jg-masthead">
+    <div class="jg-masthead-top">
+      <span class="jg-masthead-date">2026 年 7 月 15 日 · 星期三</span>
+      <span class="jg-masthead-issue">第 07 期</span>
+    </div>
+    <h1 class="jg-masthead-title">萤火特刊</h1>
+    <p class="jg-masthead-subtitle">特殊教育公益展示 · 透明 · 温情 · 记录</p>
+    <div class="jg-masthead-rule"></div>
+  </header>
 
-  <!-- 1. 顶部导航栏 -->
-  <nav class="jg-nav jg-glass jg-glass-strong" id="jgNav">
-    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-      <a href="{{ url_for('main.index') }}" class="flex items-center gap-3 group">
-        <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-purple-600 to-pink-500 text-white shadow-lg">
-          <i data-lucide="heart-handshake" class="w-5 h-5"></i>
-        </div>
-        <span class="text-xl font-bold text-slate-900 tracking-tight">公益一起捐</span>
-      </a>
-
-      <div class="hidden md:flex items-center gap-8">
-        <a href="#projects" class="jg-nav-link text-sm">公益项目</a>
-        <a href="#stats" class="jg-nav-link text-sm">数据看板</a>
-        <a href="#stories" class="jg-nav-link text-sm">儿童故事</a>
-        <a href="#donations" class="jg-nav-link text-sm">捐赠记录</a>
-      </div>
-
-      <div class="flex items-center gap-3">
-        <a href="#donate" class="hidden sm:inline-flex jg-btn jg-btn-secondary text-sm px-5 py-2.5">
-          登录
-        </a>
-        <a href="#donate" class="jg-btn jg-btn-primary text-sm px-6 py-2.5">
-          <i data-lucide="heart" class="w-4 h-4"></i>
-          立即捐赠
-        </a>
+  <!-- 2. 非对称 Hero -->
+  <section class="jg-hero-split">
+    <div class="jg-hero-copy">
+      <p class="jg-hero-kicker">本期封面</p>
+      <h2 class="jg-hero-title">每一束微光，<br>都该被温柔接住。</h2>
+      <p class="jg-hero-lead">
+        我们走进合作特殊教育学校，记录孩子们的日常、捐赠物资的流向，以及那些把“善意”变成“抵达”的人。
+      </p>
+      <div class="jg-hero-byline">
+        <span>文 · 萤火编辑部</span>
+        <span><i data-lucide="clock" class="w-4 h-4"></i> 阅读约 6 分钟</span>
       </div>
     </div>
-  </nav>
-
-  <!-- 2. Hero 区域 -->
-  <section class="jg-hero">
-    <div class="jg-hero-bg"></div>
-    <div class="jg-hero-glow"></div>
-    <div class="max-w-7xl mx-auto px-6 w-full">
-      <div class="grid lg:grid-cols-2 gap-12 items-center">
-        <div class="jg-reveal">
-          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 border border-purple-100 text-purple-700 text-xs font-semibold shadow-sm mb-6">
-            <span class="w-2 h-2 rounded-full bg-pink-500 animate-pulse"></span>
-            已有 {{ total_donations|default(0) }} 位爱心人士参与
-          </div>
-          <h1 class="jg-hero-title text-5xl lg:text-6xl font-bold text-slate-900 mb-6">
-            让每一次捐赠<br><span>都清晰可见</span>
-          </h1>
-          <p class="text-lg text-slate-600 leading-relaxed mb-8 max-w-xl">
-            连接爱心与特殊教育学校，多项目并列对比、实时进度追踪、资金流向透明，让公益 lighter, brighter, together。
-          </p>
-          <div class="flex flex-wrap gap-4">
-            <a href="#projects" class="jg-btn jg-btn-primary px-8 py-3.5 text-base">
-              浏览项目
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </a>
-            <a href="#donate" class="jg-btn jg-btn-secondary px-8 py-3.5 text-base">
-              发起一起捐
-            </a>
-          </div>
-        </div>
-
-        <div class="hidden lg:block jg-reveal" style="transition-delay: 0.15s;">
-          <div class="jg-glass jg-glow-hover p-6 relative">
-            <div class="flex items-center justify-between mb-4">
-              <h3 class="font-semibold text-slate-800">本周筹款进度</h3>
-              <span class="jg-tag">实时更新</span>
-            </div>
-            <div class="space-y-5">
-              <div>
-                <div class="flex justify-between text-sm mb-2">
-                  <span class="text-slate-600">孤独症儿童康复教具</span>
-                  <span class="font-semibold text-purple-700">78%</span>
-                </div>
-                <div class="jg-progress">
-                  <div class="jg-progress-bar" style="width: 78%;"></div>
-                </div>
-              </div>
-              <div>
-                <div class="flex justify-between text-sm mb-2">
-                  <span class="text-slate-600">听障学生助听器电池</span>
-                  <span class="font-semibold text-pink-600">55%</span>
-                </div>
-                <div class="jg-progress">
-                  <div class="jg-progress-bar" style="width: 55%;"></div>
-                </div>
-              </div>
-              <div>
-                <div class="flex justify-between text-sm mb-2">
-                  <span class="text-slate-600">特教教师培训基金</span>
-                  <span class="font-semibold text-blue-600">92%</span>
-                </div>
-                <div class="jg-progress">
-                  <div class="jg-progress-bar" style="width: 92%;"></div>
-                </div>
-              </div>
-            </div>
-            <div class="mt-6 pt-5 border-t border-purple-100 flex items-center justify-between text-sm">
-              <span class="text-slate-500">目标金额</span>
-              <span class="font-bold text-slate-800">¥ 128,000</span>
-            </div>
-          </div>
-        </div>
+    <div class="jg-hero-visual">
+      <figure class="jg-hero-frame jg-reveal">
+        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80" alt="特殊教育学校课堂">
+        <figcaption class="jg-hero-caption">合作学校 · 手工课堂</figcaption>
+      </figure>
+      <div class="jg-hero-badge">
+        <span class="jg-hero-badge-num">{{ schools|length }}</span>
+        <span class="jg-hero-badge-label">所合作学校</span>
       </div>
     </div>
   </section>
 
-  <!-- 3. 数据概览 -->
-  <section id="stats" class="py-20">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center mb-12 jg-reveal">
-        <span class="jg-tag mb-3">数据看板</span>
-        <h2 class="text-3xl lg:text-4xl font-bold text-slate-900 mt-3">透明公益，每一笔都看得见</h2>
-        <p class="text-slate-500 mt-3">实时汇总平台全部捐赠与帮扶成果</p>
-      </div>
+  <!-- 3. 双栏编辑导语 -->
+  <section class="jg-editorial">
+    <div class="jg-editorial-col">
+      <h3 class="jg-editorial-heading">编者的话</h3>
+      <p class="jg-editorial-text">
+        公益不是一次性的情绪消费，而是一段可以被翻阅、被验证、被记住的长期叙事。本期杂志以“抵达”为主题，把所有捐赠记录、校园动态与孩子的话语整理成册。
+      </p>
+      <p class="jg-editorial-text">
+        这里没有催促你付款的按钮，只有一页页真实发生的故事。我们相信，透明本身就是最温柔的邀请。
+      </p>
+    </div>
+    <div class="jg-editorial-divider"></div>
+    <div class="jg-editorial-col">
+      <h3 class="jg-editorial-heading">本期焦点</h3>
+      <ul class="jg-editorial-list">
+        <li><i data-lucide="map-pin" class="w-4 h-4"></i> 合作学校的近况与需求</li>
+        <li><i data-lucide="users" class="w-4 h-4"></i> 受助儿童的简短侧写</li>
+        <li><i data-lucide="package-check" class="w-4 h-4"></i> 近期捐赠物资的透明日志</li>
+        <li><i data-lucide="pen-tool" class="w-4 h-4"></i> 校园动态与师生手作展示</li>
+      </ul>
+    </div>
+  </section>
 
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-5 jg-reveal">
-        <div class="jg-glass jg-glow-hover jg-stat-card">
-          <div class="jg-icon-ring">
-            <i data-lucide="school" class="w-6 h-6"></i>
-          </div>
-          <div class="jg-stat-number" data-count="{{ schools|length }}">{{ schools|length }}</div>
-          <div class="text-sm text-slate-500 mt-1">合作学校</div>
-        </div>
+  <!-- 4. 引言拉页 -->
+  <section class="jg-pullquote">
+    <blockquote class="jg-pullquote-text jg-reveal">
+      “我们不想被当作‘可怜的人’来展示，我们想被看见自己擅长的事。”
+    </blockquote>
+    <cite class="jg-pullquote-source">—— 一位受助儿童在采访中说</cite>
+  </section>
 
-        <div class="jg-glass jg-glow-hover jg-stat-card">
-          <div class="jg-icon-ring">
-            <i data-lucide="gift" class="w-6 h-6"></i>
-          </div>
-          <div class="jg-stat-number" data-count="{{ total_donations|default(0) }}">{{ total_donations|default(0) }}</div>
-          <div class="text-sm text-slate-500 mt-1">捐赠笔数</div>
-        </div>
-
-        <div class="jg-glass jg-glow-hover jg-stat-card">
-          <div class="jg-icon-ring">
-            <i data-lucide="banknote" class="w-6 h-6"></i>
-          </div>
-          <div class="jg-stat-number" data-count="{{ total_amount|default(0) }}">¥{{ "{:,.0f}".format(total_amount|default(0)) }}</div>
-          <div class="text-sm text-slate-500 mt-1">累计金额（元）</div>
-        </div>
-
-        <div class="jg-glass jg-glow-hover jg-stat-card">
-          <div class="jg-icon-ring">
-            <i data-lucide="users" class="w-6 h-6"></i>
-          </div>
-          <div class="jg-stat-number" data-count="{{ children|length }}">{{ children|length }}</div>
-          <div class="text-sm text-slate-500 mt-1">受助儿童</div>
-        </div>
+  <!-- 5. 照片拼贴墙 -->
+  <section class="jg-collage" aria-label="照片拼贴墙">
+    <div class="jg-collage-header">
+      <h3 class="jg-section-title">影像志</h3>
+      <p class="jg-section-desc">捐赠抵达之后的校园切片</p>
+    </div>
+    <div class="jg-collage-grid">
+      {% for school in schools[:3] %}
+      <figure class="jg-collage-item jg-collage-item-{{ loop.index }} jg-reveal" style="transition-delay: {{ loop.index0 * 0.1 }}s;">
+        <img src="{{ school.cover_image or 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80' }}" alt="{{ school.name }}">
+        <figcaption>
+          <strong>{{ school.name }}</strong>
+          <span>{{ school.location }}</span>
+        </figcaption>
+      </figure>
+      {% endfor %}
+      {% for child in children[:3] %}
+      <figure class="jg-collage-item jg-collage-item-{{ loop.index + 3 }} jg-reveal" style="transition-delay: {{ (loop.index0 + 3) * 0.1 }}s;">
+        <img src="{{ child.avatar or 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80' }}" alt="{{ child.name }}">
+        <figcaption>
+          <strong>{{ child.name }}</strong>
+          <span>{{ child.age }} 岁</span>
+        </figcaption>
+      </figure>
+      {% endfor %}
+      <div class="jg-collage-note jg-reveal">
+        <i data-lucide="quote" class="w-5 h-5"></i>
+        <p>所有影像均由学校老师与志愿者拍摄，未经许可不用于商业用途。</p>
       </div>
     </div>
   </section>
 
-  <!-- 4. 项目/学校卡片网格 -->
-  <section id="projects" class="py-20">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 jg-reveal">
-        <div>
-          <span class="jg-tag mb-3">公益项目</span>
-          <h2 class="text-3xl lg:text-4xl font-bold text-slate-900 mt-3">多所特殊教育学校等你助力</h2>
-        </div>
-        <a href="#" class="jg-btn jg-btn-secondary text-sm self-start">
-          查看全部项目
-          <i data-lucide="arrow-right" class="w-4 h-4"></i>
-        </a>
-      </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {% for school in schools %}
-        <article class="jg-glass jg-card jg-glow-hover jg-reveal" style="transition-delay: {{ loop.index0 * 0.08 }}s;">
-          <div class="jg-card-media">
-            <img src="{{ school.image_url or 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80' }}" alt="{{ school.name }}">
-            <div class="jg-card-overlay"></div>
-            <div class="absolute top-4 left-4">
-              <span class="jg-tag">{{ school.location }}</span>
+  <!-- 6. 最新故事列表 + 侧边数据栏 -->
+  <div class="jg-layout-split">
+    <section class="jg-stories" aria-labelledby="jg-stories-title">
+      <h3 class="jg-section-title" id="jg-stories-title">最新故事</h3>
+      <p class="jg-section-desc">来自校园一线的真实记录</p>
+      <div class="jg-stories-list">
+        {% for post in recent_posts %}
+        <article class="jg-story-row jg-reveal" style="transition-delay: {{ loop.index0 * 0.06 }}s;">
+          <div class="jg-story-meta">
+            <span class="jg-story-index">{{ '%02d'|format(loop.index) }}</span>
+            <span class="jg-story-date">{{ post.created_at.strftime('%m/%d') }}</span>
+          </div>
+          <div class="jg-story-body">
+            <h4 class="jg-story-title">{{ post.title or '校园动态' }}</h4>
+            <p class="jg-story-excerpt">{{ post.content[:80] }}{% if post.content|length > 80 %}…{% endif %}</p>
+            <div class="jg-story-tags">
+              <span>{{ post.school.name }}</span>
+              {% if post.post_type == 'distribution' %}<span>物资发放</span>{% else %}<span>校园日常</span>{% endif %}
             </div>
           </div>
-          <div class="jg-card-body">
-            <h3 class="jg-card-title text-xl mb-2">{{ school.name }}</h3>
-            <div class="jg-card-meta mb-3">
-              <i data-lucide="users" class="w-4 h-4"></i>
-              <span>{{ school.student_count }} 名学生</span>
-              <span class="w-1 h-1 rounded-full bg-slate-300"></span>
-              <span>{{ school.teacher_count }} 位教师</span>
-            </div>
-            <p class="jg-card-desc text-sm mb-5 flex-1">{{ school.description }}</p>
-
-            {% set progress = (loop.index * 23) % 100 %}
-            {% if progress < 25 %}{% set progress = 35 %}{% endif %}
-            <div class="mt-auto">
-              <div class="flex justify-between text-sm mb-2">
-                <span class="text-slate-500">项目进度</span>
-                <span class="font-semibold text-purple-700">{{ progress }}%</span>
-              </div>
-              <div class="jg-progress mb-4">
-                <div class="jg-progress-bar" style="width: {{ progress }}%;"></div>
-              </div>
-              <a href="{{ url_for('main.school_detail', school_id=school.id) }}" class="jg-btn jg-btn-primary w-full text-sm py-2.5">
-                支持这所学校
-              </a>
-            </div>
-          </div>
+          <a href="{{ url_for('main.school_detail', school_id=post.school.id) }}" class="jg-story-link" aria-label="阅读 {{ post.title }}">
+            <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+          </a>
         </article>
         {% else %}
-        <div class="col-span-full text-center py-12 text-slate-500">暂无学校数据</div>
+        <p class="jg-empty">暂无故事</p>
         {% endfor %}
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 5. 筹款/捐赠进度可视化 -->
-  <section class="py-20">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 jg-glass jg-glow-hover p-8 jg-reveal">
-          <div class="flex items-center justify-between mb-6">
-            <div>
-              <span class="jg-tag mb-2">可视化</span>
-              <h3 class="text-2xl font-bold text-slate-900 mt-2">近六个月资金流向</h3>
-            </div>
-            <div class="flex gap-2">
-              <span class="jg-tag">月度</span>
-              <span class="jg-tag jg-tag-pink">累计</span>
-            </div>
+    <aside class="jg-sidebar" aria-label="数据栏">
+      <div class="jg-sidebar-inner jg-reveal">
+        <h3 class="jg-sidebar-title">数据栏</h3>
+        <dl class="jg-metric-list">
+          <div class="jg-metric">
+            <dt>合作学校</dt>
+            <dd>{{ schools|length }}</dd>
           </div>
-          <div class="jg-bar-chart">
-            {% for month, height in [('1月', 45), ('2月', 62), ('3月', 38), ('4月', 78), ('5月', 55), ('6月', 92)] %}
-            <div class="jg-bar" style="height: {{ height }}%;" title="{{ month }}: {{ height }}%">
-              <span class="jg-bar-label">{{ month }}</span>
-            </div>
-            {% endfor %}
+          <div class="jg-metric">
+            <dt>捐赠记录</dt>
+            <dd>{{ total_donations|default(0) }}</dd>
           </div>
-        </div>
-
-        <div class="jg-glass jg-glow-hover p-8 jg-reveal" style="transition-delay: 0.1s;" id="donate">
-          <span class="jg-tag jg-tag-pink mb-3">快速捐赠</span>
-          <h3 class="text-2xl font-bold text-slate-900 mt-2 mb-2">选择金额</h3>
-          <p class="text-sm text-slate-500 mb-6">所有款项 100% 用于指定学校项目</p>
-
-          <div class="jg-amount-grid mb-5">
-            <label class="jg-amount-option active">¥50</label>
-            <label class="jg-amount-option">¥100</label>
-            <label class="jg-amount-option">¥300</label>
-            <label class="jg-amount-option">¥500</label>
+          <div class="jg-metric">
+            <dt>累计金额</dt>
+            <dd>¥{{ "{:,.0f}".format(total_amount|default(0)) }}</dd>
           </div>
-
-          <div class="mb-5">
-            <input type="text" placeholder="自定义金额" class="jg-input">
+          <div class="jg-metric">
+            <dt>受助儿童</dt>
+            <dd>{{ children|length }}</dd>
           </div>
-
-          <div class="mb-5">
-            <input type="text" placeholder="您的姓名（选填）" class="jg-input">
-          </div>
-
-          <button class="jg-btn jg-btn-primary w-full py-3">
-            <i data-lucide="heart" class="w-4 h-4"></i>
-            确认捐赠
-          </button>
-
-          <p class="text-xs text-center text-slate-400 mt-4">安全加密支付 · 捐赠证书可下载</p>
+        </dl>
+        <div class="jg-sidebar-note">
+          <i data-lucide="info" class="w-4 h-4"></i>
+          <p>数据来自平台公示系统，仅供展示与审计参考。</p>
         </div>
       </div>
-    </div>
-  </section>
+    </aside>
+  </div>
 
-  <!-- 6. 故事/儿童风采卡片 -->
-  <section id="stories" class="py-20">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="text-center mb-12 jg-reveal">
-        <span class="jg-tag jg-tag-blue mb-3">儿童风采</span>
-        <h2 class="text-3xl lg:text-4xl font-bold text-slate-900 mt-3">每一个梦想，都值得被看见</h2>
+  <!-- 7. 页脚 -->
+  <footer class="jg-footer">
+    <div class="jg-footer-rule"></div>
+    <div class="jg-footer-inner">
+      <div class="jg-footer-brand">
+        <strong>萤火特刊</strong>
+        <span>特殊学校公益展示网站</span>
       </div>
-
-      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-        {% for child in children %}
-        <div class="jg-glass jg-story-card jg-glow-hover jg-reveal" style="transition-delay: {{ loop.index0 * 0.06 }}s;">
-          <img src="{{ child.avatar_url or 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80' }}" alt="{{ child.name }}" class="jg-avatar mb-4">
-          <h3 class="text-lg font-bold text-slate-900">{{ child.name }}</h3>
-          <p class="text-sm text-slate-500 mb-3">{{ child.age }} 岁</p>
-          <p class="jg-quote text-sm mb-4 pl-3">{{ child.quote or '我想用自己的方式，拥抱这个世界。' }}</p>
-          <div class="flex flex-wrap justify-center gap-2 mt-auto">
-            {% for tag in child.tags %}
-            <span class="jg-tag text-xs">{{ tag }}</span>
-            {% endfor %}
-          </div>
-        </div>
-        {% else %}
-        <div class="col-span-full text-center py-12 text-slate-500">暂无儿童数据</div>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-
-  <!-- 7. 近期捐赠记录 -->
-  <section id="donations" class="py-20">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 jg-reveal">
-          <div class="flex items-center justify-between mb-6">
-            <div>
-              <span class="jg-tag mb-3">实时动态</span>
-              <h2 class="text-3xl font-bold text-slate-900 mt-3">近期爱心捐赠</h2>
-            </div>
-          </div>
-
-          <div class="jg-glass p-6 space-y-3">
-            {% for donation in recent_donations %}
-            <div class="jg-donation-item jg-reveal" style="transition-delay: {{ loop.index0 * 0.05 }}s;">
-              <div class="jg-donation-avatar">
-                {{ donation.donor_name[:1] }}
-              </div>
-              <div class="flex-1 min-w-0">
-                <div class="flex items-center gap-2 mb-0.5">
-                  <span class="font-semibold text-slate-900 truncate">{{ donation.donor_name }}</span>
-                  <span class="text-slate-400 text-xs">捐赠给 {{ donation.school.name }}</span>
-                </div>
-                <div class="text-sm text-slate-600">
-                  {{ donation.item_name }}{% if donation.item_detail %}（{{ donation.item_detail }}）{% endif %}
-                  × {{ donation.quantity }}
-                </div>
-              </div>
-              <div class="text-right flex-shrink-0">
-                <div class="font-bold text-slate-900">¥{{ donation.amount or '0' }}</div>
-                <span class="jg-status jg-status-{{ donation.status }}">
-                  {% if donation.status == 'received' %}已接收{% elif donation.status == 'distributing' %}发放中{% else %}已完成{% endif %}
-                </span>
-              </div>
-            </div>
-            {% else %}
-            <div class="text-center py-8 text-slate-500">暂无捐赠记录</div>
-            {% endfor %}
-          </div>
-        </div>
-
-        <div class="jg-reveal" style="transition-delay: 0.1s;">
-          <div class="jg-glass jg-glow-hover p-6 sticky top-24">
-            <h3 class="text-xl font-bold text-slate-900 mb-4">捐赠去向透明</h3>
-            <ul class="space-y-4 text-sm text-slate-600">
-              <li class="flex gap-3">
-                <i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 flex-shrink-0"></i>
-                <span>每笔捐赠与指定学校/项目绑定</span>
-              </li>
-              <li class="flex gap-3">
-                <i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 flex-shrink-0"></i>
-                <span>发放进度实时更新至 completed</span>
-              </li>
-              <li class="flex gap-3">
-                <i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 flex-shrink-0"></i>
-                <span>支持按学校对比筹款完成度</span>
-              </li>
-              <li class="flex gap-3">
-                <i data-lucide="check-circle-2" class="w-5 h-5 text-green-500 flex-shrink-0"></i>
-                <span>定期公示受助儿童成长故事</span>
-              </li>
-            </ul>
-            <a href="#" class="jg-btn jg-btn-secondary w-full mt-6 text-sm">
-              查看完整公示
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 8. 页脚 -->
-  <footer class="jg-footer py-16">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid md:grid-cols-4 gap-10 mb-12">
-        <div class="md:col-span-1">
-          <div class="flex items-center gap-3 mb-4">
-            <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br from-purple-500 to-pink-500 text-white">
-              <i data-lucide="heart-handshake" class="w-5 h-5"></i>
-            </div>
-            <span class="text-xl font-bold text-white">公益一起捐</span>
-          </div>
-          <p class="text-slate-300 text-sm leading-relaxed">
-            轻量化公益平台，让每一笔爱心都能被追踪、被感知、被传递。
-          </p>
-        </div>
-        <div>
-          <h4 class="font-semibold text-white mb-4">关于我们</h4>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#">机构简介</a></li>
-            <li><a href="#">合作伙伴</a></li>
-            <li><a href="#">联系方式</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-semibold text-white mb-4">公益项目</h4>
-          <ul class="space-y-2 text-sm">
-            <li><a href="#">合作学校</a></li>
-            <li><a href="#">儿童风采</a></li>
-            <li><a href="#">捐赠公示</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="font-semibold text-white mb-4">订阅动态</h4>
-          <div class="flex gap-2">
-            <input type="email" placeholder="您的邮箱" class="jg-input text-sm bg-white/10 border-white/20 text-white placeholder-slate-400">
-            <button class="jg-btn jg-btn-primary px-4">
-              <i data-lucide="send" class="w-4 h-4"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-slate-400">
-        <p>© 2026 特殊学校公益展示网站 · 测试用 UI 变体：justgiving</p>
-        <div class="flex gap-4">
-          <a href="#">隐私政策</a>
-          <a href="#">使用条款</a>
-        </div>
-      </div>
+      <nav class="jg-footer-nav" aria-label="页脚导航">
+        <a href="{{ url_for('main.index') }}">默认首页</a>
+        <a href="{{ url_for('main.dashboard') }}">捐赠公示</a>
+      </nav>
+      <p class="jg-footer-copy">© 2026 特殊学校公益展示网站 · 测试用 UI 变体：justgiving</p>
     </div>
   </footer>
 
-</div>
+</main>
 {% endblock %}
 
 {% block body_scripts %}
 <script>
-  // 导航栏滚动效果
-  const nav = document.getElementById('jgNav');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 20) {
-      nav.classList.add('scrolled');
-    } else {
-      nav.classList.remove('scrolled');
-    }
-  });
-
-  // 滚动显现动画
+  // 滚动显现：无 JS 或减弱动效时仍可见由 _shell.html 兜底
   const reveals = document.querySelectorAll('.jg-reveal');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
-  reveals.forEach(el => observer.observe(el));
-
-  // 金额选择交互
-  document.querySelectorAll('.jg-amount-option').forEach(option => {
-    option.addEventListener('click', function() {
-      document.querySelectorAll('.jg-amount-option').forEach(o => o.classList.remove('active'));
-      this.classList.add('active');
-    });
-  });
-
-  // 数字递增动画
-  const counters = document.querySelectorAll('.jg-stat-number[data-count]');
-  const countObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const target = parseInt(el.dataset.count, 10) || 0;
-        if (target <= 0) return;
-        const duration = 1500;
-        const start = performance.now();
-        const startVal = 0;
-        const isMoney = el.textContent.includes('¥');
-
-        const tick = (now) => {
-          const progress = Math.min((now - start) / duration, 1);
-          const ease = 1 - Math.pow(1 - progress, 3);
-          const current = Math.floor(startVal + (target - startVal) * ease);
-          if (isMoney) {
-            el.textContent = '¥' + current.toLocaleString();
-          } else {
-            el.textContent = current.toLocaleString();
-          }
-          if (progress < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-        countObserver.unobserve(el);
-      }
-    });
-  }, { threshold: 0.4 });
-
-  counters.forEach(c => countObserver.observe(c));
-
-  // 重新初始化 Lucide 图标
-  if (typeof lucide !== 'undefined') {
-    lucide.createIcons();
+  if (!document.documentElement.classList.contains('headless-preview')) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+    reveals.forEach(el => observer.observe(el));
+  } else {
+    reveals.forEach(el => el.classList.add('visible'));
   }
 </script>
 {% endblock %}

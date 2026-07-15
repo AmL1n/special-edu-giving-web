@@ -1,409 +1,346 @@
 {% extends "ui_variants/_shell.html" %}
 
-{% block title %}DonorSee · 透明公益{% endblock %}
+{% block title %}DonorSee · 公益透明追踪{% endblock %}
 
 {% block head_extra %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/ui_variants/donorsee.css') }}">
 {% endblock %}
 
-{% block body_class %}donorsee-page{% endblock %}
+{% block body_class %}ds-page{% endblock %}
 
 {% block content %}
 
-<!-- 光标跟随轮廓光 -->
-<div class="dn-cursor-glow" id="cursorGlow" aria-hidden="true"></div>
+<!-- 柔和环境轮廓光 -->
+<div class="ds-ambient-glow" id="ambientGlow" aria-hidden="true"></div>
 
-<!-- 1. 顶部导航栏 -->
-<nav class="dn-nav">
-  <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-    <a href="{{ url_for('main.index', ui='donorsee') }}" class="flex items-center gap-2 group">
-      <span class="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-br from-teal-400 to-cyan-500 text-[#062c2b] font-bold text-lg">D</span>
-      <span class="text-lg font-semibold tracking-tight text-white">DonorSee <span class="text-teal-400 font-normal">公益透明</span></span>
+<a href="#timeline" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-[#0d181d] focus:text-[#d8e5e7] focus:px-4 focus:py-2 focus:rounded-lg">跳转到主要内容</a>
+
+<!-- 1. 顶部导航 -->
+<header class="ds-nav">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="{{ url_for('main.index', ui='donorsee') }}" class="flex items-center gap-2.5 group">
+      <span class="w-8 h-8 rounded-lg flex items-center justify-center bg-[rgba(94,205,199,0.12)] border border-[rgba(94,176,191,0.3)] text-[#5ecdc7] font-bold">D</span>
+      <span class="text-base font-semibold tracking-tight text-[#f0f7f7]">DonorSee <span class="text-[#7d9aa0] font-normal">公益透明</span></span>
     </a>
 
-    <div class="hidden md:flex items-center gap-8">
-      <a href="#projects" class="dn-nav-link">帮扶项目</a>
-      <a href="#impact" class="dn-nav-link">资金流向</a>
-      <a href="#children" class="dn-nav-link">儿童风采</a>
-      <a href="#donations" class="dn-nav-link">捐赠记录</a>
-    </div>
+    <nav class="hidden md:flex items-center gap-8" aria-label="页面导航">
+      <a href="#chapter-departure" class="ds-nav-link">捐赠出发</a>
+      <a href="#chapter-transport" class="ds-nav-link">分拣运输</a>
+      <a href="#chapter-arrival" class="ds-nav-link">送达学校</a>
+      <a href="#chapter-hands" class="ds-nav-link">孩子手中</a>
+    </nav>
 
-    <a href="#donate" class="dn-btn dn-btn-primary text-sm px-5 py-2.5">
-      <i data-lucide="heart" class="w-4 h-4"></i>
-      立即捐助
+    <a href="{{ url_for('main.dashboard') }}" class="ds-nav-pill">
+      <i data-lucide="scroll-text" class="w-3.5 h-3.5"></i>
+      公示档案
     </a>
   </div>
-</nav>
+</header>
 
-<!-- 2. Hero 区域 -->
-<section class="dn-hero relative min-h-[92vh] flex items-center">
-  <div class="absolute inset-0 z-0">
-    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1920&q=80" alt="" class="w-full h-full object-cover opacity-25">
-    <div class="absolute inset-0 bg-gradient-to-b from-[#080c10]/70 via-[#080c10]/50 to-[#080c10]"></div>
-  </div>
+<main id="timeline">
 
-  <div class="relative z-10 max-w-7xl mx-auto px-6 py-20 grid lg:grid-cols-2 gap-12 items-center">
-    <div class="dn-reveal">
-      <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-teal-400/25 bg-teal-400/10 text-teal-300 text-xs font-semibold mb-6">
-        <span class="w-2 h-2 rounded-full bg-teal-400 animate-pulse"></span>
-        实时视频反馈 · 100% 资金透明
-      </div>
-      <h1 class="text-4xl md:text-6xl font-bold leading-tight mb-6 dn-title-gradient">
-        看见每一份善意<br>抵达孩子手中
-      </h1>
-      <p class="text-lg md:text-xl text-[#8daab0] max-w-xl mb-8 leading-relaxed">
-        DonorSee 风格透明公益平台。从捐赠到执行，每一步都有实拍视频与资金流向数据，让善意不再沉没于黑箱。
-      </p>
-      <div class="flex flex-wrap items-center gap-4">
-        <a href="#donate" class="dn-btn dn-btn-primary text-base px-8 py-3.5">
-          <i data-lucide="play-circle" class="w-5 h-5"></i>
-          观看帮扶实拍
-        </a>
-        <a href="#projects" class="dn-btn dn-btn-ghost text-base px-7 py-3.5">
-          浏览项目
-        </a>
-      </div>
+  <!-- 2. 纪录片感深色 Hero -->
+  <section class="ds-hero" aria-labelledby="ds-hero-title">
+    <div class="max-w-6xl mx-auto px-6 pt-32">
+      <div class="ds-reveal max-w-3xl">
+        <p class="ds-hero-kicker">Documentary Transparency</p>
+        <h1 id="ds-hero-title" class="ds-hero-title text-4xl md:text-6xl lg:text-7xl mb-6">
+          追踪每一份善意<br>抵达的旅程
+        </h1>
+        <p class="ds-hero-lead text-lg md:text-xl mb-8">
+          从捐赠者起心动念，到物资进入孩子手中，我们用时间轴记录每一次转运、每一次签收、每一次微笑。没有黑箱，只有可被验证的轨迹。
+        </p>
 
-      <div class="mt-10 flex items-center gap-4 text-sm text-[#8daab0]">
-        <div class="flex -space-x-2">
-          <img class="w-8 h-8 rounded-full border-2 border-[#080c10]" src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="">
-          <img class="w-8 h-8 rounded-full border-2 border-[#080c10]" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="">
-          <img class="w-8 h-8 rounded-full border-2 border-[#080c10]" src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?auto=format&fit=crop&w=100&q=80" alt="">
+        <div class="ds-hero-meta">
+          <div class="ds-hero-meta-item ds-reveal ds-reveal-delay-1">
+            <span class="ds-hero-meta-num">{{ total_donations or 0 }}</span>
+            <span class="ds-hero-meta-label">已记录捐赠笔数</span>
+          </div>
+          <div class="ds-hero-meta-item ds-reveal ds-reveal-delay-2">
+            <span class="ds-hero-meta-num">{{ schools|length }}</span>
+            <span class="ds-hero-meta-label">合作学校</span>
+          </div>
+          <div class="ds-hero-meta-item ds-reveal ds-reveal-delay-3">
+            <span class="ds-hero-meta-num">{{ children|length }}</span>
+            <span class="ds-hero-meta-label">受助儿童</span>
+          </div>
         </div>
-        <span><strong class="text-white">{{ total_donations or 0 }}</strong> 位捐赠人已加入透明追踪</span>
       </div>
     </div>
 
-    <!-- 视频封面卡片 -->
-    <div class="dn-reveal dn-reveal-delay-2 dn-video-cover dn-glass aspect-video flex items-center justify-center">
-      <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1200&q=80" alt="帮扶项目实拍视频封面" class="absolute inset-0 w-full h-full object-cover opacity-80">
-      <button class="dn-play-btn" aria-label="播放项目实拍视频">
-        <i data-lucide="play" class="w-7 h-7 fill-current"></i>
-      </button>
-      <div class="absolute bottom-4 left-4 right-4 z-10 flex items-center justify-between text-sm">
-        <span class="px-2.5 py-1 rounded-md bg-black/40 backdrop-blur text-white/90">02:34</span>
-        <span class="px-2.5 py-1 rounded-md bg-teal-500/20 backdrop-blur text-teal-300 border border-teal-400/20">云南 · 晨光特校</span>
-      </div>
+    <div class="ds-scroll-hint" aria-hidden="true">
+      <span>向下滚动查看旅程</span>
+      <div class="ds-arrow"></div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- 3. 数据概览 -->
-<section class="relative z-10 -mt-16 pb-20">
-  <div class="max-w-6xl mx-auto px-6">
-    <div class="dn-glass dn-glass-strong p-6 md:p-8 grid grid-cols-2 md:grid-cols-4 gap-6">
-      <div class="dn-stat-card dn-reveal p-4 rounded-2xl border border-transparent hover:border-teal-400/20">
-        <div class="dn-stat-number">{{ schools|length }}</div>
-        <div class="mt-2 text-sm text-[#8daab0]">合作学校</div>
-      </div>
-      <div class="dn-stat-card dn-reveal dn-reveal-delay-1 p-4 rounded-2xl border border-transparent hover:border-teal-400/20">
-        <div class="dn-stat-number">{{ total_donations or 0 }}</div>
-        <div class="mt-2 text-sm text-[#8daab0]">捐赠笔数</div>
-      </div>
-      <div class="dn-stat-card dn-reveal dn-reveal-delay-2 p-4 rounded-2xl border border-transparent hover:border-teal-400/20">
-        <div class="dn-stat-number">¥{{ "%.0f"|format(total_amount or 0) }}</div>
-        <div class="mt-2 text-sm text-[#8daab0]">累计金额</div>
-      </div>
-      <div class="dn-stat-card dn-reveal dn-reveal-delay-3 p-4 rounded-2xl border border-transparent hover:border-teal-400/20">
-        <div class="dn-stat-number">{{ children|length }}</div>
-        <div class="mt-2 text-sm text-[#8daab0]">受助儿童</div>
-      </div>
-    </div>
-  </div>
-</section>
+  <!-- 3. 垂直章节时间轴 -->
+  <div class="ds-timeline">
 
-<!-- 4. 项目 / 学校卡片网格 -->
-<section id="projects" class="py-20">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-12">
-      <div class="dn-reveal">
-        <p class="text-teal-400 text-sm font-semibold tracking-wider uppercase mb-2">Verified Projects</p>
-        <h2 class="text-3xl md:text-4xl font-bold text-white">透明帮扶项目</h2>
+    <!-- Chapter 1: 捐赠出发 -->
+    <section id="chapter-departure" class="ds-chapter" aria-labelledby="departure-title">
+      <div class="ds-chapter-marker" aria-hidden="true">01</div>
+      <div class="ds-chapter-label ds-reveal">
+        <p class="ds-chapter-tag"><i data-lucide="send" class="w-3.5 h-3.5"></i> Departure</p>
+        <h2 id="departure-title" class="ds-chapter-title">捐赠出发</h2>
       </div>
-      <p class="dn-reveal dn-reveal-delay-1 text-[#8daab0] max-w-md">
-        每所学校都是一个可追溯的帮扶单元，实时展示物资到位、分发与执行反馈。
-      </p>
-    </div>
 
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
-      {% for s in schools %}
-      {% set progress = ((loop.index0 * 23 + 34) % 80) + 15 %}
-      <article class="dn-card dn-glass dn-spotlight overflow-hidden group dn-reveal {% if loop.index > 3 %}dn-reveal-delay-{{ (loop.index0 % 4) + 1 }}{% endif %}">
-        <div class="dn-card-image aspect-[16/10]">
-          <img src="{{ s.image_url or 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80' }}" alt="{{ s.name }}" class="w-full h-full object-cover">
-          <div class="absolute top-3 left-3 z-10">
-            <span class="dn-badge dn-badge-completed">
-              <i data-lucide="video" class="w-3 h-3"></i>
-              实拍反馈
+      <figure class="ds-freeze-frame ds-reveal">
+        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80" alt="志愿者正在整理即将发出的捐赠物资">
+        <figcaption class="ds-freeze-caption">
+          <i data-lucide="map-pin" class="w-3.5 h-3.5 inline"></i> 集散中心 · 第一批物资整装待发
+        </figcaption>
+      </figure>
+
+      <div class="ds-narrative ds-glass ds-reveal">
+        <p class="ds-narrative-text">
+          每一笔捐赠都从这里开始。我们不把捐赠简化为数字，而是记录下捐赠者、物资、目的地与出发时刻。下方的批次展示了最近进入旅程的爱心记录。
+        </p>
+
+        <div class="mt-8 space-y-3">
+          {% for d in recent_donations[:5] %}
+          {% set status_class = 'ds-status-received' if d.status == 'received' else ('ds-status-distributing' if d.status == 'distributing' else 'ds-status-completed') %}
+          {% set status_text = '已接收' if d.status == 'received' else ('分发中' if d.status == 'distributing' else '已送达') %}
+          <div class="ds-batch ds-reveal {% if loop.index > 1 %}ds-reveal-delay-{{ (loop.index0 % 3) + 1 }}{% endif %}">
+            <div class="ds-batch-icon" aria-hidden="true">
+              <i data-lucide="package" class="w-5 h-5"></i>
+            </div>
+            <div class="ds-batch-body">
+              <p class="ds-batch-title">{{ d.donor_name }} · {{ d.item_name }}</p>
+              <p class="ds-batch-detail">{{ d.item_detail or '爱心物资' }} · 数量 {{ d.quantity }} · 目的地 {{ d.school.name }}</p>
+            </div>
+            <span class="ds-status {{ status_class }}">
+              <i data-lucide="{% if d.status == 'completed' %}check-circle{% elif d.status == 'distributing' %}loader-2{% else %}inbox{% endif %}" class="w-3 h-3"></i>
+              {{ status_text }}
             </span>
           </div>
-          <button class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-teal-400/15 backdrop-blur border border-teal-400/30 text-teal-300 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity" aria-label="播放 {{ s.name }} 视频">
-            <i data-lucide="play" class="w-5 h-5 fill-current"></i>
-          </button>
+          {% else %}
+          <p class="text-[#7d9aa0] text-sm">暂无近期捐赠记录</p>
+          {% endfor %}
         </div>
-        <div class="p-5 relative z-10">
-          <div class="flex items-start justify-between gap-3 mb-3">
-            <div>
-              <h3 class="text-lg font-semibold text-white">{{ s.name }}</h3>
-              <p class="text-sm text-[#8daab0]">{{ s.location }}</p>
-            </div>
-            <span class="text-xs font-mono text-teal-300 bg-teal-400/10 px-2 py-1 rounded-md border border-teal-400/15">{{ s.founding_year }}</span>
-          </div>
-          <p class="text-sm text-[#9fb9bd] line-clamp-2 mb-4">{{ s.description }}</p>
+      </div>
+    </section>
 
-          <div class="mb-3">
-            <div class="flex items-center justify-between text-xs mb-1.5">
-              <span class="text-[#8daab0]">执行进度</span>
-              <span class="text-teal-300 font-mono font-semibold">{{ progress }}%</span>
-            </div>
-            <div class="dn-liquid-bar">
-              <div class="dn-liquid-fill" style="--w: {{ progress }}%;"></div>
-            </div>
-          </div>
+    <!-- Chapter 2: 分拣运输 -->
+    <section id="chapter-transport" class="ds-chapter" aria-labelledby="transport-title">
+      <div class="ds-chapter-marker" aria-hidden="true">02</div>
+      <div class="ds-chapter-label ds-reveal">
+        <p class="ds-chapter-tag"><i data-lucide="truck" class="w-3.5 h-3.5"></i> Transport</p>
+        <h2 id="transport-title" class="ds-chapter-title">分拣运输</h2>
+      </div>
 
-          <div class="flex items-center justify-between text-xs text-[#8daab0] border-t border-white/5 pt-3">
-            <span>{{ s.student_count }} 名学生</span>
-            <span>{{ s.teacher_count }} 名教师</span>
-            <a href="{{ url_for('main.school_detail', school_id=s.id) }}" class="text-teal-400 hover:text-teal-300 font-medium flex items-center gap-1">
-              详情 <i data-lucide="arrow-right" class="w-3 h-3"></i>
-            </a>
-          </div>
-        </div>
-      </article>
-      {% endfor %}
-    </div>
-  </div>
-</section>
+      <figure class="ds-freeze-frame ds-reveal">
+        <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1920&q=80" alt="运输车辆在山路中行驶，将捐赠物资送往偏远学校">
+        <figcaption class="ds-freeze-caption">
+          <i data-lucide="route" class="w-3.5 h-3.5 inline"></i> 运输途中 · 全程可追踪
+        </figcaption>
+      </figure>
 
-<!-- 5. 筹款 / 捐赠进度可视化 -->
-<section id="impact" class="py-20 relative">
-  <div class="absolute inset-0 bg-gradient-to-b from-transparent via-teal-900/5 to-transparent pointer-events-none"></div>
-  <div class="max-w-7xl mx-auto px-6 relative z-10">
-    <div class="grid lg:grid-cols-3 gap-8">
-      <!-- 主筹款进度 -->
-      <div class="lg:col-span-2 dn-glass dn-spotlight p-6 md:p-8 dn-reveal">
-        <div class="flex items-center justify-between mb-6">
-          <div>
-            <p class="text-teal-400 text-sm font-semibold tracking-wider uppercase mb-1">Funding Flow</p>
-            <h2 class="text-2xl md:text-3xl font-bold text-white">资金流向仪表盘</h2>
-          </div>
-          <span class="dn-badge dn-badge-completed">
-            <i data-lucide="shield-check" class="w-3 h-3"></i>
-            已审计
-          </span>
-        </div>
+      <div class="ds-narrative ds-glass ds-reveal">
+        <p class="ds-narrative-text">
+          物资离开集散中心后，进入核对、分拣与运输流程。我们为每个关键节点留下记录：分拣打包、装车发出、中转签收、到达学校。这些节点构成了一条可验证的透明链路。
+        </p>
 
-        <div class="grid sm:grid-cols-3 gap-4 mb-8">
-          <div class="p-4 rounded-xl bg-white/[0.03] border border-white/5">
-            <p class="text-xs text-[#8daab0] mb-1">已筹金额</p>
-            <p class="text-xl font-mono font-bold text-teal-300">¥{{ "%.0f"|format(total_amount or 0) }}</p>
-          </div>
-          <div class="p-4 rounded-xl bg-white/[0.03] border border-white/5">
-            <p class="text-xs text-[#8daab0] mb-1">目标金额</p>
-            <p class="text-xl font-mono font-bold text-cyan-300">¥{{ "%.0f"|format((total_amount or 0) * 1.35) }}</p>
-          </div>
-          <div class="p-4 rounded-xl bg-white/[0.03] border border-white/5">
-            <p class="text-xs text-[#8daab0] mb-1">完成率</p>
-            <p class="text-xl font-mono font-bold text-white">74%</p>
-          </div>
-        </div>
-
-        <div class="mb-2 flex items-center justify-between text-sm">
-          <span class="text-[#8daab0]">整体筹款进度</span>
-          <span class="text-teal-300 font-mono">74%</span>
-        </div>
-        <div class="dn-liquid-bar h-5 mb-8">
-          <div class="dn-liquid-fill" style="--w: 74%;"></div>
-        </div>
-
-        <!-- 柱状图：按状态分布 -->
-        <div>
-          <p class="text-sm text-[#8daab0] mb-4">近期捐赠状态分布</p>
-          <div class="h-40 flex items-end justify-between gap-2 md:gap-4">
-            {% set buckets = [
-              {'label':'已接收','value':42,'color':'from-emerald-400 to-teal-400'},
-              {'label':'分发中','value':28,'color':'from-teal-400 to-cyan-400'},
-              {'label':'已完成','value':58,'color':'from-cyan-400 to-sky-400'},
-              {'label':'本周新增','value':35,'color':'from-sky-400 to-indigo-400'},
-              {'label':'待确认','value':15,'color':'from-slate-400 to-slate-500'}
-            ] %}
-            {% for b in buckets %}
-            <div class="flex-1 flex flex-col items-center gap-2 group">
-              <div class="w-full bg-gradient-to-t {{ b.color }} rounded-t-lg dn-bar relative" style="height: {{ b.value }}%;">
-                <span class="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-mono text-white opacity-0 group-hover:opacity-100 transition-opacity">{{ b.value }}</span>
+        <div class="mt-8 space-y-2">
+          <div class="ds-node ds-reveal ds-reveal-delay-1">
+            <div class="ds-node-content">
+              <p class="ds-node-title">清单核对与分拣</p>
+              <p class="ds-node-desc">每一件物资都对照捐赠记录进行核对，按学校需求分类打包，贴上接收标签。</p>
+              <div class="ds-node-meta">
+                <i data-lucide="clipboard-check" class="w-3.5 h-3.5"></i>
+                <span>单据归档 · 双人复核</span>
               </div>
-              <span class="text-[10px] md:text-xs text-[#8daab0]">{{ b.label }}</span>
             </div>
-            {% endfor %}
+          </div>
+          <div class="ds-node ds-reveal ds-reveal-delay-2">
+            <div class="ds-node-content">
+              <p class="ds-node-title">装车发出</p>
+              <p class="ds-node-desc">运输车辆拍摄发车照片，记录车牌、司机与预计到达时间，轨迹同步公示。</p>
+              <div class="ds-node-meta">
+                <i data-lucide="camera" class="w-3.5 h-3.5"></i>
+                <span>影像留档 · 轨迹可查</span>
+              </div>
+            </div>
+          </div>
+          <div class="ds-node ds-reveal ds-reveal-delay-3">
+            <div class="ds-node-content">
+              <p class="ds-node-title">中转与最后一公里</p>
+              <p class="ds-node-desc">对于偏远地区学校，物资经县级中转站后由校方志愿者或当地物流完成最后一公里配送。</p>
+              <div class="ds-node-meta">
+                <i data-lucide="map" class="w-3.5 h-3.5"></i>
+                <span>节点签收 · 短信反馈</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+    </section>
 
-      <!-- 实时反馈模块 -->
-      <div class="dn-glass dn-spotlight p-6 dn-reveal dn-reveal-delay-2 flex flex-col">
-        <p class="text-teal-400 text-sm font-semibold tracking-wider uppercase mb-1">Live Feedback</p>
-        <h3 class="text-xl font-bold text-white mb-6">实时视频反馈</h3>
+    <!-- Chapter 3: 送达学校 -->
+    <section id="chapter-arrival" class="ds-chapter" aria-labelledby="arrival-title">
+      <div class="ds-chapter-marker" aria-hidden="true">03</div>
+      <div class="ds-chapter-label ds-reveal">
+        <p class="ds-chapter-tag"><i data-lucide="school" class="w-3.5 h-3.5"></i> Arrival</p>
+        <h2 id="arrival-title" class="ds-chapter-title">送达学校</h2>
+      </div>
 
-        <div class="space-y-4 flex-1">
-          <div class="relative rounded-xl overflow-hidden border border-white/10 aspect-video">
-            <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=600&q=80" alt="捐赠物资分发实拍" class="w-full h-full object-cover opacity-80">
-            <div class="absolute top-3 left-3 flex items-center gap-1.5 px-2 py-1 rounded-md bg-red-500/20 text-red-300 text-xs font-semibold border border-red-400/20">
-              <span class="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse"></span>
-              LIVE
+      <figure class="ds-freeze-frame ds-reveal">
+        <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80" alt="特殊教育学校的校园与教学楼">
+        <figcaption class="ds-freeze-caption">
+          <i data-lucide="building-2" class="w-3.5 h-3.5 inline"></i> 学校签收 · 物资进入校园
+        </figcaption>
+      </figure>
+
+      <div class="ds-narrative ds-glass ds-reveal">
+        <p class="ds-narrative-text">
+          当物资抵达合作学校，校方会完成签收、拆箱清点，并将结果反馈到平台。以下是部分学校的接收概况，每一所学校都是一个持续被关注的帮扶单元。
+        </p>
+
+        <div class="mt-8 space-y-6">
+          {% for s in schools[:3] %}
+          <article class="ds-arrival ds-reveal {% if loop.index > 1 %}ds-reveal-delay-{{ (loop.index0 % 2) + 1 }}{% endif %}">
+            <div class="ds-arrival-media">
+              <img src="{{ s.image_url or 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80' }}" alt="{{ s.name }}校园环境">
             </div>
-            <button class="dn-play-btn w-10 h-10" aria-label="播放直播">
-              <i data-lucide="play" class="w-4 h-4 fill-current"></i>
-            </button>
-          </div>
-          <div>
-            <p class="text-white font-medium text-sm">四川成都特校 · 助听器分发</p>
-            <p class="text-xs text-[#8daab0] mt-1">2 分钟前更新 · 由校方志愿者实拍</p>
-          </div>
-
-          <hr class="dn-divider my-4">
-
-          <div class="flex items-center gap-3 text-sm">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-400 to-teal-500 flex items-center justify-center text-[#062c2b] font-bold">¥</div>
-            <div class="flex-1">
-              <p class="text-white">您的捐赠已送达</p>
-              <p class="text-xs text-[#8daab0]">编号 #{{ '%06d'|format((total_donations or 0)) }} · 刚刚</p>
+            <div class="ds-arrival-info">
+              <h3 class="ds-arrival-name">{{ s.name }}</h3>
+              <p class="ds-arrival-location">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                {{ s.location }}
+              </p>
+              <p class="text-sm text-[#7d9aa0] leading-relaxed">{{ s.description }}</p>
+              <div class="ds-arrival-stats">
+                <div class="ds-arrival-stat">
+                  <p class="ds-arrival-stat-num">{{ s.student_count }}</p>
+                  <p class="ds-arrival-stat-label">在校学生</p>
+                </div>
+                <div class="ds-arrival-stat">
+                  <p class="ds-arrival-stat-num">{{ s.teacher_count }}</p>
+                  <p class="ds-arrival-stat-label">教师团队</p>
+                </div>
+              </div>
+              <a href="{{ url_for('main.school_detail', school_id=s.id) }}" class="inline-flex items-center gap-1.5 mt-4 text-sm font-medium text-[#5ecdc7] hover:text-[#7ddbd6] transition-colors">
+                查看校园动态 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
             </div>
-            <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
-          </div>
+          </article>
+          {% else %}
+          <p class="text-[#7d9aa0] text-sm">暂无合作学校数据</p>
+          {% endfor %}
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Chapter 4: 孩子手中 -->
+    <section id="chapter-hands" class="ds-chapter" aria-labelledby="hands-title">
+      <div class="ds-chapter-marker" aria-hidden="true">04</div>
+      <div class="ds-chapter-label ds-reveal">
+        <p class="ds-chapter-tag"><i data-lucide="heart" class="w-3.5 h-3.5"></i> Impact</p>
+        <h2 id="hands-title" class="ds-chapter-title">孩子手中</h2>
+      </div>
+
+      <figure class="ds-freeze-frame ds-reveal">
+        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1920&q=80" alt="孩子们在课堂上开心地使用捐赠物资">
+        <figcaption class="ds-freeze-caption">
+          <i data-lucide="smile" class="w-3.5 h-3.5 inline"></i> 终点也是起点 · 善意落地
+        </figcaption>
+      </figure>
+
+      <div class="ds-narrative ds-glass ds-reveal">
+        <p class="ds-narrative-text">
+          旅程的终点，是物资真正进入孩子手中的那一刻。这些反馈不是为了感动，而是为了证明：每一份善意都被认真对待，每一次帮助都留下了真实的痕迹。
+        </p>
+
+        <div class="mt-8 space-y-6">
+          {% for c in children[:4] %}
+          <blockquote class="ds-quote-block ds-reveal {% if loop.index > 1 %}ds-reveal-delay-{{ (loop.index0 % 3) + 1 }}{% endif %}">
+            <p class="ds-quote-text">“{{ c.quote or '谢谢叔叔阿姨，我会更努力地学习。' }}”</p>
+            <footer class="ds-quote-author">
+              <img src="{{ c.avatar_url or 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=200&q=80' }}" alt="{{ c.name }}" class="ds-quote-avatar">
+              <div>
+                <p class="ds-quote-name">{{ c.name }}</p>
+                <p class="ds-quote-age">{{ c.age }} 岁 · {{ c.bio or '一名热爱生活的特殊儿童' }}</p>
+              </div>
+            </footer>
+          </blockquote>
+          {% else %}
+          <p class="text-[#7d9aa0] text-sm">暂无儿童风采数据</p>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
   </div>
-</section>
 
-<!-- 6. 故事 / 儿童风采卡片 -->
-<section id="children" class="py-20">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="text-center max-w-2xl mx-auto mb-14 dn-reveal">
-      <p class="text-teal-400 text-sm font-semibold tracking-wider uppercase mb-2">Their Stories</p>
-      <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">受助儿童风采</h2>
-      <p class="text-[#8daab0]">每个孩子背后都有一段故事，您的善意让他们被看见、被支持。</p>
-    </div>
-
-    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-7">
-      {% for c in children %}
-      <article class="dn-child-card dn-glass dn-spotlight overflow-hidden dn-reveal {% if loop.index0 % 4 != 0 %}dn-reveal-delay-{{ (loop.index0 % 4) }}{% endif %}">
-        <div class="p-6 flex items-start gap-4 border-b border-white/5">
-          <img src="{{ c.avatar_url or 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=200&q=80' }}" alt="{{ c.name }}" class="w-16 h-16 rounded-full object-cover border-2 border-teal-400/25">
-          <div>
-            <h3 class="text-lg font-semibold text-white">{{ c.name }}</h3>
-            <p class="text-sm text-[#8daab0]">{{ c.age }} 岁</p>
-            <div class="flex flex-wrap gap-1.5 mt-2">
-              {% for tag in (c.tags or '').split(',') %}
-                {% if tag.strip() %}
-                <span class="text-[10px] px-2 py-0.5 rounded-full bg-cyan-400/10 text-cyan-300 border border-cyan-400/15">{{ tag.strip() }}</span>
-                {% endif %}
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-        <div class="p-6 flex-1 flex flex-col">
-          <p class="dn-quote text-sm mb-4 flex-1">“{{ c.quote or '谢谢叔叔阿姨，我会更努力地学习。' }}”</p>
-          <p class="text-sm text-[#9fb9bd] line-clamp-3">{{ c.bio or '一名热爱生活的特殊儿童，正在学校接受个性化教育。' }}</p>
-        </div>
-      </article>
-      {% endfor %}
-    </div>
-  </div>
-</section>
-
-<!-- 7. 近期捐赠记录 -->
-<section id="donations" class="py-20">
-  <div class="max-w-5xl mx-auto px-6">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10 dn-reveal">
-      <div>
-        <p class="text-teal-400 text-sm font-semibold tracking-wider uppercase mb-2">Recent Donations</p>
-        <h2 class="text-3xl md:text-4xl font-bold text-white">近期捐赠记录</h2>
-      </div>
-      <a href="{{ url_for('main.dashboard') }}" class="dn-btn dn-btn-ghost text-sm">
-        查看完整公示
-        <i data-lucide="arrow-right" class="w-4 h-4"></i>
-      </a>
-    </div>
-
-    <div class="dn-glass p-5 md:p-6 dn-reveal dn-reveal-delay-1">
-      <div class="hidden md:grid grid-cols-12 gap-4 text-xs font-semibold text-[#8daab0] uppercase tracking-wider px-4 pb-3 border-b border-white/5">
-        <div class="col-span-3">捐赠人</div>
-        <div class="col-span-3">物资 / 金额</div>
-        <div class="col-span-3">接收学校</div>
-        <div class="col-span-2">状态</div>
-        <div class="col-span-1 text-right">时间</div>
-      </div>
-
-      <div class="divide-y divide-white/5">
-        {% for d in recent_donations %}
-        {% set status_class = 'dn-badge-received' if d.status == 'received' else ('dn-badge-distributing' if d.status == 'distributing' else 'dn-badge-completed') %}
-        {% set status_text = '已接收' if d.status == 'received' else ('分发中' if d.status == 'distributing' else '已完成') %}
-        <div class="dn-donation-item">
-          <div class="flex items-center gap-3 min-w-0 flex-1 md:col-span-3">
-            <div class="dn-donation-avatar flex-shrink-0">{{ d.donor_name[:1] }}</div>
-            <div class="min-w-0">
-              <p class="text-white font-medium text-sm truncate">{{ d.donor_name }}</p>
-              <p class="text-xs text-[#8daab0] md:hidden">{{ d.school.name }}</p>
-            </div>
-          </div>
-          <div class="hidden md:block md:col-span-3 min-w-0">
-            <p class="text-white text-sm truncate">{{ d.item_name }} {{ d.item_detail or '' }}</p>
-            <p class="text-xs text-teal-300 font-mono">¥{{ "%.0f"|format(d.amount or 0) }} × {{ d.quantity }}</p>
-          </div>
-          <div class="hidden md:block md:col-span-3 text-sm text-[#9fb9bd] truncate">{{ d.school.name }}</div>
-          <div class="hidden md:block md:col-span-2">
-            <span class="dn-badge {{ status_class }}">{{ status_text }}</span>
-          </div>
-          <div class="text-right text-xs text-[#8daab0] font-mono whitespace-nowrap">
-            {% if d.created_at %}
-              {{ d.created_at.strftime('%m-%d') }}
-            {% else %}
-              --
-            {% endif %}
-          </div>
-        </div>
-        {% else %}
-        <div class="py-10 text-center text-[#8daab0] text-sm">暂无捐赠记录</div>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 8. 页脚 -->
-<footer class="dn-footer py-14">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="grid md:grid-cols-4 gap-10 mb-10">
-      <div class="md:col-span-2">
-        <a href="{{ url_for('main.index', ui='donorsee') }}" class="flex items-center gap-2 mb-4">
-          <span class="w-8 h-8 rounded-lg flex items-center justify-center bg-gradient-to-br from-teal-400 to-cyan-500 text-[#062c2b] font-bold">D</span>
-          <span class="text-lg font-semibold text-white">DonorSee 公益透明</span>
-        </a>
-        <p class="text-sm text-[#8daab0] max-w-sm leading-relaxed">
-          用视频与数据让公益回归透明。每一笔捐赠都可追踪，每一个项目都经得起检验。
+  <!-- 4. 验证节点 -->
+  <section class="ds-verification" aria-labelledby="verify-title">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center max-w-2xl mx-auto mb-12 ds-reveal">
+        <p class="ds-chapter-tag justify-center"><i data-lucide="shield-check" class="w-3.5 h-3.5"></i> Verified</p>
+        <h2 id="verify-title" class="ds-chapter-title">四个验证节点</h2>
+        <p class="text-[#7d9aa0] mt-3 leading-relaxed">
+          我们建立了一套轻量但完整的验证机制，让每一次帮扶都可被独立核对。
         </p>
       </div>
-      <div>
-        <h4 class="text-white font-semibold mb-4">导航</h4>
-        <ul class="space-y-2 text-sm text-[#8daab0]">
-          <li><a href="#projects" class="hover:text-teal-300 transition-colors">帮扶项目</a></li>
-          <li><a href="#impact" class="hover:text-teal-300 transition-colors">资金流向</a></li>
-          <li><a href="#children" class="hover:text-teal-300 transition-colors">儿童风采</a></li>
-          <li><a href="#donations" class="hover:text-teal-300 transition-colors">捐赠记录</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4 class="text-white font-semibold mb-4">联系</h4>
-        <ul class="space-y-2 text-sm text-[#8daab0]">
-          <li>contact@donorsee-demo.org</li>
-          <li>400-000-0000</li>
-          <li>北京市朝阳区公益大厦</li>
-        </ul>
+
+      <div class="ds-verification-grid">
+        <div class="ds-verify-card ds-reveal ds-reveal-delay-1">
+          <div class="ds-verify-icon" aria-hidden="true">
+            <i data-lucide="file-check" class="w-5 h-5"></i>
+          </div>
+          <h3 class="ds-verify-title">捐赠凭证</h3>
+          <p class="ds-verify-desc">记录捐赠人、物资明细与目标学校，形成不可篡改的电子凭证。</p>
+        </div>
+        <div class="ds-verify-card ds-reveal ds-reveal-delay-2">
+          <div class="ds-verify-icon" aria-hidden="true">
+            <i data-lucide="route" class="w-5 h-5"></i>
+          </div>
+          <h3 class="ds-verify-title">物流轨迹</h3>
+          <p class="ds-verify-desc">从出发、中转到签收，每个节点都有照片、时间与责任人记录。</p>
+        </div>
+        <div class="ds-verify-card ds-reveal ds-reveal-delay-3">
+          <div class="ds-verify-icon" aria-hidden="true">
+            <i data-lucide="camera" class="w-5 h-5"></i>
+          </div>
+          <h3 class="ds-verify-title">影像反馈</h3>
+          <p class="ds-verify-desc">校方与志愿者拍摄签收、分发与使用场景，形成可视化反馈闭环。</p>
+        </div>
+        <div class="ds-verify-card ds-reveal ds-reveal-delay-4">
+          <div class="ds-verify-icon" aria-hidden="true">
+            <i data-lucide="scroll-text" class="w-5 h-5"></i>
+          </div>
+          <h3 class="ds-verify-title">公示档案</h3>
+          <p class="ds-verify-desc">所有记录汇总进入公开档案页，任何人都可以查看与核对历史数据。</p>
+        </div>
       </div>
     </div>
-    <hr class="dn-divider mb-6">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[#8daab0]">
+  </section>
+
+</main>
+
+<!-- 5. 页脚 -->
+<footer class="ds-footer">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8">
+      <div>
+        <a href="{{ url_for('main.index', ui='donorsee') }}" class="flex items-center gap-2 mb-2">
+          <span class="w-7 h-7 rounded-md flex items-center justify-center bg-[rgba(94,205,199,0.12)] border border-[rgba(94,176,191,0.3)] text-[#5ecdc7] font-bold text-sm">D</span>
+          <span class="text-base font-semibold text-[#f0f7f7]">DonorSee 公益透明</span>
+        </a>
+        <p class="text-sm text-[#7d9aa0] max-w-sm leading-relaxed">
+          用时间轴与验证节点，让公益的每一步都经得起审视。
+        </p>
+      </div>
+      <nav class="flex flex-wrap gap-6" aria-label="页脚导航">
+        <a href="#chapter-departure" class="ds-footer-link">捐赠出发</a>
+        <a href="#chapter-transport" class="ds-footer-link">分拣运输</a>
+        <a href="#chapter-arrival" class="ds-footer-link">送达学校</a>
+        <a href="#chapter-hands" class="ds-footer-link">孩子手中</a>
+        <a href="{{ url_for('main.dashboard') }}" class="ds-footer-link">公示档案</a>
+      </nav>
+    </div>
+    <hr class="ds-divider mb-6">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[#7d9aa0]">
       <p>© {{ 2026 }} 特殊学校公益展示网站 · UI 变体测试页（donorsee）</p>
       <p>测试结束后删除 <code>app/templates/ui_variants</code> 与 <code>app/static/css/ui_variants</code></p>
     </div>
@@ -417,28 +354,20 @@
 (function() {
   'use strict';
 
-  // 光标跟随柔和轮廓光
-  const glow = document.getElementById('cursorGlow');
+  // 环境光随滚动轻微位移（仅在非触控设备）
+  const glow = document.getElementById('ambientGlow');
   if (glow && !window.matchMedia('(pointer: coarse)').matches) {
     let raf = null;
-    document.addEventListener('mousemove', (e) => {
+    window.addEventListener('scroll', () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
-        glow.style.left = e.clientX + 'px';
-        glow.style.top = e.clientY + 'px';
+        const y = window.scrollY;
+        glow.style.top = (y * 0.25 + window.innerHeight * 0.4) + 'px';
+        glow.style.left = (window.innerWidth * 0.5 + Math.sin(y * 0.001) * 80) + 'px';
         raf = null;
       });
-    });
+    }, { passive: true });
   }
-
-  // 卡片光标跟随轮廓光
-  document.querySelectorAll('.dn-spotlight').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      card.style.setProperty('--x', (e.clientX - rect.left) + 'px');
-      card.style.setProperty('--y', (e.clientY - rect.top) + 'px');
-    });
-  });
 
   // 滚动 reveal
   const observer = new IntersectionObserver((entries) => {
@@ -448,9 +377,9 @@
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
 
-  document.querySelectorAll('.dn-reveal').forEach(el => observer.observe(el));
+  document.querySelectorAll('.ds-reveal').forEach(el => observer.observe(el));
 })();
 </script>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends "ui_variants/_shell.html" %}
 
-{% block title %}WWF 风格 · 自然守护计划{% endblock %}
+{% block title %}WWF 风格 · 年度守护报告{% endblock %}
 
 {% block head_extra %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/ui_variants/wwf.css') }}">
@@ -9,16 +9,13 @@
 {% block body_class %}wwf-variant{% endblock %}
 
 {% block content %}
-{% set total = total_amount|default(0) %}
-{% set goal = 1000000 %}
-{% set progress = ((total / goal * 100) if goal else 0) %}
-{% set progress_pct = [progress, 5]|max %}
+{% set total = total_amount|default(0)|float %}
 
 {# ---------- 顶部导航 ---------- #}
 <header id="wwf-nav" class="wwf-nav fixed top-0 left-0 right-0 z-50">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
-      <a href="?ui=wwf" class="flex items-center gap-3 text-2xl font-bold tracking-tight">
+      <a href="?ui=wwf" class="flex items-center gap-3 text-xl md:text-2xl font-bold tracking-tight">
         <span class="inline-flex items-center justify-center w-10 h-10 rounded-full wwf-glass">
           <i data-lucide="leaf" class="w-6 h-6 text-[#C7A75A]"></i>
         </span>
@@ -26,18 +23,17 @@
       </a>
 
       <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-[#E8DCC4]">
-        <a href="#projects" class="hover:text-white transition-colors">守护项目</a>
-        <a href="#impact" class="hover:text-white transition-colors">保护成效</a>
-        <a href="#stories" class="hover:text-white transition-colors">儿童风采</a>
-        <a href="#donations" class="hover:text-white transition-colors">捐赠记录</a>
+        <a href="#executive" class="hover:text-white transition-colors">摘要</a>
+        <a href="#bento" class="hover:text-white transition-colors">仪表盘</a>
+        <a href="#viz" class="hover:text-white transition-colors">数据可视化</a>
+        <a href="#schools" class="hover:text-white transition-colors">学校分布</a>
+        <a href="#children" class="hover:text-white transition-colors">儿童风采</a>
       </nav>
 
-      <div class="hidden md:block">
-        <button data-wwf-open-modal class="wwf-btn-primary text-sm">
-          <i data-lucide="heart" class="w-4 h-4"></i>
-          立即守护
-        </button>
-      </div>
+      <a href="/" class="hidden md:inline-flex items-center gap-2 text-sm text-[#E8DCC4] hover:text-white transition-colors">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        返回默认版
+      </a>
 
       <button id="wwf-menu-btn" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl wwf-glass text-[#F7F5F0]">
         <i data-lucide="menu" class="w-5 h-5"></i>
@@ -46,187 +42,325 @@
   </div>
 
   <div id="wwf-mobile-menu" class="hidden md:hidden px-6 pb-5">
-    <div class="wwf-glass-strong rounded-2xl p-4 space-y-3">
-      <a href="#projects" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">守护项目</a>
-      <a href="#impact" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">保护成效</a>
-      <a href="#stories" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">儿童风采</a>
-      <a href="#donations" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">捐赠记录</a>
-      <button data-wwf-open-modal class="wwf-btn-primary w-full text-sm mt-2">
-        <i data-lucide="heart" class="w-4 h-4"></i>
-        立即守护
-      </button>
+    <div class="wwf-glass-strong rounded-2xl p-4 space-y-2">
+      <a href="#executive" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">摘要</a>
+      <a href="#bento" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">仪表盘</a>
+      <a href="#viz" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">数据可视化</a>
+      <a href="#schools" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">学校分布</a>
+      <a href="#children" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">儿童风采</a>
+      <a href="/" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">返回默认版</a>
     </div>
   </div>
 </header>
 
 <main class="wwf-container">
-  {# ---------- Hero ---------- #}
-  <section class="relative min-h-[92vh] flex items-center pt-20 overflow-hidden">
-    <div class="absolute inset-0 z-0">
-      <img src="https://images.unsplash.com/photo-1448375240586-dfd8f3793300?auto=format&fit=crop&w=1920&q=80"
-           alt="茂密森林背景" class="w-full h-full object-cover opacity-70">
-      <div class="absolute inset-0 bg-gradient-to-r from-[#1B3B2F]/95 via-[#1B3B2F]/70 to-transparent"></div>
-      <div class="absolute inset-0 bg-gradient-to-t from-[#1B3B2F] via-transparent to-transparent"></div>
-    </div>
+  {# ---------- 封面 Hero ---------- #}
+  <section class="relative min-h-[90vh] flex items-end pb-16 md:pb-24 pt-24 overflow-hidden">
+    <div class="wwf-hero-bg"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#0F231C] via-[#0F231C]/85 to-[#0F231C]/30"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-20">
-      <div class="max-w-2xl">
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
+      <div class="max-w-3xl">
         <div class="wwf-reveal inline-flex items-center gap-2 px-4 py-2 rounded-full wwf-glass text-xs font-semibold text-[#E8DCC4] mb-6">
-          <i data-lucide="globe-2" class="w-4 h-4 text-[#C7A75A]"></i>
-          测试变体：WWF 自然守护风格
+          <i data-lucide="file-text" class="w-4 h-4 text-[#C7A75A]"></i>
+          2026 年度报告 · WWF 自然守护风格测试变体
         </div>
-        <h1 class="wwf-reveal text-5xl md:text-7xl font-bold leading-[1.1] font-['Noto_Serif_SC'] text-white mb-6">
-          为每一个<br><span class="text-[#C7A75A]">特殊生命</span> 守护成长
+        <h1 class="wwf-reveal text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05] font-['Noto_Serif_SC'] text-[#F7F5F0] mb-6">
+          守护每一次<br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#C7A75A] to-[#8FAE68]">特殊成长</span>
         </h1>
-        <p class="wwf-reveal text-lg md:text-xl text-[#E8DCC4]/90 leading-relaxed mb-10 max-w-xl">
-          借鉴 WWF 自然保护主义美学，以森林、土黄与苔藓绿为底色，用半透玻璃承载每一所特殊教育学校与受助儿童的故事。
+        <p class="wwf-reveal text-lg md:text-xl text-[#E8DCC4]/80 leading-relaxed mb-10 max-w-2xl">
+          以年度报告 Bento 仪表盘的形式，公开合作学校、受助儿童、物资状态与资金用途。没有口号，只有可追踪的数据。
         </p>
         <div class="wwf-reveal flex flex-wrap gap-4">
-          <button data-wwf-open-modal class="wwf-btn-primary text-base">
-            <i data-lucide="heart" class="w-5 h-5"></i>
-            成为守护者
-          </button>
-          <a href="#projects" class="wwf-btn-ghost text-base">
-            <i data-lucide="binoculars" class="w-5 h-5"></i>
-            探索项目
+          <a href="#executive" class="wwf-btn-primary">
+            <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+            阅读报告摘要
+          </a>
+          <a href="#schools" class="wwf-btn-ghost">
+            <i data-lucide="map" class="w-5 h-5"></i>
+            查看学校分布
           </a>
         </div>
       </div>
     </div>
 
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce text-[#E8DCC4]/70">
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce text-[#E8DCC4]/60">
       <i data-lucide="chevron-down" class="w-7 h-7"></i>
     </div>
   </section>
 
-  {# ---------- 数据概览 ---------- #}
-  <section class="relative -mt-16 z-20 pb-16">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 wwf-stagger">
-        <div class="wwf-reveal wwf-glass-strong rounded-2xl p-6 md:p-8 text-center">
-          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#6A8D46]/25 text-[#B8D68C] mb-4">
+  {# ---------- 执行摘要条 ---------- #}
+  <section id="executive" class="relative border-y border-[#C7A75A]/20 bg-[#0F231C]/70 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-8 md:py-10">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
+        <div class="wwf-reveal flex items-center gap-4">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#6A8D46]/20 text-[#B8D68C]">
             <i data-lucide="school" class="w-6 h-6"></i>
-          </div>
-          <div class="text-3xl md:text-4xl font-bold text-white font-['JetBrains_Mono']">{{ schools|length }}</div>
-          <div class="text-sm text-[#E8DCC4]/80 mt-1">合作学校</div>
-        </div>
-        <div class="wwf-reveal wwf-glass-strong rounded-2xl p-6 md:p-8 text-center">
-          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#C7A75A]/25 text-[#F2D78A] mb-4">
-            <i data-lucide="hand-heart" class="w-6 h-6"></i>
-          </div>
-          <div class="text-3xl md:text-4xl font-bold text-white font-['JetBrains_Mono']">{{ total_donations|default(0) }}</div>
-          <div class="text-sm text-[#E8DCC4]/80 mt-1">捐赠笔数</div>
-        </div>
-        <div class="wwf-reveal wwf-glass-strong rounded-2xl p-6 md:p-8 text-center">
-          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#D4A056]/25 text-[#F2D78A] mb-4">
-            <i data-lucide="coins" class="w-6 h-6"></i>
-          </div>
-          <div class="text-3xl md:text-4xl font-bold text-white font-['JetBrains_Mono']">¥{{ "%.0f"|format(total) }}</div>
-          <div class="text-sm text-[#E8DCC4]/80 mt-1">累计金额</div>
-        </div>
-        <div class="wwf-reveal wwf-glass-strong rounded-2xl p-6 md:p-8 text-center">
-          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#2E4A3E]/50 text-[#A7C4B5] mb-4">
-            <i data-lucide="users" class="w-6 h-6"></i>
-          </div>
-          <div class="text-3xl md:text-4xl font-bold text-white font-['JetBrains_Mono']">{{ children|length }}</div>
-          <div class="text-sm text-[#E8DCC4]/80 mt-1">受助儿童</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {# ---------- 筹款进度 ---------- #}
-  <section class="py-12 md:py-20">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="wwf-reveal wwf-glass rounded-3xl p-8 md:p-12">
-        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+          </span>
           <div>
-            <p class="text-[#C7A75A] font-semibold text-sm tracking-wider uppercase mb-2">Fundraising Progress</p>
-            <h2 class="text-3xl md:text-4xl font-bold font-['Noto_Serif_SC'] text-white">年度守护基金进度</h2>
-          </div>
-          <div class="text-right">
-            <div class="text-4xl font-bold text-white font-['JetBrains_Mono']">{{ progress|round(1) }}%</div>
-            <div class="text-[#E8DCC4]/80 text-sm">目标 ¥{{ "{:,}".format(goal) }}</div>
+            <div class="text-3xl md:text-4xl font-bold text-[#F7F5F0] font-['JetBrains_Mono']">{{ schools|length }}</div>
+            <div class="text-xs text-[#E8DCC4]/70 uppercase tracking-wider">合作学校</div>
           </div>
         </div>
-        <div class="wwf-progress-track mb-4">
-          <div class="wwf-progress-fill" data-wwf-progress="{{ progress_pct }}"></div>
+        <div class="wwf-reveal flex items-center gap-4">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#C7A75A]/20 text-[#F2D78A]">
+            <i data-lucide="hand-heart" class="w-6 h-6"></i>
+          </span>
+          <div>
+            <div class="text-3xl md:text-4xl font-bold text-[#F7F5F0] font-['JetBrains_Mono']">{{ total_donations|default(0) }}</div>
+            <div class="text-xs text-[#E8DCC4]/70 uppercase tracking-wider">捐赠笔数</div>
+          </div>
         </div>
-        <div class="flex justify-between text-sm text-[#E8DCC4]/80">
-          <span>已筹 ¥{{ "{:,}".format(total|int) }}</span>
-          <span>还差 ¥{{ "{:,}".format((goal - total)|int) }}</span>
+        <div class="wwf-reveal flex items-center gap-4">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#D4A056]/20 text-[#F2D78A]">
+            <i data-lucide="coins" class="w-6 h-6"></i>
+          </span>
+          <div>
+            <div class="text-3xl md:text-4xl font-bold text-[#F7F5F0] font-['JetBrains_Mono']">¥{{ "{:,.0f}".format(total) }}</div>
+            <div class="text-xs text-[#E8DCC4]/70 uppercase tracking-wider">累计金额</div>
+          </div>
+        </div>
+        <div class="wwf-reveal flex items-center gap-4">
+          <span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#3D5A3B]/50 text-[#A7C4B5]">
+            <i data-lucide="users" class="w-6 h-6"></i>
+          </span>
+          <div>
+            <div class="text-3xl md:text-4xl font-bold text-[#F7F5F0] font-['JetBrains_Mono']">{{ children|length }}</div>
+            <div class="text-xs text-[#E8DCC4]/70 uppercase tracking-wider">受助儿童</div>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  {# ---------- 项目 / 学校卡片网格 ---------- #}
-  <section id="projects" class="py-16 md:py-24">
+  {# ---------- Bento 数据瓦片网格 ---------- #}
+  <section id="bento" class="py-16 md:py-24">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="wwf-reveal mb-12 md:mb-16 text-center max-w-2xl mx-auto">
-        <p class="text-[#C7A75A] font-semibold text-sm tracking-wider uppercase mb-2">Protected Projects</p>
-        <h2 class="text-3xl md:text-5xl font-bold font-['Noto_Serif_SC'] text-white mb-4">守护中的学校与项目</h2>
-        <p class="text-[#E8DCC4]/80">每一所合作学校都是一片需要呵护的森林，每一份关注都是滋养生命的阳光。</p>
+      <div class="wwf-reveal mb-10 md:mb-12">
+        <p class="text-[#C7A75A] text-xs font-semibold tracking-[0.2em] uppercase mb-2">Annual Dashboard</p>
+        <h2 class="text-3xl md:text-5xl font-bold font-['Noto_Serif_SC'] text-[#F7F5F0]">年度守护仪表盘</h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 wwf-stagger">
-        {% for school in schools %}
-        <article class="wwf-reveal wwf-glass wwf-glow-hover rounded-3xl overflow-hidden flex flex-col h-full">
-          <div class="relative h-52 overflow-hidden">
-            <img src="{{ school.image_url or 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80' }}"
-                 alt="{{ school.name }}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
-            <div class="absolute top-4 left-4">
-              <span class="px-3 py-1 rounded-full text-xs font-bold bg-[#1B3B2F]/80 text-[#C7A75A] border border-[#C7A75A]/30">
-                {{ school.location }}
-              </span>
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-5 auto-rows-min">
+        {# 累计金额大瓦片 #}
+        <div class="wwf-reveal wwf-tile col-span-1 md:col-span-2 row-span-1 md:row-span-2 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-3">
+              <i data-lucide="coins" class="w-4 h-4"></i>
+              累计公益金额
             </div>
+            <div class="text-4xl md:text-6xl font-bold text-[#F7F5F0] font-['JetBrains_Mono'] leading-none mb-2">
+              ¥{{ "{:,.0f}".format(total) }}
+            </div>
+            <p class="text-sm text-[#E8DCC4]/70">来自 {{ total_donations|default(0) }} 笔公开捐赠记录</p>
           </div>
-          <div class="p-6 md:p-7 flex-1 flex flex-col">
-            <h3 class="text-xl font-bold text-white font-['Noto_Serif_SC'] mb-2">{{ school.name }}</h3>
-            <p class="text-[#E8DCC4]/80 text-sm leading-relaxed mb-5 flex-1">
-              {{ school.description[:90] }}{% if school.description|length > 90 %}…{% endif %}
-            </p>
-            <div class="grid grid-cols-2 gap-3 text-sm mb-5">
-              <div class="wwf-glass rounded-xl p-3 text-center">
-                <div class="font-bold text-white font-['JetBrains_Mono']">{{ school.student_count }}</div>
-                <div class="text-[#E8DCC4]/70 text-xs">在校学生</div>
-              </div>
-              <div class="wwf-glass rounded-xl p-3 text-center">
-                <div class="font-bold text-white font-['JetBrains_Mono']">{{ school.teacher_count }}</div>
-                <div class="text-[#E8DCC4]/70 text-xs">教师团队</div>
-              </div>
+          <div class="mt-6 h-24 md:h-32">
+            <svg viewBox="0 0 300 80" class="w-full h-full overflow-visible" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="sparkGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="rgba(199,167,90,0.35)"/>
+                  <stop offset="100%" stop-color="rgba(199,167,90,0)"/>
+                </linearGradient>
+              </defs>
+              <path d="M0,70 Q30,65 60,55 T120,45 T180,30 T240,25 T300,10" fill="none" stroke="#C7A75A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M0,70 Q30,65 60,55 T120,45 T180,30 T240,25 T300,10 V80 H0 Z" fill="url(#sparkGradient)"/>
+            </svg>
+          </div>
+        </div>
+
+        {# 学校分布列表瓦片 #}
+        <div class="wwf-reveal wwf-tile col-span-1 md:col-span-1 lg:col-span-2 row-span-1 md:row-span-2">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase">
+              <i data-lucide="map-pin" class="w-4 h-4"></i>
+              合作学校分布
             </div>
-            <a href="/school/{{ school.id }}?ui=wwf" class="wwf-btn-ghost w-full text-sm">
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-              查看项目详情
+            <a href="#schools" class="text-xs text-[#E8DCC4]/60 hover:text-[#C7A75A] flex items-center gap-1 transition-colors">
+              全部 <i data-lucide="arrow-right" class="w-3 h-3"></i>
             </a>
           </div>
-        </article>
-        {% else %}
-        <div class="col-span-full wwf-glass rounded-3xl p-10 text-center text-[#E8DCC4]/80">
-          暂无学校数据，请运行 <code>python seed.py</code> 注入演示数据。
+          <div class="space-y-2">
+            {% for school in schools %}
+            <a href="/school/{{ school.id }}?ui=wwf" class="wwf-school-row group flex items-center justify-between p-3 rounded-2xl transition-colors">
+              <div class="flex items-center gap-3 min-w-0">
+                <span class="w-8 h-8 rounded-full bg-[#6A8D46]/20 flex items-center justify-center text-[#C7A75A] text-xs font-bold shrink-0">{{ loop.index }}</span>
+                <div class="min-w-0">
+                  <div class="text-sm font-semibold text-[#F7F5F0] group-hover:text-[#C7A75A] transition-colors truncate">{{ school.name }}</div>
+                  <div class="text-xs text-[#E8DCC4]/60 truncate">{{ school.location }} · {{ school.student_count }} 名学生 · {{ school.teacher_count }} 名教师</div>
+                </div>
+              </div>
+              <i data-lucide="chevron-right" class="w-4 h-4 text-[#E8DCC4]/40 group-hover:text-[#C7A75A] transition-colors shrink-0"></i>
+            </a>
+            {% else %}
+            <p class="text-sm text-[#E8DCC4]/60">暂无学校数据。</p>
+            {% endfor %}
+          </div>
         </div>
-        {% endfor %}
+
+        {# 受助儿童头像瓦片 #}
+        <div class="wwf-reveal wwf-tile col-span-1">
+          <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-4">
+            <i data-lucide="users" class="w-4 h-4"></i>
+            受助儿童
+          </div>
+          <div class="text-4xl font-bold text-[#F7F5F0] font-['JetBrains_Mono'] mb-1">{{ children|length }}</div>
+          <p class="text-xs text-[#E8DCC4]/60 mb-4">本年度公开档案</p>
+          <div class="flex -space-x-2.5 overflow-hidden">
+            {% for child in children[:8] %}
+            <img src="{{ child.avatar_url or 'https://images.unsplash.com/photo-1540479859555-17af45c78602?auto=format&fit=crop&w=100&q=80' }}"
+                 alt="{{ child.name }}" title="{{ child.name }}"
+                 class="w-9 h-9 rounded-full border-2 border-[#1B3B2F] object-cover wwf-avatar-ring">
+            {% endfor %}
+            {% if children|length > 8 %}
+            <div class="w-9 h-9 rounded-full border-2 border-[#1B3B2F] bg-[#C7A75A]/20 flex items-center justify-center text-[10px] text-[#E8DCC4]">+{{ children|length - 8 }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+        {# 透明指数瓦片 #}
+        <div class="wwf-reveal wwf-tile col-span-1">
+          <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-2">
+            <i data-lucide="shield-check" class="w-4 h-4"></i>
+            透明指数
+          </div>
+          <div class="flex items-end gap-2 mb-1">
+            <div class="text-5xl font-bold text-[#F7F5F0] font-['JetBrains_Mono']">100</div>
+            <div class="text-sm text-[#E8DCC4]/70 mb-1.5">/100</div>
+          </div>
+          <p class="text-xs text-[#E8DCC4]/60">每笔捐赠均可公开查询</p>
+        </div>
+
+        {# 物资状态环形图瓦片 #}
+        <div class="wwf-reveal wwf-tile col-span-1">
+          <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-4">
+            <i data-lucide="pie-chart" class="w-4 h-4"></i>
+            物资状态
+          </div>
+          {% set received = recent_donations|selectattr('status','equalto','received')|list|length %}
+          {% set distributing = recent_donations|selectattr('status','equalto','distributing')|list|length %}
+          {% set completed = recent_donations|selectattr('status','equalto','completed')|list|length %}
+          {% set total_status = [received + distributing + completed, 1]|max %}
+          <div class="relative h-28 w-28 mx-auto">
+            <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
+              <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
+              <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none" stroke="#6A8D46" stroke-width="3"
+                    stroke-dasharray="{{ (received/total_status*100)|round(1) }}, 100"/>
+              <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none" stroke="#C7A75A" stroke-width="3"
+                    stroke-dasharray="{{ (distributing/total_status*100)|round(1) }}, 100"
+                    stroke-dashoffset="-{{ (received/total_status*100)|round(1) }}"/>
+              <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                    fill="none" stroke="#3D5A3B" stroke-width="3"
+                    stroke-dasharray="{{ (completed/total_status*100)|round(1) }}, 100"
+                    stroke-dashoffset="-{{ ((received+distributing)/total_status*100)|round(1) }}"/>
+            </svg>
+            <div class="absolute inset-0 flex items-center justify-center">
+              <div class="text-center">
+                <div class="text-xl font-bold text-[#F7F5F0] font-['JetBrains_Mono']">{{ total_donations|default(0) }}</div>
+                <div class="text-[10px] text-[#E8DCC4]/70">笔</div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3 flex flex-wrap justify-center gap-2 text-[10px]">
+            <span class="flex items-center gap-1 text-[#E8DCC4]/80"><span class="w-2 h-2 rounded-full bg-[#6A8D46]"></span>已接收</span>
+            <span class="flex items-center gap-1 text-[#E8DCC4]/80"><span class="w-2 h-2 rounded-full bg-[#C7A75A]"></span>分发中</span>
+            <span class="flex items-center gap-1 text-[#E8DCC4]/80"><span class="w-2 h-2 rounded-full bg-[#3D5A3B]"></span>已完成</span>
+          </div>
+        </div>
+
+        {# 最新动态瓦片 #}
+        <div class="wwf-reveal wwf-tile col-span-1 md:col-span-2">
+          <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-4">
+            <i data-lucide="newspaper" class="w-4 h-4"></i>
+            最新动态
+          </div>
+          <div class="space-y-3">
+            {% for post in recent_posts[:3] %}
+            <div class="flex items-start gap-3">
+              <div class="w-1.5 h-1.5 rounded-full bg-[#C7A75A] mt-2 shrink-0"></div>
+              <div class="min-w-0">
+                <div class="text-sm font-medium text-[#F7F5F0] truncate">{{ post.title }}</div>
+                <div class="text-xs text-[#E8DCC4]/60 wwf-line-clamp">{{ post.content }}</div>
+              </div>
+            </div>
+            {% else %}
+            <p class="text-sm text-[#E8DCC4]/60">暂无动态。</p>
+            {% endfor %}
+          </div>
+        </div>
+
+        {# 资金用途拆分瓦片 #}
+        <div class="wwf-reveal wwf-tile col-span-1 md:col-span-2">
+          <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-5">
+            <i data-lucide="wallet" class="w-4 h-4"></i>
+            资金用途拆分
+          </div>
+          <div class="space-y-4">
+            {% set splits = [('教学物资', 42, '#6A8D46'), ('生活辅助', 28, '#C7A75A'), ('康复器材', 18, '#8FAE68'), ('运营管理', 12, '#3D5A3B')] %}
+            {% for label, pct, color in splits %}
+            <div>
+              <div class="flex justify-between text-xs text-[#E8DCC4]/80 mb-1.5">
+                <span>{{ label }}</span>
+                <span class="font-mono">{{ pct }}%</span>
+              </div>
+              <div class="h-2 rounded-full bg-white/10 overflow-hidden">
+                <div class="h-full rounded-full wwf-fin-bar" style="width: {{ pct }}%; background-color: {{ color }};"></div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        {# 最近捐赠瓦片 #}
+        <div class="wwf-reveal wwf-tile col-span-1 md:col-span-2">
+          <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-4">
+            <i data-lucide="list" class="w-4 h-4"></i>
+            最近捐赠
+          </div>
+          <div class="space-y-3">
+            {% for d in recent_donations[:4] %}
+            <div class="flex items-center justify-between gap-3 text-sm">
+              <div class="flex items-center gap-2 min-w-0">
+                <span class="w-6 h-6 rounded-full bg-[#6A8D46]/20 flex items-center justify-center text-[#C7A75A] text-[10px] font-bold shrink-0">
+                  {{ d.donor_name[0] if d.donor_name else '匿' }}
+                </span>
+                <span class="text-[#F7F5F0] truncate">{{ d.donor_name or '匿名' }}</span>
+                <span class="text-xs text-[#E8DCC4]/60 truncate hidden sm:inline">{{ d.item_name }} ×{{ d.quantity }}</span>
+              </div>
+              <span class="wwf-status-badge shrink-0
+                {% if d.status == 'received' %}bg-[#6A8D46]/20 text-[#B8D68C]
+                {% elif d.status == 'distributing' %}bg-[#C7A75A]/20 text-[#F2D78A]
+                {% else %}bg-[#3D5A3B]/60 text-[#A7C4B5]{% endif %}">
+                {% if d.status == 'received' %}已接收{% elif d.status == 'distributing' %}分发中{% else %}已完成{% endif %}
+              </span>
+            </div>
+            {% else %}
+            <p class="text-sm text-[#E8DCC4]/60">暂无捐赠记录。</p>
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  {# ---------- 保护成效 / 数据可视化 ---------- #}
-  <section id="impact" class="py-16 md:py-24 relative">
+  {# ---------- 数据可视化区 ---------- #}
+  <section id="viz" class="py-16 md:py-24 relative">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="wwf-reveal mb-12 md:mb-16 text-center max-w-2xl mx-auto">
-        <p class="text-[#C7A75A] font-semibold text-sm tracking-wider uppercase mb-2">Conservation Impact</p>
-        <h2 class="text-3xl md:text-5xl font-bold font-['Noto_Serif_SC'] text-white mb-4">保护成效可视化</h2>
-        <p class="text-[#E8DCC4]/80">以轻盈的折线与柱状图，呈现公益守护带来的可持续改变。</p>
+      <div class="wwf-reveal mb-10 md:mb-12">
+        <p class="text-[#C7A75A] text-xs font-semibold tracking-[0.2em] uppercase mb-2">Data Visualization</p>
+        <h2 class="text-3xl md:text-5xl font-bold font-['Noto_Serif_SC'] text-[#F7F5F0]">数据可视化区</h2>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 wwf-stagger">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
         {# 折线图 #}
-        <div class="wwf-reveal wwf-glass-strong rounded-3xl p-6 md:p-8">
-          <h3 class="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-            <i data-lucide="activity" class="w-5 h-5 text-[#C7A75A]"></i>
+        <div class="wwf-reveal wwf-tile">
+          <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-6">
+            <i data-lucide="activity" class="w-4 h-4"></i>
             五年捐赠增长趋势
-          </h3>
+          </div>
           <div class="relative h-64">
             <svg viewBox="0 0 400 200" class="w-full h-full overflow-visible">
               <defs>
@@ -235,20 +369,16 @@
                   <stop offset="100%" stop-color="#C7A75A"/>
                 </linearGradient>
               </defs>
-              {# 网格 #}
               <line x1="0" y1="50" x2="400" y2="50" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
               <line x1="0" y1="100" x2="400" y2="100" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
               <line x1="0" y1="150" x2="400" y2="150" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
-              {# 折线 #}
               <polyline fill="none" stroke="url(#lineGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"
                         points="20,160 100,130 180,90 260,70 340,30" class="wwf-line-path"/>
-              {# 数据点 #}
               <circle cx="20" cy="160" r="5" fill="#6A8D46"/>
               <circle cx="100" cy="130" r="5" fill="#6A8D46"/>
               <circle cx="180" cy="90" r="5" fill="#C7A75A"/>
               <circle cx="260" cy="70" r="5" fill="#C7A75A"/>
               <circle cx="340" cy="30" r="5" fill="#D4A056"/>
-              {# 年份标签 #}
               <text x="20" y="190" fill="#E8DCC4" font-size="10" text-anchor="middle">2021</text>
               <text x="100" y="190" fill="#E8DCC4" font-size="10" text-anchor="middle">2022</text>
               <text x="180" y="190" fill="#E8DCC4" font-size="10" text-anchor="middle">2023</text>
@@ -258,19 +388,91 @@
           </div>
         </div>
 
-        {# 柱状图 #}
-        <div class="wwf-reveal wwf-glass-strong rounded-3xl p-6 md:p-8">
-          <h3 class="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-            <i data-lucide="bar-chart-3" class="w-5 h-5 text-[#C7A75A]"></i>
-            年度帮扶覆盖人数
-          </h3>
-          <div class="flex items-end justify-between h-64 gap-3 md:gap-4 pt-4">
-            {% set bar_heights = [35, 48, 62, 78, 92] %}
-            {% for h in bar_heights %}
-            <div class="flex-1 flex flex-col items-center gap-3">
-              <div class="w-full max-w-[3.5rem] rounded-t-xl bg-gradient-to-t from-[#3D5A3B] to-[#C7A75A] wwf-chart-bar shadow-lg" style="height: {{ h }}%;"></div>
-              <span class="text-xs text-[#E8DCC4]/80">{{ loop.index + 2020 }}</span>
+        {# 环形图 #}
+        <div class="wwf-reveal wwf-tile">
+          <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-6">
+            <i data-lucide="pie-chart" class="w-4 h-4"></i>
+            帮扶领域分布
+          </div>
+          <div class="flex flex-col md:flex-row items-center gap-8">
+            <div class="relative h-48 w-48 shrink-0">
+              <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      fill="none" stroke="#6A8D46" stroke-width="3" stroke-dasharray="42, 100"/>
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      fill="none" stroke="#C7A75A" stroke-width="3" stroke-dasharray="28, 100" stroke-dashoffset="-42"/>
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      fill="none" stroke="#8FAE68" stroke-width="3" stroke-dasharray="18, 100" stroke-dashoffset="-70"/>
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                      fill="none" stroke="#3D5A3B" stroke-width="3" stroke-dasharray="12, 100" stroke-dashoffset="-88"/>
+              </svg>
             </div>
+            <div class="flex-1 w-full space-y-4">
+              {% set fields = [('教学物资', 42, '#6A8D46'), ('生活辅助', 28, '#C7A75A'), ('康复器材', 18, '#8FAE68'), ('运营管理', 12, '#3D5A3B')] %}
+              {% for label, pct, color in fields %}
+              <div class="flex items-center justify-between text-sm">
+                <div class="flex items-center gap-2">
+                  <span class="w-3 h-3 rounded-full" style="background-color: {{ color }};"></span>
+                  <span class="text-[#E8DCC4]">{{ label }}</span>
+                </div>
+                <span class="font-mono text-[#F7F5F0]">{{ pct }}%</span>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ---------- 学校地图/列表混排 ---------- #}
+  <section id="schools" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="wwf-reveal mb-10 md:mb-12">
+        <p class="text-[#C7A75A] text-xs font-semibold tracking-[0.2em] uppercase mb-2">School Network</p>
+        <h2 class="text-3xl md:text-5xl font-bold font-['Noto_Serif_SC'] text-[#F7F5F0]">学校地图 / 名录</h2>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
+        {# 抽象地图 #}
+        <div class="wwf-reveal wwf-tile lg:col-span-1">
+          <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-4">
+            <i data-lucide="map" class="w-4 h-4"></i>
+            守护网络
+          </div>
+          <div class="aspect-square wwf-map-grid rounded-2xl p-4 flex items-center justify-center">
+            <div class="grid grid-cols-8 gap-3">
+              {% for i in range(64) %}
+              <div class="wwf-map-dot {% if i in [10,13,18,27,34,41,50,55] %}active{% endif %}"></div>
+              {% endfor %}
+            </div>
+          </div>
+          <p class="text-xs text-[#E8DCC4]/60 mt-4">每个亮点代表一所合作学校，覆盖全国多个地区。</p>
+        </div>
+
+        {# 学校名录 #}
+        <div class="wwf-reveal wwf-tile lg:col-span-2">
+          <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-6">
+            <i data-lucide="list" class="w-4 h-4"></i>
+            学校名录
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for school in schools %}
+            <a href="/school/{{ school.id }}?ui=wwf" class="wwf-school-row group block p-4 rounded-2xl transition-colors">
+              <div class="flex items-start justify-between gap-3 mb-2">
+                <h3 class="text-base font-semibold text-[#F7F5F0] group-hover:text-[#C7A75A] transition-colors">{{ school.name }}</h3>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#6A8D46]/20 text-[#B8D68C]">{{ school.location }}</span>
+              </div>
+              <p class="text-xs text-[#E8DCC4]/70 line-clamp-2 mb-3">{{ school.description }}</p>
+              <div class="flex items-center gap-4 text-xs text-[#E8DCC4]/60">
+                <span class="flex items-center gap-1"><i data-lucide="users" class="w-3 h-3"></i> {{ school.student_count }} 学生</span>
+                <span class="flex items-center gap-1"><i data-lucide="graduation-cap" class="w-3 h-3"></i> {{ school.teacher_count }} 教师</span>
+              </div>
+            </a>
+            {% else %}
+            <p class="text-sm text-[#E8DCC4]/60">暂无学校数据。</p>
             {% endfor %}
           </div>
         </div>
@@ -278,195 +480,114 @@
     </div>
   </section>
 
-  {# ---------- 故事 / 儿童风采卡片 ---------- #}
-  <section id="stories" class="py-16 md:py-24">
+  {# ---------- 小头像画廊 ---------- #}
+  <section id="children" class="py-16 md:py-24">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="wwf-reveal mb-12 md:mb-16 text-center max-w-2xl mx-auto">
-        <p class="text-[#C7A75A] font-semibold text-sm tracking-wider uppercase mb-2">Children Stories</p>
-        <h2 class="text-3xl md:text-5xl font-bold font-['Noto_Serif_SC'] text-white mb-4">儿童风采</h2>
-        <p class="text-[#E8DCC4]/80">每一张笑脸都是自然里最珍贵的生命信号，倾听他们的声音。</p>
+      <div class="wwf-reveal mb-10 md:mb-12 text-center max-w-2xl mx-auto">
+        <p class="text-[#C7A75A] text-xs font-semibold tracking-[0.2em] uppercase mb-2">Children Gallery</p>
+        <h2 class="text-3xl md:text-5xl font-bold font-['Noto_Serif_SC'] text-[#F7F5F0] mb-3">受助儿童画廊</h2>
+        <p class="text-[#E8DCC4]/70">每一张笑脸都是年度报告里最珍贵的注脚。</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 wwf-stagger">
+      <div class="flex flex-wrap justify-center gap-4 md:gap-6">
         {% for child in children %}
-        <article class="wwf-reveal wwf-glass wwf-glow-hover rounded-3xl p-6 md:p-8">
-          <div class="flex items-start gap-4 mb-5">
-            <img src="{{ child.avatar_url or 'https://images.unsplash.com/photo-1540479859555-17af45c78602?auto=format&fit=crop&w=200&q=80' }}"
-                 alt="{{ child.name }}" class="w-16 h-16 rounded-2xl object-cover border-2 border-[#C7A75A]/40">
-            <div>
-              <h3 class="text-xl font-bold text-white font-['Noto_Serif_SC']">{{ child.name }}</h3>
-              <p class="text-sm text-[#E8DCC4]/70">{{ child.age }} 岁</p>
-            </div>
+        <div class="wwf-reveal wwf-avatar-card group flex flex-col items-center text-center">
+          <div class="relative mb-3">
+            <img src="{{ child.avatar_url or 'https://images.unsplash.com/photo-1540479859555-17af45c78602?auto=format&fit=crop&w=150&q=80' }}"
+                 alt="{{ child.name }}"
+                 class="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-[#C7A75A]/30 group-hover:border-[#C7A75A] transition-colors">
+            <span class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#6A8D46] text-[#F7F5F0] text-[10px] flex items-center justify-center font-bold">{{ child.age }}</span>
           </div>
-          <blockquote class="relative pl-4 border-l-2 border-[#C7A75A]/50 text-[#E8DCC4] italic mb-5">
-            “{{ child.quote or '我想成为森林里会唱歌的小鸟。' }}”
-          </blockquote>
-          <p class="text-sm text-[#E8DCC4]/80 leading-relaxed mb-5">
-            {{ child.bio[:80] }}{% if child.bio|length > 80 %}…{% endif %}
-          </p>
+          <div class="text-sm font-medium text-[#F7F5F0]">{{ child.name }}</div>
           {% if child.tags %}
-          <div class="flex flex-wrap gap-2">
-            {% for tag in child.tags.split(',') %}
-            <span class="px-2.5 py-1 rounded-full text-xs font-medium bg-[#6A8D46]/20 text-[#B8D68C] border border-[#6A8D46]/30">
-              {{ tag.strip() }}
-            </span>
+          <div class="mt-1 flex flex-wrap justify-center gap-1">
+            {% for tag in child.tags.split(',')[:2] %}
+            <span class="px-1.5 py-0.5 rounded text-[10px] bg-[#6A8D46]/15 text-[#B8D68C]">{{ tag.strip() }}</span>
             {% endfor %}
           </div>
           {% endif %}
-        </article>
-        {% else %}
-        <div class="col-span-full wwf-glass rounded-3xl p-10 text-center text-[#E8DCC4]/80">
-          暂无儿童数据，请运行 <code>python seed.py</code> 注入演示数据。
         </div>
+        {% else %}
+        <p class="text-sm text-[#E8DCC4]/60">暂无儿童数据。</p>
         {% endfor %}
       </div>
     </div>
   </section>
 
-  {# ---------- 近期捐赠记录 ---------- #}
-  <section id="donations" class="py-16 md:py-24">
+  {# ---------- 财务拆分 ---------- #}
+  <section id="finance" class="py-16 md:py-24">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
-      <div class="wwf-reveal mb-12 md:mb-16 text-center max-w-2xl mx-auto">
-        <p class="text-[#C7A75A] font-semibold text-sm tracking-wider uppercase mb-2">Recent Donations</p>
-        <h2 class="text-3xl md:text-5xl font-bold font-['Noto_Serif_SC'] text-white mb-4">近期捐赠记录</h2>
-        <p class="text-[#E8DCC4]/80">透明、可追踪，每一笔善意都如森林里的水滴，汇成守护的河流。</p>
+      <div class="wwf-reveal mb-10 md:mb-12">
+        <p class="text-[#C7A75A] text-xs font-semibold tracking-[0.2em] uppercase mb-2">Financial Breakdown</p>
+        <h2 class="text-3xl md:text-5xl font-bold font-['Noto_Serif_SC'] text-[#F7F5F0]">财务拆分</h2>
       </div>
 
-      <div class="wwf-reveal wwf-glass-strong rounded-3xl overflow-hidden">
-        <div class="overflow-x-auto">
-          <table class="w-full min-w-[680px]">
-            <thead>
-              <tr class="border-b border-white/10 text-left text-sm text-[#E8DCC4]/80">
-                <th class="py-4 px-6 font-medium">捐赠人</th>
-                <th class="py-4 px-6 font-medium">项目 / 学校</th>
-                <th class="py-4 px-6 font-medium">物资</th>
-                <th class="py-4 px-6 font-medium">金额</th>
-                <th class="py-4 px-6 font-medium">状态</th>
-                <th class="py-4 px-6 font-medium">时间</th>
-              </tr>
-            </thead>
-            <tbody class="text-sm">
-              {% for d in recent_donations %}
-              <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
-                <td class="py-4 px-6">
-                  <div class="flex items-center gap-3">
-                    <span class="w-8 h-8 rounded-full bg-[#6A8D46]/30 flex items-center justify-center text-[#B8D68C] font-bold text-xs">
-                      {{ d.donor_name[0] if d.donor_name else '匿' }}
-                    </span>
-                    <span class="text-white font-medium">{{ d.donor_name or '匿名爱心人士' }}</span>
-                  </div>
-                </td>
-                <td class="py-4 px-6 text-[#E8DCC4]/90">{{ d.school.name if d.school else '全部项目' }}</td>
-                <td class="py-4 px-6 text-[#E8DCC4]/90">
-                  {{ d.item_name }}{% if d.item_detail %} <span class="text-[#E8DCC4]/60">· {{ d.item_detail }}</span>{% endif %}
-                  <span class="text-[#C7A75A] ml-1">×{{ d.quantity }}</span>
-                </td>
-                <td class="py-4 px-6 text-white font-['JetBrains_Mono']">¥{{ "%.0f"|format(d.amount) }}</td>
-                <td class="py-4 px-6">
-                  {% if d.status == 'received' %}
-                    <span class="wwf-status wwf-status-received"><i data-lucide="check-circle-2" class="w-3 h-3"></i> 已接收</span>
-                  {% elif d.status == 'distributing' %}
-                    <span class="wwf-status wwf-status-distributing"><i data-lucide="loader-2" class="w-3 h-3"></i> 分发中</span>
-                  {% else %}
-                    <span class="wwf-status wwf-status-completed"><i data-lucide="package-check" class="w-3 h-3"></i> 已完成</span>
-                  {% endif %}
-                </td>
-                <td class="py-4 px-6 text-[#E8DCC4]/70">{{ d.created_at.strftime('%m-%d') if d.created_at else '-' }}</td>
-              </tr>
-              {% else %}
-              <tr>
-                <td colspan="6" class="py-10 text-center text-[#E8DCC4]/80">
-                  暂无捐赠记录，请运行 <code>python seed.py</code> 注入演示数据。
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+      <div class="wwf-reveal wwf-tile">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+          <div>
+            <div class="text-xs text-[#E8DCC4]/70 uppercase tracking-wider mb-1">年度总支出</div>
+            <div class="text-3xl md:text-4xl font-bold text-[#F7F5F0] font-['JetBrains_Mono']">¥{{ "{:,.0f}".format(total) }}</div>
+          </div>
+          <div class="flex flex-wrap gap-4 text-sm">
+            {% set fields = [('教学物资', 42, '#6A8D46'), ('生活辅助', 28, '#C7A75A'), ('康复器材', 18, '#8FAE68'), ('运营管理', 12, '#3D5A3B')] %}
+            {% for label, pct, color in fields %}
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full" style="background-color: {{ color }};"></span>
+              <span class="text-[#E8DCC4]">{{ label }} {{ pct }}%</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="h-10 md:h-12 rounded-full overflow-hidden flex wwf-stacked-bar">
+          {% for label, pct, color in fields %}
+          <div class="h-full flex items-center justify-center text-[10px] md:text-xs font-semibold text-[#0F231C] wwf-stacked-segment"
+               style="width: {{ pct }}%; background-color: {{ color }};">
+            <span class="hidden md:inline">{{ label }}</span>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
+          {% for label, pct, color in fields %}
+          <div class="text-center p-4 rounded-2xl bg-white/5">
+            <div class="text-2xl font-bold text-[#F7F5F0] font-['JetBrains_Mono'] mb-1">¥{{ "{:,.0f}".format(total * pct / 100) }}</div>
+            <div class="text-xs text-[#E8DCC4]/70">{{ label }}</div>
+          </div>
+          {% endfor %}
         </div>
       </div>
     </div>
   </section>
 
   {# ---------- 页脚 ---------- #}
-  <footer class="border-t border-white/10 bg-[#1B3B2F]/60 backdrop-blur-md">
+  <footer class="border-t border-white/10 bg-[#0F231C]/80 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12 md:py-16">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
-        <div class="md:col-span-2">
-          <a href="?ui=wwf" class="flex items-center gap-3 text-2xl font-bold mb-4">
-            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full wwf-glass">
-              <i data-lucide="leaf" class="w-6 h-6 text-[#C7A75A]"></i>
-            </span>
-            <span class="font-['Noto_Serif_SC'] text-white">守护计划</span>
-          </a>
-          <p class="text-[#E8DCC4]/70 max-w-sm leading-relaxed">
-            本页面为 WWF 风格测试变体，采用自然肌理渐变、玻璃拟态与数据可视化，仅供 UI 评审使用。
-          </p>
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-full wwf-glass">
+            <i data-lucide="leaf" class="w-6 h-6 text-[#C7A75A]"></i>
+          </span>
+          <div>
+            <div class="font-['Noto_Serif_SC'] text-xl font-bold text-[#F7F5F0]">守护计划</div>
+            <div class="text-xs text-[#E8DCC4]/60">WWF 风格年度报告测试变体 · 上线前删除</div>
+          </div>
         </div>
-        <div>
-          <h4 class="text-white font-semibold mb-4">探索</h4>
-          <ul class="space-y-2 text-sm text-[#E8DCC4]/80">
-            <li><a href="#projects" class="hover:text-[#C7A75A]">守护项目</a></li>
-            <li><a href="#impact" class="hover:text-[#C7A75A]">保护成效</a></li>
-            <li><a href="#stories" class="hover:text-[#C7A75A]">儿童风采</a></li>
-          </ul>
-        </div>
-        <div>
-          <h4 class="text-white font-semibold mb-4">联系</h4>
-          <ul class="space-y-2 text-sm text-[#E8DCC4]/80">
-            <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4"></i> hello@example.org</li>
-            <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4"></i> 中国 · 公益示范</li>
-          </ul>
+        <div class="flex flex-wrap gap-6 text-sm text-[#E8DCC4]/70">
+          <a href="#executive" class="hover:text-[#C7A75A]">摘要</a>
+          <a href="#bento" class="hover:text-[#C7A75A]">仪表盘</a>
+          <a href="#viz" class="hover:text-[#C7A75A]">可视化</a>
+          <a href="#schools" class="hover:text-[#C7A75A]">学校</a>
+          <a href="/" class="hover:text-[#C7A75A]">默认版</a>
         </div>
       </div>
-      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#E8DCC4]/60">
-        <p>© 2026 特殊学校公益展示网站 · WWF 风格测试变体</p>
+      <div class="border-t border-white/10 mt-8 pt-8 text-xs text-[#E8DCC4]/50 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p>© 2026 特殊学校公益展示网站 · 本页为 UI 变体测试，不含真实支付功能</p>
         <p>上线前请删除 <code>app/templates/ui_variants</code> 目录</p>
       </div>
     </div>
   </footer>
 </main>
-
-{# ---------- 捐赠弹窗 ---------- #}
-<div id="wwf-donate-modal" class="wwf-modal-backdrop fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true">
-  <div class="absolute inset-0 bg-[#0D1F18]/80 backdrop-blur-sm" data-wwf-close-modal></div>
-  <div class="wwf-modal-panel wwf-layered-glass relative w-full max-w-lg rounded-3xl p-1">
-    <div class="relative wwf-glass-strong rounded-[1.35rem] p-6 md:p-8 overflow-hidden">
-      <button data-wwf-close-modal class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-[#E8DCC4] transition-colors">
-        <i data-lucide="x" class="w-5 h-5"></i>
-      </button>
-      <div class="text-center mb-6">
-        <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#6A8D46]/25 text-[#C7A75A] mb-4">
-          <i data-lucide="heart" class="w-7 h-7"></i>
-        </div>
-        <h3 class="text-2xl font-bold text-white font-['Noto_Serif_SC']">成为守护者</h3>
-        <p class="text-[#E8DCC4]/80 text-sm mt-2">您的每一笔捐赠，都会化作森林里的光。</p>
-      </div>
-
-      <form class="space-y-5" onsubmit="event.preventDefault(); alert('演示环境：捐赠功能仅作 UI 展示。');">
-        <div class="grid grid-cols-3 gap-3">
-          <button type="button" class="wwf-amount-btn px-3 py-3 rounded-xl border border-[#C7A75A]/40 bg-[#C7A75A]/10 text-white font-semibold hover:bg-[#C7A75A]/25 transition-colors">¥50</button>
-          <button type="button" class="wwf-amount-btn px-3 py-3 rounded-xl border border-[#C7A75A]/40 bg-[#C7A75A]/10 text-white font-semibold hover:bg-[#C7A75A]/25 transition-colors">¥100</button>
-          <button type="button" class="wwf-amount-btn px-3 py-3 rounded-xl border border-[#C7A75A]/40 bg-[#C7A75A]/10 text-white font-semibold hover:bg-[#C7A75A]/25 transition-colors">¥500</button>
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-[#E8DCC4]/80 mb-1.5">自定义金额</label>
-          <div class="relative">
-            <span class="absolute left-4 top-1/2 -translate-y-1/2 text-[#E8DCC4]/60">¥</span>
-            <input type="number" placeholder="输入金额" class="w-full pl-9 pr-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-[#E8DCC4]/50 focus:outline-none focus:border-[#C7A75A]/60">
-          </div>
-        </div>
-        <div>
-          <label class="block text-xs font-medium text-[#E8DCC4]/80 mb-1.5">您的称呼</label>
-          <input type="text" placeholder="爱心人士" class="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder-[#E8DCC4]/50 focus:outline-none focus:border-[#C7A75A]/60">
-        </div>
-        <button type="submit" class="wwf-btn-primary w-full text-base">
-          <i data-lucide="heart" class="w-5 h-5"></i>
-          确认捐赠
-        </button>
-      </form>
-    </div>
-  </div>
-</div>
 {% endblock %}
 
 {% block body_scripts %}
@@ -490,39 +611,12 @@
     });
   }
 
-  // 弹窗
-  const modal = document.getElementById('wwf-donate-modal');
-  const openBtns = document.querySelectorAll('[data-wwf-open-modal]');
-  const closeBtns = document.querySelectorAll('[data-wwf-close-modal]');
-  function openModal() { modal.classList.add('wwf-open'); document.body.style.overflow = 'hidden'; }
-  function closeModal() { modal.classList.remove('wwf-open'); document.body.style.overflow = ''; }
-  openBtns.forEach(btn => btn.addEventListener('click', openModal));
-  closeBtns.forEach(btn => btn.addEventListener('click', closeModal));
-  modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('wwf-open')) closeModal(); });
-
-  // 金额按钮选中态
-  document.querySelectorAll('.wwf-amount-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.wwf-amount-btn').forEach(b => {
-        b.classList.remove('bg-[#C7A75A]', 'text-[#1B3B2F]', 'border-[#C7A75A]');
-        b.classList.add('bg-[#C7A75A]/10', 'text-white', 'border-[#C7A75A]/40');
-      });
-      btn.classList.remove('bg-[#C7A75A]/10', 'text-white', 'border-[#C7A75A]/40');
-      btn.classList.add('bg-[#C7A75A]', 'text-[#1B3B2F]', 'border-[#C7A75A]');
-    });
-  });
-
   // 滚动揭示
-  const revealEls = document.querySelectorAll('.wwf-reveal, .wwf-chart-bar, .wwf-line-path, .wwf-progress-fill');
+  const revealEls = document.querySelectorAll('.wwf-reveal, .wwf-line-path');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('wwf-visible');
-        if (entry.target.classList.contains('wwf-progress-fill')) {
-          const pct = entry.target.getAttribute('data-wwf-progress') || '0';
-          entry.target.style.width = pct + '%';
-        }
         observer.unobserve(entry.target);
       }
     });

@@ -2,17 +2,18 @@
 
 /* ---------- 设计令牌 ---------- */
 :root {
-  --wwf-forest: #1B3B2F;
+  --wwf-forest: #0F231C;
+  --wwf-deep: #1B3B2F;
   --wwf-moss: #3D5A3B;
   --wwf-leaf: #6A8D46;
+  --wwf-lightleaf: #8FAE68;
   --wwf-earth: #C7A75A;
   --wwf-sand: #E8DCC4;
   --wwf-ivory: #F7F5F0;
-  --wwf-accent: #D4A056;
-  --wwf-glass: rgba(255, 255, 255, 0.10);
-  --wwf-glass-strong: rgba(255, 255, 255, 0.16);
-  --wwf-border: rgba(255, 255, 255, 0.22);
-  --wwf-shadow: rgba(0, 0, 0, 0.35);
+  --wwf-glass: rgba(255, 255, 255, 0.08);
+  --wwf-glass-strong: rgba(255, 255, 255, 0.14);
+  --wwf-border: rgba(255, 255, 255, 0.16);
+  --wwf-shadow: rgba(0, 0, 0, 0.30);
 }
 
 /* ---------- 全局 ---------- */
@@ -22,24 +23,27 @@ html {
 
 body.wwf-variant {
   font-family: 'Noto Sans SC', 'Inter', sans-serif;
-  color: #F7F5F0;
+  color: var(--wwf-ivory);
   background:
-    radial-gradient(ellipse at 20% 10%, rgba(106, 141, 70, 0.35) 0%, transparent 45%),
-    radial-gradient(ellipse at 80% 90%, rgba(199, 167, 90, 0.30) 0%, transparent 45%),
-    linear-gradient(160deg, #1B3B2F 0%, #243E2D 35%, #3D5A3B 70%, #2F3E28 100%);
+    radial-gradient(ellipse at 15% 0%, rgba(106, 141, 70, 0.25) 0%, transparent 40%),
+    radial-gradient(ellipse at 85% 100%, rgba(199, 167, 90, 0.22) 0%, transparent 40%),
+    linear-gradient(180deg, var(--wwf-forest) 0%, var(--wwf-deep) 40%, #142B22 100%);
   min-height: 100vh;
   position: relative;
 }
 
-/* 自然肌理噪点层 */
+/* 细网格材质 */
 body.wwf-variant::before {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
 }
 
 .wwf-container {
@@ -47,13 +51,12 @@ body.wwf-variant::before {
   z-index: 1;
 }
 
-/* ---------- 玻璃拟态卡片 ---------- */
+/* ---------- 玻璃拟态 ---------- */
 .wwf-glass {
   background: var(--wwf-glass);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--wwf-border);
-  box-shadow: 0 8px 32px var(--wwf-shadow);
 }
 
 .wwf-glass-strong {
@@ -61,37 +64,34 @@ body.wwf-variant::before {
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
   border: 1px solid var(--wwf-border);
-  box-shadow: 0 12px 40px var(--wwf-shadow);
 }
 
-/* ---------- 悬浮光效 ---------- */
-.wwf-glow-hover {
-  position: relative;
-  overflow: hidden;
-  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+/* ---------- Bento 瓦片 ---------- */
+.wwf-tile {
+  background: var(--wwf-glass);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid var(--wwf-border);
+  border-radius: 1.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px var(--wwf-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-.wwf-glow-hover::before {
-  content: '';
+.wwf-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+  border-color: rgba(199, 167, 90, 0.35);
+}
+
+/* ---------- Hero 背景 ---------- */
+.wwf-hero-bg {
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
-  transform: skewX(-20deg);
-  transition: left 0.6s ease;
-  pointer-events: none;
-}
-
-.wwf-glow-hover:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 18px 44px rgba(0,0,0,0.45), 0 0 18px rgba(212,160,86,0.25);
-  border-color: rgba(212,160,86,0.55);
-}
-
-.wwf-glow-hover:hover::before {
-  left: 140%;
+  inset: 0;
+  background:
+    radial-gradient(circle at 70% 30%, rgba(106, 141, 70, 0.35), transparent 50%),
+    url('https://images.unsplash.com/photo-1448375240586-dfd8f3793300?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+  opacity: 0.55;
 }
 
 /* ---------- 按钮 ---------- */
@@ -103,15 +103,15 @@ body.wwf-variant::before {
   padding: 0.85rem 1.8rem;
   font-weight: 700;
   border-radius: 999px;
-  background: linear-gradient(135deg, var(--wwf-earth) 0%, var(--wwf-accent) 100%);
-  color: #1B3B2F;
-  box-shadow: 0 6px 18px rgba(199,167,90,0.35);
+  background: linear-gradient(135deg, var(--wwf-earth) 0%, #D4A056 100%);
+  color: var(--wwf-forest);
+  box-shadow: 0 6px 18px rgba(199, 167, 90, 0.35);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .wwf-btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 10px 28px rgba(199,167,90,0.5);
+  box-shadow: 0 10px 28px rgba(199, 167, 90, 0.5);
 }
 
 .wwf-btn-ghost {
@@ -123,20 +123,20 @@ body.wwf-variant::before {
   font-weight: 600;
   border-radius: 999px;
   border: 1px solid var(--wwf-border);
-  background: rgba(255,255,255,0.08);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--wwf-ivory);
   transition: background 0.25s ease, transform 0.25s ease;
 }
 
 .wwf-btn-ghost:hover {
-  background: rgba(255,255,255,0.16);
+  background: rgba(255, 255, 255, 0.16);
   transform: translateY(-2px);
 }
 
 /* ---------- 滚动揭示动画 ---------- */
 .wwf-reveal {
   opacity: 0;
-  transform: translateY(36px);
+  transform: translateY(30px);
   transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -147,48 +147,106 @@ body.wwf-variant::before {
 }
 
 .wwf-stagger > .wwf-reveal:nth-child(1) { transition-delay: 0ms; }
-.wwf-stagger > .wwf-reveal:nth-child(2) { transition-delay: 90ms; }
-.wwf-stagger > .wwf-reveal:nth-child(3) { transition-delay: 180ms; }
-.wwf-stagger > .wwf-reveal:nth-child(4) { transition-delay: 270ms; }
-.wwf-stagger > .wwf-reveal:nth-child(5) { transition-delay: 360ms; }
-.wwf-stagger > .wwf-reveal:nth-child(6) { transition-delay: 450ms; }
+.wwf-stagger > .wwf-reveal:nth-child(2) { transition-delay: 80ms; }
+.wwf-stagger > .wwf-reveal:nth-child(3) { transition-delay: 160ms; }
+.wwf-stagger > .wwf-reveal:nth-child(4) { transition-delay: 240ms; }
+.wwf-stagger > .wwf-reveal:nth-child(5) { transition-delay: 320ms; }
+.wwf-stagger > .wwf-reveal:nth-child(6) { transition-delay: 400ms; }
+.wwf-stagger > .wwf-reveal:nth-child(7) { transition-delay: 480ms; }
+.wwf-stagger > .wwf-reveal:nth-child(8) { transition-delay: 560ms; }
 
-/* ---------- 进度条 ---------- */
-.wwf-progress-track {
-  height: 0.85rem;
+/* ---------- 学校行 ---------- */
+.wwf-school-row {
+  border: 1px solid transparent;
+}
+
+.wwf-school-row:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--wwf-border);
+}
+
+/* ---------- 财务条形 ---------- */
+.wwf-fin-bar {
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.wwf-stacked-bar {
+  background: rgba(255, 255, 255, 0.08);
   border-radius: 999px;
-  background: rgba(255,255,255,0.12);
-  overflow: hidden;
 }
 
-.wwf-progress-fill {
-  height: 100%;
+.wwf-stacked-segment {
+  transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- 状态徽章 ---------- */
+.wwf-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.6rem;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--wwf-leaf), var(--wwf-earth));
-  width: 0;
-  transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
-  box-shadow: 0 0 12px rgba(212,160,86,0.35);
+  font-size: 0.7rem;
+  font-weight: 600;
 }
 
-/* ---------- 图表 ---------- */
-.wwf-chart-bar {
-  transform-origin: bottom;
-  transform: scaleY(0);
-  transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1);
+/* ---------- 头像 ---------- */
+.wwf-avatar-ring {
+  transition: transform 0.25s ease;
 }
 
-.wwf-chart-bar.wwf-visible {
-  transform: scaleY(1);
+.wwf-avatar-ring:hover {
+  transform: scale(1.1);
+  z-index: 10;
 }
 
+.wwf-avatar-card {
+  transition: transform 0.25s ease;
+}
+
+.wwf-avatar-card:hover {
+  transform: translateY(-4px);
+}
+
+/* ---------- 地图网格 ---------- */
+.wwf-map-grid {
+  background:
+    radial-gradient(circle at 30% 30%, rgba(106, 141, 70, 0.20), transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(199, 167, 90, 0.15), transparent 50%),
+    rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--wwf-border);
+}
+
+.wwf-map-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.wwf-map-dot.active {
+  background: var(--wwf-earth);
+  box-shadow: 0 0 10px rgba(199, 167, 90, 0.7);
+}
+
+/* ---------- 折线动画 ---------- */
 .wwf-line-path {
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
   transition: stroke-dashoffset 1.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.wwf-line-path.wwf-visible {
+.wwf-line-path.wwf-visible,
+.headless-preview .wwf-line-path {
   stroke-dashoffset: 0;
+}
+
+/* ---------- 文字截断 ---------- */
+.wwf-line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* ---------- 导航 ---------- */
@@ -197,81 +255,34 @@ body.wwf-variant::before {
 }
 
 .wwf-nav-scrolled {
-  background: rgba(27, 59, 47, 0.85);
-  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  background: rgba(15, 35, 28, 0.88);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
 }
-
-/* ---------- 捐赠弹窗 ---------- */
-.wwf-modal-backdrop {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-}
-
-.wwf-modal-backdrop.wwf-open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.wwf-modal-panel {
-  transform: scale(0.96) translateY(10px);
-  opacity: 0;
-  transition: transform 0.35s ease, opacity 0.35s ease;
-}
-
-.wwf-modal-backdrop.wwf-open .wwf-modal-panel {
-  transform: scale(1) translateY(0);
-  opacity: 1;
-}
-
-.wwf-layered-glass {
-  position: relative;
-}
-
-.wwf-layered-glass::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.55), rgba(255,255,255,0.05) 50%, rgba(212,160,86,0.35));
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  pointer-events: none;
-}
-
-/* ---------- 状态标签 ---------- */
-.wwf-status {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.wwf-status-received { background: rgba(106,141,70,0.22); color: #B8D68C; }
-.wwf-status-distributing { background: rgba(199,167,90,0.22); color: #F2D78A; }
-.wwf-status-completed { background: rgba(46,74,62,0.45); color: #A7C4B5; }
 
 /* ---------- 减少动效支持 ---------- */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   .wwf-reveal,
-  .wwf-chart-bar,
-  .wwf-line-path,
-  .wwf-progress-fill,
-  .wwf-glow-hover,
-  .wwf-glow-hover::before,
+  .wwf-tile,
+  .wwf-tile:hover,
   .wwf-btn-primary,
   .wwf-btn-ghost,
-  .wwf-modal-backdrop,
-  .wwf-modal-panel {
+  .wwf-fin-bar,
+  .wwf-stacked-segment,
+  .wwf-line-path,
+  .wwf-avatar-ring,
+  .wwf-avatar-card,
+  .wwf-school-row {
     transition: none !important;
     animation: none !important;
   }
-  .wwf-reveal { opacity: 1; transform: none; }
-  .wwf-chart-bar { transform: scaleY(1); }
-  .wwf-line-path { stroke-dashoffset: 0; }
+  .wwf-reveal {
+    opacity: 1;
+    transform: none;
+  }
+  .wwf-line-path {
+    stroke-dashoffset: 0;
+  }
 }
