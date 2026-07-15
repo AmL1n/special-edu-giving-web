@@ -1,0 +1,419 @@
+{% extends "ui_variants/_shell.html" %}
+
+{% block title %}{{ school.name }} · 学校年度守护报告{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ui_variants/wwf.css') }}">
+<noscript>
+  <style>
+    .wwf-reveal { opacity: 1 !important; transform: none !important; }
+  </style>
+</noscript>
+{% endblock %}
+
+{% block body_class %}wwf-variant{% endblock %}
+
+{% block content %}
+{% set school_total = donations|sum(attribute='amount')|default(0)|float %}
+{% set school_received = donations|selectattr('status','equalto','received')|list|length %}
+{% set school_distributing = donations|selectattr('status','equalto','distributing')|list|length %}
+{% set school_completed = donations|selectattr('status','equalto','completed')|list|length %}
+{% set school_status_total = [school_received + school_distributing + school_completed, 1]|max %}
+
+{# ---------- 顶部导航 ---------- #}
+<header id="wwf-nav" class="wwf-nav fixed top-0 left-0 right-0 z-50">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20">
+      <a href="{{ url_for('main.index', ui='wwf') }}" class="flex items-center gap-3 text-xl md:text-2xl font-bold tracking-tight">
+        <span class="inline-flex items-center justify-center w-10 h-10 rounded-full wwf-glass">
+          <i data-lucide="leaf" class="w-6 h-6 text-[#C7A75A]"></i>
+        </span>
+        <span class="font-['Noto_Serif_SC'] text-[#F7F5F0]">守护计划</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-[#E8DCC4]" aria-label="主导航">
+        <a href="{{ url_for('main.index', ui='wwf') }}" class="hover:text-white transition-colors">首页</a>
+        <a href="{{ url_for('main.school_detail', school_id=school.id, ui='wwf') }}" class="hover:text-white transition-colors" aria-current="page">学校详情</a>
+        <a href="{{ url_for('main.dashboard', ui='wwf') }}" class="hover:text-white transition-colors">捐赠公示</a>
+      </nav>
+
+      <a href="{{ url_for('main.school_detail', school_id=school.id) }}" class="hidden md:inline-flex items-center gap-2 text-sm text-[#E8DCC4] hover:text-white transition-colors">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        返回默认版
+      </a>
+
+      <button id="wwf-menu-btn" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl wwf-glass text-[#F7F5F0]" aria-label="打开菜单">
+        <i data-lucide="menu" class="w-5 h-5"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="wwf-mobile-menu" class="hidden md:hidden px-6 pb-5">
+    <div class="wwf-glass-strong rounded-2xl p-4 space-y-2">
+      <a href="{{ url_for('main.index', ui='wwf') }}" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">首页</a>
+      <a href="{{ url_for('main.school_detail', school_id=school.id, ui='wwf') }}" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]" aria-current="page">学校详情</a>
+      <a href="{{ url_for('main.dashboard', ui='wwf') }}" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">捐赠公示</a>
+      <a href="{{ url_for('main.school_detail', school_id=school.id) }}" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">返回默认版</a>
+    </div>
+  </div>
+</header>
+
+<main class="wwf-container">
+  {# ---------- 学校 Hero ---------- #}
+  <section class="wwf-school-hero" aria-labelledby="wwf-school-name">
+    <div class="wwf-school-hero-bg" style="background-image: url('{{ variant_asset('wwf', 'images/school-' ~ ((school.id - 1) % 3 + 1) ~ '.jpg', school.cover_image) }}');" role="img" aria-label="{{ school.name }}校园环境"></div>
+    <div class="wwf-school-hero-content">
+      <div class="wwf-reveal inline-flex items-center gap-2 px-4 py-2 rounded-full wwf-glass text-xs font-semibold text-[#E8DCC4] mb-4">
+        <i data-lucide="map-pin" class="w-4 h-4 text-[#C7A75A]"></i>
+        {{ school.location or '地址待补充' }}
+      </div>
+      <h1 id="wwf-school-name" class="wwf-reveal text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.05] font-['Noto_Serif_SC'] text-[#F7F5F0] mb-4">
+        {{ school.name }}
+      </h1>
+      <p class="wwf-reveal text-lg text-[#E8DCC4]/80 leading-relaxed mb-8 max-w-2xl">
+        {{ school.description or '学校简介待补充' }}
+      </p>
+      <div class="wwf-reveal flex flex-wrap gap-4">
+        <a href="#report" class="wwf-btn-primary">
+          <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
+          查看年度报告
+        </a>
+        <a href="{{ url_for('main.dashboard', school_id=school.id, ui='wwf') }}" class="wwf-btn-ghost">
+          <i data-lucide="list" class="w-5 h-5"></i>
+          查看公示
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {# ---------- KPI 条 ---------- #}
+  <section class="relative border-y border-[#C7A75A]/20 bg-[#0F231C]/70 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-6 md:py-8">
+      <div class="wwf-kpi-grid">
+        <div class="wwf-reveal wwf-kpi-mini">
+          <div class="value">{{ school.student_count or 0 }}</div>
+          <div class="label">在校学生</div>
+        </div>
+        <div class="wwf-reveal wwf-kpi-mini">
+          <div class="value">{{ school.teacher_count or 0 }}</div>
+          <div class="label">教职工</div>
+        </div>
+        <div class="wwf-reveal wwf-kpi-mini">
+          <div class="value">{{ donations|length }}</div>
+          <div class="label">捐赠记录</div>
+        </div>
+        <div class="wwf-reveal wwf-kpi-mini">
+          <div class="value">¥{{ "{:,.0f}".format(school_total) }}</div>
+          <div class="label">累计受赠金额</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# ---------- 年度报告 Bento ---------- #}
+  <section id="report" class="py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="wwf-reveal mb-10 md:mb-12">
+        <p class="text-[#C7A75A] text-xs font-semibold tracking-[0.2em] uppercase mb-2">School Report Card</p>
+        <h2 class="text-3xl md:text-5xl font-bold font-['Noto_Serif_SC'] text-[#F7F5F0]">学校年度报告卡</h2>
+      </div>
+
+      <div class="wwf-report-grid">
+        {# 左侧主内容 #}
+        <div class="wwf-report-main space-y-6">
+          {# 学校简介 #}
+          <div class="wwf-reveal wwf-tile">
+            <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-4">
+              <i data-lucide="info" class="w-4 h-4"></i>
+              学校简介
+            </div>
+            <p class="text-[#E8DCC4]/90 leading-relaxed">{{ school.description or '学校简介待补充。' }}</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-white/10">
+              <div>
+                <div class="text-xs text-[#E8DCC4]/60 mb-1">创校年份</div>
+                <div class="text-lg font-bold text-[#F7F5F0] font-['JetBrains_Mono']">{{ school.founded_year or '-' }}</div>
+              </div>
+              <div>
+                <div class="text-xs text-[#E8DCC4]/60 mb-1">学生人数</div>
+                <div class="text-lg font-bold text-[#F7F5F0] font-['JetBrains_Mono']">{{ school.student_count or 0 }}</div>
+              </div>
+              <div>
+                <div class="text-xs text-[#E8DCC4]/60 mb-1">教师人数</div>
+                <div class="text-lg font-bold text-[#F7F5F0] font-['JetBrains_Mono']">{{ school.teacher_count or 0 }}</div>
+              </div>
+              <div>
+                <div class="text-xs text-[#E8DCC4]/60 mb-1">动态更新</div>
+                <div class="text-lg font-bold text-[#F7F5F0] font-['JetBrains_Mono']">{{ posts|length }}</div>
+              </div>
+            </div>
+          </div>
+
+          {# 物资状态 #}
+          <div class="wwf-reveal wwf-tile">
+            <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-5">
+              <i data-lucide="pie-chart" class="w-4 h-4"></i>
+              物资状态
+            </div>
+            <div class="flex flex-col md:flex-row items-center gap-8">
+              <div class="relative h-36 w-36 shrink-0" role="img" aria-label="学校物资状态：已接收 {{ school_received }} 笔，分发中 {{ school_distributing }} 笔，已完成 {{ school_completed }} 笔">
+                <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none" stroke="#6A8D46" stroke-width="3"
+                        stroke-dasharray="{{ (school_received/school_status_total*100)|round(1) }}, 100"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none" stroke="#C7A75A" stroke-width="3"
+                        stroke-dasharray="{{ (school_distributing/school_status_total*100)|round(1) }}, 100"
+                        stroke-dashoffset="-{{ (school_received/school_status_total*100)|round(1) }}"/>
+                  <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                        fill="none" stroke="#3D5A3B" stroke-width="3"
+                        stroke-dasharray="{{ (school_completed/school_status_total*100)|round(1) }}, 100"
+                        stroke-dashoffset="-{{ ((school_received+school_distributing)/school_status_total*100)|round(1) }}"/>
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center">
+                  <div class="text-center">
+                    <div class="text-2xl font-bold text-[#F7F5F0] font-['JetBrains_Mono']">{{ donations|length }}</div>
+                    <div class="text-[10px] text-[#E8DCC4]/70">笔</div>
+                  </div>
+                </div>
+              </div>
+              <div class="flex-1 w-full grid grid-cols-3 gap-4">
+                <div class="text-center p-4 rounded-2xl bg-[#6A8D46]/10 border border-[#6A8D46]/20">
+                  <div class="text-2xl font-bold text-[#B8D68C] font-['JetBrains_Mono']">{{ school_received }}</div>
+                  <div class="text-xs text-[#E8DCC4]/70 mt-1">已接收</div>
+                </div>
+                <div class="text-center p-4 rounded-2xl bg-[#C7A75A]/10 border border-[#C7A75A]/20">
+                  <div class="text-2xl font-bold text-[#F2D78A] font-['JetBrains_Mono']">{{ school_distributing }}</div>
+                  <div class="text-xs text-[#E8DCC4]/70 mt-1">分发中</div>
+                </div>
+                <div class="text-center p-4 rounded-2xl bg-[#3D5A3B]/30 border border-[#3D5A3B]/40">
+                  <div class="text-2xl font-bold text-[#A7C4B5] font-['JetBrains_Mono']">{{ school_completed }}</div>
+                  <div class="text-xs text-[#E8DCC4]/70 mt-1">已完成</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {# 近期动态 #}
+          <div class="wwf-reveal wwf-tile">
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase">
+                <i data-lucide="newspaper" class="w-4 h-4"></i>
+                近期动态
+              </div>
+              <span class="text-xs text-[#E8DCC4]/60">共 {{ posts|length }} 篇</span>
+            </div>
+            {% if posts %}
+            <div class="wwf-post-list">
+              {% for post in posts[:4] %}
+              <article class="wwf-post-item">
+                <img src="{{ variant_asset('wwf', 'images/scene-' ~ ((loop.index - 1) % 14 + 1) ~ '.jpg', post.image_url) }}" alt="{{ post.title }}">
+                <div class="min-w-0">
+                  <div class="date">{{ post.created_at.strftime('%Y-%m-%d') if post.created_at else '' }}</div>
+                  <div class="title">{{ post.title }}</div>
+                  <div class="excerpt wwf-line-clamp-2">{{ post.content or '' }}</div>
+                  <span class="inline-flex mt-2 px-2 py-0.5 rounded-full text-[10px] font-medium {% if post.post_type == 'distribution' %}bg-[#C7A75A]/20 text-[#F2D78A]{% else %}bg-[#6A8D46]/20 text-[#B8D68C]{% endif %}">
+                    {% if post.post_type == 'distribution' %}捐赠分发{% else %}校园日常{% endif %}
+                  </span>
+                </div>
+              </article>
+              {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-sm text-[#E8DCC4]/60">暂无动态。</p>
+            {% endif %}
+          </div>
+
+          {# 校园画廊 #}
+          <div class="wwf-reveal">
+            <h3 class="wwf-section-title">校园图库</h3>
+            <div class="wwf-gallery-grid">
+              {% for i in range(8) %}
+              <div class="wwf-gallery-item">
+                <img src="{{ variant_asset('wwf', 'images/scene-' ~ (i + 1) ~ '.jpg', '') }}" alt="{{ school.name }}校园场景 {{ i + 1 }}">
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        {# 右侧边栏 #}
+        <aside class="wwf-report-aside" aria-label="学校信息">
+          {# 学校切换 #}
+          <div class="wwf-reveal wwf-tile">
+            <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-4">
+              <i data-lucide="shuffle" class="w-4 h-4"></i>
+              切换学校
+            </div>
+            <label for="wwf-school-select" class="sr-only">选择要查看的学校</label>
+            <select id="wwf-school-select" class="w-full px-4 py-3 rounded-xl border border-[rgba(255,255,255,0.16)] bg-[rgba(0,0,0,0.2)] text-[#F7F5F0] text-sm focus:outline-none focus:border-[#C7A75A]" onchange="if(this.value) window.location.href='{{ url_for('main.school_detail', school_id=0, ui='wwf') }}'.replace('0', this.value);">
+              {% for s in all_schools %}
+              <option value="{{ s.id }}" {% if s.id == school.id %}selected{% endif %}>{{ s.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          {# 儿童头像墙 #}
+          <div class="wwf-reveal wwf-tile">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase">
+                <i data-lucide="users" class="w-4 h-4"></i>
+                儿童头像墙
+              </div>
+              <span class="text-xs text-[#E8DCC4]/60">{{ children|length }} 名</span>
+            </div>
+            {% if children %}
+            <div class="wwf-child-wall">
+              {% for child in children %}
+              <div class="wwf-child-chip" title="{{ child.name }}，{{ child.age }}岁">
+                <img src="{{ variant_asset('wwf', 'images/child-' ~ ((loop.index - 1) % 12 + 1) ~ '.jpg', child.avatar) }}" alt="{{ child.name }}">
+                <span class="name">{{ child.name }}</span>
+                <span class="age">{{ child.age }}岁</span>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-sm text-[#E8DCC4]/60">暂无儿童数据。</p>
+            {% endif %}
+          </div>
+
+          {# 学生风采卡片 #}
+          <div class="wwf-reveal wwf-tile">
+            <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase mb-4">
+              <i data-lucide="quote" class="w-4 h-4"></i>
+              学生心声
+            </div>
+            {% if children %}
+            <div class="space-y-4">
+              {% for child in children[:3] %}
+              <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                <p class="text-sm text-[#E8DCC4]/90 italic mb-3">&ldquo;{{ child.quote or '每一天都是新的开始' }}&rdquo;</p>
+                <div class="flex items-center gap-2">
+                  <img src="{{ variant_asset('wwf', 'images/child-' ~ ((loop.index - 1) % 12 + 1) ~ '.jpg', child.avatar) }}" alt="{{ child.name }}" class="w-7 h-7 rounded-full object-cover">
+                  <span class="text-xs font-medium text-[#F7F5F0]">{{ child.name }}</span>
+                  <span class="text-xs text-[#E8DCC4]/60">{{ child.age }}岁</span>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-sm text-[#E8DCC4]/60">暂无学生心声。</p>
+            {% endif %}
+          </div>
+
+          {# 最近捐赠 #}
+          <div class="wwf-reveal wwf-tile">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2 text-[#C7A75A] text-xs font-semibold tracking-widest uppercase">
+                <i data-lucide="list" class="w-4 h-4"></i>
+                最近捐赠
+              </div>
+              <a href="{{ url_for('main.dashboard', school_id=school.id, ui='wwf') }}" class="text-xs text-[#E8DCC4]/60 hover:text-[#C7A75A] flex items-center gap-1 transition-colors">
+                全部 <i data-lucide="arrow-right" class="w-3 h-3"></i>
+              </a>
+            </div>
+            {% if donations %}
+            <div class="space-y-3">
+              {% for d in donations[:4] %}
+              <div class="flex items-center justify-between gap-2 text-sm">
+                <div class="flex items-center gap-2 min-w-0">
+                  <span class="w-6 h-6 rounded-full bg-[#6A8D46]/20 flex items-center justify-center text-[#C7A75A] text-[10px] font-bold shrink-0">{{ d.donor_name[0] if d.donor_name else '匿' }}</span>
+                  <span class="text-[#F7F5F0] truncate">{{ d.donor_name or '匿名' }}</span>
+                </div>
+                <span class="wwf-status-badge shrink-0
+                  {% if d.status == 'received' %}bg-[#6A8D46]/20 text-[#B8D68C]
+                  {% elif d.status == 'distributing' %}bg-[#C7A75A]/20 text-[#F2D78A]
+                  {% else %}bg-[#3D5A3B]/60 text-[#A7C4B5]{% endif %}">
+                  {% if d.status == 'received' %}已接收{% elif d.status == 'distributing' %}分发中{% else %}已完成{% endif %}
+                </span>
+              </div>
+              {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-sm text-[#E8DCC4]/60">暂无捐赠记录。</p>
+            {% endif %}
+          </div>
+
+          {# 了解更多 CTA #}
+          <div class="wwf-reveal wwf-tile text-center">
+            <p class="text-sm text-[#E8DCC4]/80 mb-4">想了解学校更多详情与完整捐赠记录？</p>
+            <a href="{{ url_for('main.dashboard', school_id=school.id, ui='wwf') }}" class="wwf-btn-primary w-full">
+              <i data-lucide="search" class="w-4 h-4"></i>
+              查看公示
+            </a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  {# ---------- 页脚 ---------- #}
+  <footer class="wwf-footer">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12 md:py-16">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center justify-center w-10 h-10 rounded-full wwf-glass">
+            <i data-lucide="leaf" class="w-6 h-6 text-[#C7A75A]"></i>
+          </span>
+          <div>
+            <div class="font-['Noto_Serif_SC'] text-xl font-bold text-[#F7F5F0]">守护计划</div>
+            <div class="text-xs text-[#E8DCC4]/60">WWF 风格年度报告测试变体 · 上线前删除</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-6 text-sm text-[#E8DCC4]/70">
+          <a href="{{ url_for('main.index', ui='wwf') }}" class="hover:text-[#C7A75A]">首页</a>
+          <a href="{{ url_for('main.school_detail', school_id=school.id, ui='wwf') }}" class="hover:text-[#C7A75A]">学校详情</a>
+          <a href="{{ url_for('main.dashboard', ui='wwf') }}" class="hover:text-[#C7A75A]">捐赠公示</a>
+          <a href="{{ url_for('main.school_detail', school_id=school.id) }}" class="hover:text-[#C7A75A]">默认版</a>
+        </div>
+      </div>
+      <div class="border-t border-white/10 mt-8 pt-8 text-xs text-[#E8DCC4]/50 flex flex-col md:flex-row items-center justify-between gap-4">
+        <p>© 2026 特殊学校公益展示网站 · 本页为 UI 变体测试，不含真实支付功能</p>
+        <p>上线前请删除 <code>app/templates/ui_variants</code> 目录</p>
+      </div>
+    </div>
+  </footer>
+</main>
+{% endblock %}
+
+{% block body_scripts %}
+<script>
+(function() {
+  const nav = document.getElementById('wwf-nav');
+  function updateNav() {
+    if (window.scrollY > 40) nav.classList.add('wwf-nav-scrolled');
+    else nav.classList.remove('wwf-nav-scrolled');
+  }
+  window.addEventListener('scroll', updateNav, { passive: true });
+  updateNav();
+
+  const menuBtn = document.getElementById('wwf-menu-btn');
+  const mobileMenu = document.getElementById('wwf-mobile-menu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+    });
+  }
+
+  const revealEls = document.querySelectorAll('.wwf-reveal');
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('wwf-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('wwf-visible'));
+  }
+
+  if (typeof lucide !== 'undefined') lucide.createIcons();
+})();
+</script>
+{% endblock %}

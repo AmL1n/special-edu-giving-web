@@ -1,0 +1,295 @@
+{% extends "ui_variants/_shell.html" %}
+
+{% block title %}{{ school.name }} · 萤火特刊{% endblock %}
+
+{% block body_class %}jg-magazine{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ui_variants/justgiving.css') }}">
+{% endblock %}
+
+{% block content %}
+<a href="#jg-main" class="jg-skip-link">跳转到主要内容</a>
+
+<main class="jg-wrapper" id="jg-main">
+
+  <!-- 顶部导航 -->
+  <nav class="jg-nav" aria-label="萤火特刊导航">
+    <a class="jg-nav-brand" href="{{ url_for('main.index', ui='justgiving') }}">
+      <i data-lucide="book-open" class="w-4 h-4" aria-hidden="true"></i>
+      萤火特刊
+    </a>
+    <div class="jg-nav-links">
+      <a href="{{ url_for('main.index', ui='justgiving') }}">首页</a>
+      <a href="{{ url_for('main.school_detail', school_id=school.id, ui='justgiving') }}" aria-current="page">专题故事</a>
+      <a href="{{ url_for('main.dashboard', ui='justgiving') }}">账目公开</a>
+    </div>
+  </nav>
+
+  <!-- 刊头 -->
+  <header class="jg-masthead jg-masthead-compact">
+    <div class="jg-masthead-top">
+      <span class="jg-masthead-date">2026 年 7 月 15 日 · 星期三</span>
+      <span class="jg-masthead-issue">第 07 期</span>
+    </div>
+    <p class="jg-masthead-title">萤火特刊</p>
+    <div class="jg-masthead-rule"></div>
+  </header>
+
+  <!-- 文章头图 -->
+  <header class="jg-article-header" aria-labelledby="school-name">
+    <figure class="jg-article-hero jg-reveal">
+      <img src="{{ variant_asset('justgiving', 'images/school-' ~ ((school.id - 1) % 3 + 1) ~ '.jpg', school.cover_image) }}"
+           alt="{{ school.name }}教学楼与户外活动空间">
+      <figcaption class="jg-article-hero-caption">
+        <span>{{ school.location or '地址待补充' }}</span>
+        {% if school.founded_year %}<span>创校 {{ school.founded_year }} 年</span>{% endif %}
+      </figcaption>
+    </figure>
+    <div class="jg-article-headline">
+      <p class="jg-article-eyebrow">专题报道</p>
+      <h1 id="school-name" class="jg-article-title">{{ school.name }}</h1>
+      <div class="jg-article-meta">
+        <span>文 · 萤火编辑部</span>
+        <span aria-hidden="true">·</span>
+        <span>学生 {{ school.student_count or 0 }} 人 · 教职工 {{ school.teacher_count or 0 }} 人</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- 长文章 -->
+  <article class="jg-article" aria-labelledby="school-name">
+    <div class="jg-article-lead jg-drop-cap">
+      <p>
+        {{ school.description or '学校简介待补充。' }} 在这里，教育不是整齐划一的流水线，而是根据每一个孩子的节奏，为他们量身定制的成长方案。
+      </p>
+    </div>
+
+    <aside class="jg-sidenote" aria-label="学校数据速览">
+      <h2 class="jg-sidenote-title">学校速览</h2>
+      <dl class="jg-sidenote-list">
+        <div>
+          <dt>学生人数</dt>
+          <dd>{{ school.student_count or 0 }} 人</dd>
+        </div>
+        <div>
+          <dt>教职工</dt>
+          <dd>{{ school.teacher_count or 0 }} 人</dd>
+        </div>
+        <div>
+          <dt>创校年份</dt>
+          <dd>{{ school.founded_year or '-' }} 年</dd>
+        </div>
+        <div>
+          <dt>捐赠记录</dt>
+          <dd>{{ donations|length }} 笔</dd>
+        </div>
+        <div>
+          <dt>动态更新</dt>
+          <dd>{{ posts|length }} 篇</dd>
+        </div>
+      </dl>
+    </aside>
+
+    <p>
+      走进校园，首先注意到的是走廊墙上贴满了孩子们的作品：水彩画、剪纸、手写诗句。它们并不完美，但每一笔都透露着被认真对待的痕迹。老师告诉我们，这里的教学目标是“让孩子觉得自己是有价值的”，而不是“让他们变得和别人一样”。
+    </p>
+
+    <figure class="jg-figure-bleed jg-reveal">
+      <img src="{{ variant_asset('justgiving', 'images/scene-' ~ ((school.id - 1) % 7 + 1) ~ '.jpg', 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=1600&q=80') }}"
+           alt="{{ school.name }}日常教学活动场景">
+      <figcaption>
+        <span>图 · 校园日常</span>
+        <span>由学校老师拍摄</span>
+      </figcaption>
+    </figure>
+
+    <blockquote class="jg-blockquote jg-reveal">
+      <p>“我们不需要被同情，我们需要被理解。理解之后，才会知道我们真正需要的是什么。”</p>
+      <cite>—— 学校老师</cite>
+    </blockquote>
+
+    <p>
+      捐赠物资的抵达，是这里最被期待的事情之一。每一件物品都会经过签收、登记、分发，最终被使用在课堂上或孩子的生活中。我们翻阅了学校的捐赠记录，试图还原“善意”从出发到落地的全过程。
+    </p>
+
+    <div class="jg-article-actions">
+      <a href="{{ url_for('main.dashboard', school_id=school.id, ui='justgiving') }}" class="jg-btn jg-btn-primary">
+        查看该校捐赠公示 <i data-lucide="table" class="w-4 h-4" aria-hidden="true"></i>
+      </a>
+    </div>
+  </article>
+
+  <!-- Tab 切换区 -->
+  <section class="jg-tab-section" aria-labelledby="jg-tab-title">
+    <h2 id="jg-tab-title" class="jg-section-title">本期内容</h2>
+
+    <div class="jg-tabs" role="tablist" aria-label="学校详情分类">
+      <button class="jg-tab active" id="tab-daily" role="tab" aria-selected="true" aria-controls="panel-daily" data-tab="daily">日常动态</button>
+      <button class="jg-tab" id="tab-donations" role="tab" aria-selected="false" aria-controls="panel-donations" data-tab="donations">捐赠公示</button>
+      <button class="jg-tab" id="tab-children" role="tab" aria-selected="false" aria-controls="panel-children" data-tab="children">学生风采</button>
+    </div>
+
+    <!-- 日常动态 -->
+    <div class="jg-tab-panel active" id="panel-daily" role="tabpanel" aria-labelledby="tab-daily" data-tab-content="daily">
+      {% if posts %}
+      <div class="jg-post-grid">
+        {% for post in posts %}
+        <article class="jg-post-card jg-reveal" style="transition-delay: {{ loop.index0 * 0.08 }}s;">
+          <figure class="jg-post-image">
+            <img src="{{ variant_asset('justgiving', 'images/scene-' ~ ((post.id - 1) % 14 + 1) ~ '.jpg', post.image_url) }}"
+                 alt="{{ post.title }}"
+                 onerror="this.src='{{ post.image_url or 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80' }}'">
+          </figure>
+          <div class="jg-post-body">
+            <span class="jg-post-type {% if post.post_type == 'distribution' %}jg-post-type-dist{% endif %}">
+              {% if post.post_type == 'distribution' %}物资发放{% else %}校园日常{% endif %}
+            </span>
+            <h3 class="jg-post-title">{{ post.title }}</h3>
+            <p class="jg-post-date">{{ post.created_at.strftime('%Y 年 %m 月 %d 日') if post.created_at else '' }}</p>
+            <p class="jg-post-excerpt">{{ post.content or '' }}</p>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="jg-empty">暂无日常动态</p>
+      {% endif %}
+    </div>
+
+    <!-- 捐赠公示 -->
+    <div class="jg-tab-panel" id="panel-donations" role="tabpanel" aria-labelledby="tab-donations" data-tab-content="donations">
+      {% if donations %}
+      <div class="jg-donation-mini-list" role="list">
+        {% for donation in donations %}
+        <article class="jg-donation-mini jg-reveal" style="transition-delay: {{ loop.index0 * 0.05 }}s;" role="listitem">
+          <div class="jg-donation-mini-num" aria-label="第 {{ loop.index }} 条">{{ loop.index }}</div>
+          <div class="jg-donation-mini-body">
+            <div class="jg-donation-mini-donor">{{ donation.donor_name }}</div>
+            <div class="jg-donation-mini-item">{{ donation.item_name }} · {{ donation.quantity or '数量待补充' }}</div>
+          </div>
+          <div class="jg-donation-mini-meta">
+            <span class="jg-donation-mini-class">{{ donation.received_class or '学校统一' }}</span>
+            <span class="jg-donation-mini-status jg-status-{{ donation.status }}">
+              {% if donation.status == 'received' %}已接收
+              {% elif donation.status == 'distributing' %}分发中
+              {% else %}已完成{% endif %}
+            </span>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="jg-empty">暂无捐赠记录</p>
+      {% endif %}
+    </div>
+
+    <!-- 学生风采 -->
+    <div class="jg-tab-panel" id="panel-children" role="tabpanel" aria-labelledby="tab-children" data-tab-content="children">
+      {% if children %}
+      <div class="jg-children-grid">
+        {% for child in children %}
+        <article class="jg-child-card jg-reveal" style="transition-delay: {{ loop.index0 * 0.08 }}s;">
+          <div class="jg-child-avatar">
+            <img src="{{ variant_asset('justgiving', 'images/child-' ~ ((child.id - 1) % 12 + 1) ~ '.jpg', child.avatar or '') }}"
+                 alt="{{ child.name }}的照片"
+                 onerror="this.onerror=null;this.src='{{ child.avatar or 'https://images.pexels.com/photos/8364026/pexels-photo-8364026.jpeg?auto=compress&cs=tinysrgb&w=200' }}';">
+          </div>
+          <h3 class="jg-child-name">{{ child.name }}</h3>
+          <p class="jg-child-age">{{ child.age }} 岁 · {{ school.name }}</p>
+          {% if child.bio %}
+          <p class="jg-child-bio">{{ child.bio }}</p>
+          {% endif %}
+          <blockquote class="jg-child-quote">
+            <p>“{{ child.quote or '每一天都是新的开始' }}”</p>
+          </blockquote>
+          <div class="jg-child-tags">
+            {% for tag in (child.tags or '').split(',') %}
+            {% if tag.strip() %}
+            <span class="jg-child-tag">{{ tag.strip() }}</span>
+            {% endif %}
+            {% endfor %}
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="jg-empty">暂无学生风采信息</p>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- 学校切换 -->
+  <nav class="jg-school-switch" aria-label="切换学校">
+    <h2 class="jg-school-switch-title">继续阅读</h2>
+    <div class="jg-school-switch-list">
+      {% for s in all_schools %}
+      <a href="{{ url_for('main.school_detail', school_id=s.id, ui='justgiving') }}"
+         class="jg-school-switch-link {% if s.id == school.id %}jg-school-switch-current{% endif %}">
+        <span class="jg-school-switch-name">{{ s.name }}</span>
+        <span class="jg-school-switch-location">{{ s.location or '' }}</span>
+      </a>
+      {% endfor %}
+    </div>
+  </nav>
+
+  <!-- 页脚 -->
+  <footer class="jg-footer">
+    <div class="jg-footer-rule"></div>
+    <div class="jg-footer-inner">
+      <div class="jg-footer-brand">
+        <strong>萤火特刊</strong>
+        <span>特殊学校公益展示网站</span>
+      </div>
+      <nav class="jg-footer-nav" aria-label="页脚导航">
+        <a href="{{ url_for('main.index', ui='justgiving') }}">首页</a>
+        <a href="{{ url_for('main.school_detail', school_id=school.id, ui='justgiving') }}">专题故事</a>
+        <a href="{{ url_for('main.dashboard', ui='justgiving') }}">账目公开</a>
+      </nav>
+      <p class="jg-footer-copy">© 2026 特殊学校公益展示网站 · 测试用 UI 变体：justgiving</p>
+    </div>
+  </footer>
+
+</main>
+{% endblock %}
+
+{% block body_scripts %}
+<script>
+  (function () {
+    // 滚动显现
+    const reveals = document.querySelectorAll('.jg-reveal');
+    if (!document.documentElement.classList.contains('headless-preview')) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+      reveals.forEach(el => observer.observe(el));
+    } else {
+      reveals.forEach(el => el.classList.add('visible'));
+    }
+
+    // Tab 切换
+    const tabs = document.querySelectorAll('.jg-tab');
+    const panels = document.querySelectorAll('.jg-tab-panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => {
+          t.setAttribute('aria-selected', 'false');
+          t.classList.remove('active');
+        });
+        tab.setAttribute('aria-selected', 'true');
+        tab.classList.add('active');
+        const target = tab.dataset.tab;
+        panels.forEach(p => {
+          const isTarget = p.dataset.tabContent === target;
+          p.classList.toggle('active', isTarget);
+        });
+      });
+    });
+  })();
+</script>
+{% endblock %}

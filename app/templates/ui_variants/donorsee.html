@@ -13,6 +13,11 @@
 <!-- 柔和环境轮廓光 -->
 <div class="ds-ambient-glow" id="ambientGlow" aria-hidden="true"></div>
 
+<!-- 章节进度条 -->
+<div class="ds-progress" aria-hidden="true">
+  <div class="ds-progress-bar" id="chapterProgress"></div>
+</div>
+
 <a href="#timeline" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-[#0d181d] focus:text-[#d8e5e7] focus:px-4 focus:py-2 focus:rounded-lg">跳转到主要内容</a>
 
 <!-- 1. 顶部导航 -->
@@ -30,10 +35,15 @@
       <a href="#chapter-hands" class="ds-nav-link">孩子手中</a>
     </nav>
 
-    <a href="{{ url_for('main.dashboard') }}" class="ds-nav-pill">
-      <i data-lucide="scroll-text" class="w-3.5 h-3.5"></i>
-      公示档案
-    </a>
+    <div class="flex items-center gap-3">
+      <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='donorsee') }}" class="hidden sm:inline-flex ds-nav-link items-center gap-1.5">
+        学校故事
+      </a>
+      <a href="{{ url_for('main.dashboard', ui='donorsee') }}" class="ds-nav-pill">
+        <i data-lucide="scroll-text" class="w-3.5 h-3.5"></i>
+        公示档案
+      </a>
+    </div>
   </div>
 </header>
 
@@ -41,7 +51,18 @@
 
   <!-- 2. 纪录片感深色 Hero -->
   <section class="ds-hero" aria-labelledby="ds-hero-title">
-    <div class="max-w-6xl mx-auto px-6 pt-32">
+    <div class="ds-hero-video" aria-hidden="true">
+      <video id="heroVideo" autoplay muted loop playsinline poster="{{ variant_asset('donorsee', 'images/scene-1.jpg', 'https://images.pexels.com/photos/7395291/pexels-photo-7395291.jpeg?auto=compress&cs=tinysrgb&w=1200') }}">
+        <source src="{{ variant_asset('donorsee', 'videos/hero-video.mp4', '') }}" type="video/mp4">
+      </video>
+      <div class="ds-hero-video-overlay"></div>
+    </div>
+
+    <button type="button" class="ds-video-toggle" id="heroVideoToggle" aria-label="暂停背景视频" aria-pressed="false">
+      <i data-lucide="pause" class="w-4 h-4"></i>
+    </button>
+
+    <div class="max-w-6xl mx-auto px-6 pt-32 relative z-10">
       <div class="ds-reveal max-w-3xl">
         <p class="ds-hero-kicker">Documentary Transparency</p>
         <h1 id="ds-hero-title" class="ds-hero-title text-4xl md:text-6xl lg:text-7xl mb-6">
@@ -86,7 +107,7 @@
       </div>
 
       <figure class="ds-freeze-frame ds-reveal">
-        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80" alt="志愿者正在整理即将发出的捐赠物资">
+        <img src="{{ variant_asset('donorsee', 'images/scene-1.jpg', 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1920&q=80') }}" alt="志愿者正在整理即将发出的捐赠物资">
         <figcaption class="ds-freeze-caption">
           <i data-lucide="map-pin" class="w-3.5 h-3.5 inline"></i> 集散中心 · 第一批物资整装待发
         </figcaption>
@@ -130,7 +151,7 @@
       </div>
 
       <figure class="ds-freeze-frame ds-reveal">
-        <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1920&q=80" alt="运输车辆在山路中行驶，将捐赠物资送往偏远学校">
+        <img src="{{ variant_asset('donorsee', 'images/scene-5.jpg', 'https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=1920&q=80') }}" alt="运输车辆在山路中行驶，将捐赠物资送往偏远学校">
         <figcaption class="ds-freeze-caption">
           <i data-lucide="route" class="w-3.5 h-3.5 inline"></i> 运输途中 · 全程可追踪
         </figcaption>
@@ -185,7 +206,7 @@
       </div>
 
       <figure class="ds-freeze-frame ds-reveal">
-        <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80" alt="特殊教育学校的校园与教学楼">
+        <img src="{{ variant_asset('donorsee', 'images/scene-9.jpg', 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80') }}" alt="特殊教育学校的校园与教学楼">
         <figcaption class="ds-freeze-caption">
           <i data-lucide="building-2" class="w-3.5 h-3.5 inline"></i> 学校签收 · 物资进入校园
         </figcaption>
@@ -198,9 +219,10 @@
 
         <div class="mt-8 space-y-6">
           {% for s in schools[:3] %}
+          {% set local_school_img = variant_asset('donorsee', 'images/school-' ~ loop.index ~ '.jpg', s.cover_image) %}
           <article class="ds-arrival ds-reveal {% if loop.index > 1 %}ds-reveal-delay-{{ (loop.index0 % 2) + 1 }}{% endif %}">
             <div class="ds-arrival-media">
-              <img src="{{ s.image_url or 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=800&q=80' }}" alt="{{ s.name }}校园环境">
+              <img src="{{ local_school_img }}" alt="{{ s.name }}校园环境">
             </div>
             <div class="ds-arrival-info">
               <h3 class="ds-arrival-name">{{ s.name }}</h3>
@@ -219,7 +241,7 @@
                   <p class="ds-arrival-stat-label">教师团队</p>
                 </div>
               </div>
-              <a href="{{ url_for('main.school_detail', school_id=s.id) }}" class="inline-flex items-center gap-1.5 mt-4 text-sm font-medium text-[#5ecdc7] hover:text-[#7ddbd6] transition-colors">
+              <a href="{{ url_for('main.school_detail', school_id=s.id, ui='donorsee') }}" class="ds-link-arrow mt-4 inline-flex items-center gap-1.5">
                 查看校园动态 <i data-lucide="arrow-right" class="w-4 h-4"></i>
               </a>
             </div>
@@ -240,7 +262,7 @@
       </div>
 
       <figure class="ds-freeze-frame ds-reveal">
-        <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1920&q=80" alt="孩子们在课堂上开心地使用捐赠物资">
+        <img src="{{ variant_asset('donorsee', 'images/scene-13.jpg', 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1920&q=80') }}" alt="孩子们在课堂上开心地使用捐赠物资">
         <figcaption class="ds-freeze-caption">
           <i data-lucide="smile" class="w-3.5 h-3.5 inline"></i> 终点也是起点 · 善意落地
         </figcaption>
@@ -253,10 +275,11 @@
 
         <div class="mt-8 space-y-6">
           {% for c in children[:4] %}
+          {% set child_img = variant_asset('donorsee', 'images/child-' ~ loop.index ~ '.jpg', c.avatar) %}
           <blockquote class="ds-quote-block ds-reveal {% if loop.index > 1 %}ds-reveal-delay-{{ (loop.index0 % 3) + 1 }}{% endif %}">
             <p class="ds-quote-text">“{{ c.quote or '谢谢叔叔阿姨，我会更努力地学习。' }}”</p>
             <footer class="ds-quote-author">
-              <img src="{{ c.avatar_url or 'https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&w=200&q=80' }}" alt="{{ c.name }}" class="ds-quote-avatar">
+              <img src="{{ child_img }}" alt="{{ c.name }}" class="ds-quote-avatar">
               <div>
                 <p class="ds-quote-name">{{ c.name }}</p>
                 <p class="ds-quote-age">{{ c.age }} 岁 · {{ c.bio or '一名热爱生活的特殊儿童' }}</p>
@@ -313,6 +336,13 @@
           <p class="ds-verify-desc">所有记录汇总进入公开档案页，任何人都可以查看与核对历史数据。</p>
         </div>
       </div>
+
+      <div class="text-center mt-12 ds-reveal">
+        <a href="{{ url_for('main.dashboard', ui='donorsee') }}" class="ds-btn ds-btn-primary">
+          <i data-lucide="scroll-text" class="w-4 h-4"></i>
+          查看完整公示档案
+        </a>
+      </div>
     </div>
   </section>
 
@@ -336,7 +366,7 @@
         <a href="#chapter-transport" class="ds-footer-link">分拣运输</a>
         <a href="#chapter-arrival" class="ds-footer-link">送达学校</a>
         <a href="#chapter-hands" class="ds-footer-link">孩子手中</a>
-        <a href="{{ url_for('main.dashboard') }}" class="ds-footer-link">公示档案</a>
+        <a href="{{ url_for('main.dashboard', ui='donorsee') }}" class="ds-footer-link">公示档案</a>
       </nav>
     </div>
     <hr class="ds-divider mb-6">
@@ -353,6 +383,28 @@
 <script>
 (function() {
   'use strict';
+
+  // Hero 视频播放/暂停
+  const video = document.getElementById('heroVideo');
+  const toggle = document.getElementById('heroVideoToggle');
+  if (video && toggle) {
+    const icon = toggle.querySelector('[data-lucide]');
+    const setPlaying = (playing) => {
+      if (playing) {
+        video.play();
+        toggle.setAttribute('aria-label', '暂停背景视频');
+        toggle.setAttribute('aria-pressed', 'false');
+        if (icon) icon.setAttribute('data-lucide', 'pause');
+      } else {
+        video.pause();
+        toggle.setAttribute('aria-label', '播放背景视频');
+        toggle.setAttribute('aria-pressed', 'true');
+        if (icon) icon.setAttribute('data-lucide', 'play');
+      }
+      if (window.lucide) lucide.createIcons();
+    };
+    toggle.addEventListener('click', () => setPlaying(video.paused));
+  }
 
   // 环境光随滚动轻微位移（仅在非触控设备）
   const glow = document.getElementById('ambientGlow');
@@ -380,6 +432,20 @@
   }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
 
   document.querySelectorAll('.ds-reveal').forEach(el => observer.observe(el));
+
+  // 章节进度条
+  const progressBar = document.getElementById('chapterProgress');
+  const chapters = document.querySelectorAll('.ds-chapter');
+  if (progressBar && chapters.length) {
+    const updateProgress = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = docHeight > 0 ? Math.min(1, Math.max(0, scrollTop / docHeight)) : 0;
+      progressBar.style.width = (ratio * 100) + '%';
+    };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+  }
 })();
 </script>
 {% endblock %}

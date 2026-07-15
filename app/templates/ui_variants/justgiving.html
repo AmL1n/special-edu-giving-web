@@ -1,6 +1,6 @@
 {% extends "ui_variants/_shell.html" %}
 
-{% block title %}JustGiving 风格预览{% endblock %}
+{% block title %}萤火特刊 · 首页{% endblock %}
 
 {% block body_class %}jg-magazine{% endblock %}
 
@@ -9,7 +9,22 @@
 {% endblock %}
 
 {% block content %}
-<main class="jg-wrapper">
+<a href="#jg-main" class="jg-skip-link">跳转到主要内容</a>
+
+<main class="jg-wrapper" id="jg-main">
+
+  <!-- 顶部导航 -->
+  <nav class="jg-nav" aria-label="萤火特刊导航">
+    <a class="jg-nav-brand" href="{{ url_for('main.index', ui='justgiving') }}">
+      <i data-lucide="book-open" class="w-4 h-4" aria-hidden="true"></i>
+      萤火特刊
+    </a>
+    <div class="jg-nav-links">
+      <a href="{{ url_for('main.index', ui='justgiving') }}" aria-current="page">首页</a>
+      <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='justgiving') }}">专题故事</a>
+      <a href="{{ url_for('main.dashboard', ui='justgiving') }}">账目公开</a>
+    </div>
+  </nav>
 
   <!-- 1. 杂志刊头 -->
   <header class="jg-masthead">
@@ -23,24 +38,25 @@
   </header>
 
   <!-- 2. 非对称 Hero -->
-  <section class="jg-hero-split">
+  <section class="jg-hero-split" aria-labelledby="jg-hero-title">
     <div class="jg-hero-copy">
       <p class="jg-hero-kicker">本期封面</p>
-      <h2 class="jg-hero-title">每一束微光，<br>都该被温柔接住。</h2>
+      <h2 id="jg-hero-title" class="jg-hero-title">每一束微光，<br>都该被温柔接住。</h2>
       <p class="jg-hero-lead">
         我们走进合作特殊教育学校，记录孩子们的日常、捐赠物资的流向，以及那些把“善意”变成“抵达”的人。
       </p>
       <div class="jg-hero-byline">
         <span>文 · 萤火编辑部</span>
-        <span><i data-lucide="clock" class="w-4 h-4"></i> 阅读约 6 分钟</span>
+        <span><i data-lucide="clock" class="w-4 h-4" aria-hidden="true"></i> 阅读约 6 分钟</span>
       </div>
     </div>
     <div class="jg-hero-visual">
       <figure class="jg-hero-frame jg-reveal">
-        <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80" alt="特殊教育学校课堂">
+        <img src="{{ variant_asset('justgiving', 'images/scene-1.jpg', 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1200&q=80') }}"
+             alt="合作学校课堂里，老师与孩子一起完成手工作品">
         <figcaption class="jg-hero-caption">合作学校 · 手工课堂</figcaption>
       </figure>
-      <div class="jg-hero-badge">
+      <div class="jg-hero-badge" aria-label="目前有 {{ schools|length }} 所合作学校">
         <span class="jg-hero-badge-num">{{ schools|length }}</span>
         <span class="jg-hero-badge-label">所合作学校</span>
       </div>
@@ -48,9 +64,9 @@
   </section>
 
   <!-- 3. 双栏编辑导语 -->
-  <section class="jg-editorial">
+  <section class="jg-editorial" aria-labelledby="jg-editor-heading">
     <div class="jg-editorial-col">
-      <h3 class="jg-editorial-heading">编者的话</h3>
+      <h3 class="jg-editorial-heading" id="jg-editor-heading">编者的话</h3>
       <p class="jg-editorial-text">
         公益不是一次性的情绪消费，而是一段可以被翻阅、被验证、被记住的长期叙事。本期杂志以“抵达”为主题，把所有捐赠记录、校园动态与孩子的话语整理成册。
       </p>
@@ -58,36 +74,101 @@
         这里没有催促你付款的按钮，只有一页页真实发生的故事。我们相信，透明本身就是最温柔的邀请。
       </p>
     </div>
-    <div class="jg-editorial-divider"></div>
+    <div class="jg-editorial-divider" aria-hidden="true"></div>
     <div class="jg-editorial-col">
       <h3 class="jg-editorial-heading">本期焦点</h3>
       <ul class="jg-editorial-list">
-        <li><i data-lucide="map-pin" class="w-4 h-4"></i> 合作学校的近况与需求</li>
-        <li><i data-lucide="users" class="w-4 h-4"></i> 受助儿童的简短侧写</li>
-        <li><i data-lucide="package-check" class="w-4 h-4"></i> 近期捐赠物资的透明日志</li>
-        <li><i data-lucide="pen-tool" class="w-4 h-4"></i> 校园动态与师生手作展示</li>
+        <li><i data-lucide="map-pin" class="w-4 h-4" aria-hidden="true"></i> 合作学校的近况与需求</li>
+        <li><i data-lucide="users" class="w-4 h-4" aria-hidden="true"></i> 受助儿童的简短侧写</li>
+        <li><i data-lucide="package-check" class="w-4 h-4" aria-hidden="true"></i> 近期捐赠物资的透明日志</li>
+        <li><i data-lucide="pen-tool" class="w-4 h-4" aria-hidden="true"></i> 校园动态与师生手作展示</li>
       </ul>
     </div>
   </section>
 
-  <!-- 4. 引言拉页 -->
-  <section class="jg-pullquote">
+  <!-- 4. 目录 -->
+  <nav class="jg-toc" aria-labelledby="jg-toc-title">
+    <h2 id="jg-toc-title" class="jg-toc-title">目录</h2>
+    <ol class="jg-toc-list">
+      <li class="jg-toc-item jg-reveal">
+        <span class="jg-toc-num">01</span>
+        <div class="jg-toc-body">
+          <a href="#jg-cover-story" class="jg-toc-link">封面故事：每一束微光，都该被温柔接住</a>
+          <span class="jg-toc-page">第 1 页</span>
+        </div>
+      </li>
+      <li class="jg-toc-item jg-reveal" style="transition-delay: 0.06s;">
+        <span class="jg-toc-num">02</span>
+        <div class="jg-toc-body">
+          <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='justgiving') }}" class="jg-toc-link">专题报道：{{ schools[0].name }}</a>
+          <span class="jg-toc-page">第 4 页</span>
+        </div>
+      </li>
+      <li class="jg-toc-item jg-reveal" style="transition-delay: 0.12s;">
+        <span class="jg-toc-num">03</span>
+        <div class="jg-toc-body">
+          <a href="{{ url_for('main.dashboard', ui='justgiving') }}" class="jg-toc-link">账目公开：捐赠透明公示</a>
+          <span class="jg-toc-page">第 12 页</span>
+        </div>
+      </li>
+      <li class="jg-toc-item jg-reveal" style="transition-delay: 0.18s;">
+        <span class="jg-toc-num">04</span>
+        <div class="jg-toc-body">
+          <a href="#jg-collage" class="jg-toc-link">影像志：校园与孩子的瞬间</a>
+          <span class="jg-toc-page">第 18 页</span>
+        </div>
+      </li>
+    </ol>
+  </nav>
+
+  <!-- 5. 封面故事大图 -->
+  <section class="jg-cover-story" id="jg-cover-story" aria-labelledby="jg-cover-title">
+    <div class="jg-cover-header">
+      <span class="jg-cover-kicker">Cover Story</span>
+      <h2 id="jg-cover-title" class="jg-cover-title">抵达：当善意变成可触摸的日常</h2>
+    </div>
+    <figure class="jg-cover-figure jg-reveal">
+      <img src="{{ variant_asset('justgiving', 'images/school-1.jpg', 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=1600&q=85') }}"
+           alt="杭州市启明星特殊教育学校教学楼与户外活动空间">
+      <figcaption class="jg-cover-caption">
+        <span>{{ schools[0].name }}</span>
+        <span>{{ schools[0].location }}</span>
+      </figcaption>
+    </figure>
+    <div class="jg-cover-body">
+      <p class="jg-cover-lead">
+        本期封面故事带我们走进合作特殊教育学校。在这里，捐赠不再是抽象的数字，而是一件件被签收、被分发、被使用的物品——是冬天里的校服、是课堂上的绘本、是孩子们手中被握热的画笔。
+      </p>
+      <div class="jg-cover-actions">
+        <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='justgiving') }}" class="jg-btn jg-btn-primary">
+          阅读故事 <i data-lucide="arrow-right" class="w-4 h-4" aria-hidden="true"></i>
+        </a>
+        <a href="{{ url_for('main.dashboard', ui='justgiving') }}" class="jg-btn jg-btn-ghost">
+          查看公示 <i data-lucide="table" class="w-4 h-4" aria-hidden="true"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 跨页 Pull Quote -->
+  <section class="jg-pullquote jg-pullquote-wide" aria-label="本期引言">
     <blockquote class="jg-pullquote-text jg-reveal">
       “我们不想被当作‘可怜的人’来展示，我们想被看见自己擅长的事。”
     </blockquote>
     <cite class="jg-pullquote-source">—— 一位受助儿童在采访中说</cite>
   </section>
 
-  <!-- 5. 照片拼贴墙 -->
-  <section class="jg-collage" aria-label="照片拼贴墙">
+  <!-- 7. 照片 Essay -->
+  <section class="jg-collage" id="jg-collage" aria-labelledby="jg-collage-title">
     <div class="jg-collage-header">
-      <h3 class="jg-section-title">影像志</h3>
+      <h3 class="jg-section-title" id="jg-collage-title">影像志</h3>
       <p class="jg-section-desc">捐赠抵达之后的校园切片</p>
     </div>
     <div class="jg-collage-grid">
       {% for school in schools[:3] %}
       <figure class="jg-collage-item jg-collage-item-{{ loop.index }} jg-reveal" style="transition-delay: {{ loop.index0 * 0.1 }}s;">
-        <img src="{{ school.cover_image or 'https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80' }}" alt="{{ school.name }}">
+        <img src="{{ variant_asset('justgiving', 'images/school-' ~ loop.index ~ '.jpg', school.cover_image) }}"
+             alt="{{ school.name }}校园环境">
         <figcaption>
           <strong>{{ school.name }}</strong>
           <span>{{ school.location }}</span>
@@ -96,21 +177,22 @@
       {% endfor %}
       {% for child in children[:3] %}
       <figure class="jg-collage-item jg-collage-item-{{ loop.index + 3 }} jg-reveal" style="transition-delay: {{ (loop.index0 + 3) * 0.1 }}s;">
-        <img src="{{ child.avatar or 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80' }}" alt="{{ child.name }}">
+        <img src="{{ variant_asset('justgiving', 'images/child-' ~ ((child.id - 1) % 12 + 1) ~ '.jpg', child.avatar) }}"
+             alt="{{ child.name }}的照片">
         <figcaption>
           <strong>{{ child.name }}</strong>
-          <span>{{ child.age }} 岁</span>
+          <span>{{ child.age }} 岁 · {{ child.school.name }}</span>
         </figcaption>
       </figure>
       {% endfor %}
       <div class="jg-collage-note jg-reveal">
-        <i data-lucide="quote" class="w-5 h-5"></i>
+        <i data-lucide="quote" class="w-5 h-5" aria-hidden="true"></i>
         <p>所有影像均由学校老师与志愿者拍摄，未经许可不用于商业用途。</p>
       </div>
     </div>
   </section>
 
-  <!-- 6. 最新故事列表 + 侧边数据栏 -->
+  <!-- 8. 最新故事 + 侧边数据栏 -->
   <div class="jg-layout-split">
     <section class="jg-stories" aria-labelledby="jg-stories-title">
       <h3 class="jg-section-title" id="jg-stories-title">最新故事</h3>
@@ -120,7 +202,7 @@
         <article class="jg-story-row jg-reveal" style="transition-delay: {{ loop.index0 * 0.06 }}s;">
           <div class="jg-story-meta">
             <span class="jg-story-index">{{ '%02d'|format(loop.index) }}</span>
-            <span class="jg-story-date">{{ post.created_at.strftime('%m/%d') }}</span>
+            <span class="jg-story-date">{{ post.created_at.strftime('%m/%d') if post.created_at else '' }}</span>
           </div>
           <div class="jg-story-body">
             <h4 class="jg-story-title">{{ post.title or '校园动态' }}</h4>
@@ -130,8 +212,8 @@
               {% if post.post_type == 'distribution' %}<span>物资发放</span>{% else %}<span>校园日常</span>{% endif %}
             </div>
           </div>
-          <a href="{{ url_for('main.school_detail', school_id=post.school.id) }}" class="jg-story-link" aria-label="阅读 {{ post.title }}">
-            <i data-lucide="arrow-up-right" class="w-5 h-5"></i>
+          <a href="{{ url_for('main.school_detail', school_id=post.school.id, ui='justgiving') }}" class="jg-story-link" aria-label="阅读 {{ post.title }}">
+            <i data-lucide="arrow-up-right" class="w-5 h-5" aria-hidden="true"></i>
           </a>
         </article>
         {% else %}
@@ -162,14 +244,33 @@
           </div>
         </dl>
         <div class="jg-sidebar-note">
-          <i data-lucide="info" class="w-4 h-4"></i>
+          <i data-lucide="info" class="w-4 h-4" aria-hidden="true"></i>
           <p>数据来自平台公示系统，仅供展示与审计参考。</p>
+        </div>
+        <div class="jg-sidebar-actions">
+          <a href="{{ url_for('main.dashboard', ui='justgiving') }}" class="jg-btn jg-btn-primary jg-btn-small">查看公示</a>
         </div>
       </div>
     </aside>
   </div>
 
-  <!-- 7. 页脚 -->
+  <!-- 9. 关注入口 -->
+  <section class="jg-follow" aria-labelledby="jg-follow-title">
+    <div class="jg-follow-inner jg-reveal">
+      <h2 id="jg-follow-title" class="jg-follow-title">持续关注</h2>
+      <p class="jg-follow-text">
+        订阅萤火特刊，我们将在每一期发布时把新的学校故事与账目公开送到你手中。
+      </p>
+      <form class="jg-follow-form" onsubmit="event.preventDefault(); alert('演示项目：订阅功能未真实启用');">
+        <label for="jg-follow-email" class="sr-only">电子邮箱</label>
+        <input type="email" id="jg-follow-email" class="jg-follow-input" placeholder="your@email.com" aria-label="输入邮箱订阅特刊">
+        <button type="submit" class="jg-btn jg-btn-primary">关注学校</button>
+      </form>
+      <p class="jg-follow-hint">仅作演示，不会收集真实邮箱。</p>
+    </div>
+  </section>
+
+  <!-- 10. 页脚 -->
   <footer class="jg-footer">
     <div class="jg-footer-rule"></div>
     <div class="jg-footer-inner">
@@ -178,8 +279,10 @@
         <span>特殊学校公益展示网站</span>
       </div>
       <nav class="jg-footer-nav" aria-label="页脚导航">
+        <a href="{{ url_for('main.index', ui='justgiving') }}">首页</a>
+        <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='justgiving') }}">专题故事</a>
+        <a href="{{ url_for('main.dashboard', ui='justgiving') }}">账目公开</a>
         <a href="{{ url_for('main.index') }}">默认首页</a>
-        <a href="{{ url_for('main.dashboard') }}">捐赠公示</a>
       </nav>
       <p class="jg-footer-copy">© 2026 特殊学校公益展示网站 · 测试用 UI 变体：justgiving</p>
     </div>
@@ -190,20 +293,21 @@
 
 {% block body_scripts %}
 <script>
-  // 滚动显现：无 JS 或减弱动效时仍可见由 _shell.html 兜底
-  const reveals = document.querySelectorAll('.jg-reveal');
-  if (!document.documentElement.classList.contains('headless-preview')) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-    reveals.forEach(el => observer.observe(el));
-  } else {
-    reveals.forEach(el => el.classList.add('visible'));
-  }
+  (function () {
+    const reveals = document.querySelectorAll('.jg-reveal');
+    if (!document.documentElement.classList.contains('headless-preview')) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+      reveals.forEach(el => observer.observe(el));
+    } else {
+      reveals.forEach(el => el.classList.add('visible'));
+    }
+  })();
 </script>
 {% endblock %}

@@ -6,8 +6,10 @@
   --gfm-gray-50: #f4f5f4;
   --gfm-gray-100: #e8ebe8;
   --gfm-gray-200: #d3d8d3;
+  --gfm-gray-300: #b8c0b8;
   --gfm-gray-400: #97a097;
   --gfm-gray-500: #6b756b;
+  --gfm-gray-600: #555f55;
   --gfm-gray-700: #3d453d;
   --gfm-gray-900: #1a1f1a;
   --gfm-green: #22b55c;
@@ -19,9 +21,11 @@
   --gfm-radius-sm: 0.5rem;
   --gfm-radius: 0.875rem;
   --gfm-radius-lg: 1.25rem;
+  --gfm-radius-xl: 1.5rem;
   --gfm-radius-pill: 9999px;
   --gfm-shadow-sm: 0 1px 2px rgba(26, 31, 26, 0.04);
   --gfm-shadow: 0 1px 3px rgba(26, 31, 26, 0.06), 0 1px 2px rgba(26, 31, 26, 0.03);
+  --gfm-shadow-md: 0 4px 12px rgba(26, 31, 26, 0.06), 0 2px 4px rgba(26, 31, 26, 0.03);
   --gfm-shadow-focus: 0 0 0 3px rgba(34, 181, 92, 0.12);
   --gfm-transition: 0.2s cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -58,6 +62,10 @@ body.gofundme-theme {
 .gfm-header-link:hover {
   color: var(--gfm-green-dark);
 }
+.gfm-header-link.active {
+  color: var(--gfm-green-dark);
+  font-weight: 600;
+}
 
 .gfm-logo-mark {
   width: 2rem;
@@ -73,6 +81,56 @@ body.gofundme-theme {
 .gfm-logo-mark:hover {
   background: var(--gfm-green-dark);
   transform: scale(1.05);
+}
+
+/* ========== Buttons ========== */
+.gfm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: var(--gfm-radius-pill);
+  transition: all var(--gfm-transition);
+  cursor: pointer;
+  border: 1px solid transparent;
+  text-decoration: none;
+  min-height: 44px;
+}
+
+.gfm-btn-primary {
+  background: var(--gfm-green);
+  color: #fff;
+}
+.gfm-btn-primary:hover {
+  background: var(--gfm-green-dark);
+}
+
+.gfm-btn-outline {
+  background: #fff;
+  color: var(--gfm-gray-700);
+  border-color: var(--gfm-gray-200);
+}
+.gfm-btn-outline:hover {
+  border-color: var(--gfm-green);
+  color: var(--gfm-green-dark);
+  background: var(--gfm-green-soft);
+}
+
+.gfm-btn-ghost {
+  background: transparent;
+  color: var(--gfm-gray-700);
+}
+.gfm-btn-ghost:hover {
+  color: var(--gfm-green-dark);
+  background: var(--gfm-green-mist);
+}
+
+.gfm-btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
 }
 
 /* ========== Search hero ========== */
@@ -146,13 +204,156 @@ body.gofundme-theme {
   background: var(--gfm-green-soft);
 }
 
-/* ========== Directory list ========== */
+/* ========== Section label ========== */
+.gfm-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gfm-green-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.gfm-section-label::before {
+  content: '';
+  width: 1.5rem;
+  height: 2px;
+  background: var(--gfm-green);
+  border-radius: 2px;
+}
+
+/* ========== School directory cards ========== */
 .gfm-directory {
   background: #fff;
   border-top: 1px solid var(--gfm-gray-100);
   border-bottom: 1px solid var(--gfm-gray-100);
 }
 
+.gfm-directory-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .gfm-directory-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .gfm-directory-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.gfm-school-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--gfm-gray-100);
+  border-radius: var(--gfm-radius-lg);
+  overflow: hidden;
+  transition: border-color var(--gfm-transition), box-shadow var(--gfm-transition), transform var(--gfm-transition);
+  text-decoration: none;
+  color: inherit;
+}
+.gfm-school-card:hover {
+  border-color: var(--gfm-green);
+  box-shadow: var(--gfm-shadow-md);
+  transform: translateY(-3px);
+}
+
+.gfm-school-card-image {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--gfm-gray-100);
+}
+.gfm-school-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.gfm-school-card:hover .gfm-school-card-image img {
+  transform: scale(1.05);
+}
+
+.gfm-school-card-location {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--gfm-gray-700);
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: var(--gfm-radius-pill);
+  backdrop-filter: blur(4px);
+}
+
+.gfm-school-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 1.25rem;
+}
+
+.gfm-school-card-title {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--gfm-gray-900);
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+
+.gfm-school-card-desc {
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--gfm-gray-500);
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gfm-school-card-stats {
+  display: flex;
+  gap: 1rem;
+  margin-top: auto;
+  margin-bottom: 1rem;
+  font-size: 0.8125rem;
+  color: var(--gfm-gray-600);
+}
+
+.gfm-school-card-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.gfm-school-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gfm-school-card-tag {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--gfm-green-dark);
+  background: var(--gfm-green-soft);
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--gfm-radius-pill);
+}
+
+/* Legacy directory list (kept for compatibility) */
 .gfm-index-bar {
   display: flex;
   flex-wrap: wrap;
@@ -240,6 +441,107 @@ body.gofundme-theme {
 .gfm-directory-item:hover .gfm-directory-arrow {
   color: var(--gfm-green);
   transform: translateX(4px);
+}
+
+/* ========== Success stories ========== */
+.gfm-stories-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .gfm-stories-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.gfm-story-card {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+  background: #fff;
+  border: 1px solid var(--gfm-gray-100);
+  border-radius: var(--gfm-radius-lg);
+  overflow: hidden;
+  transition: box-shadow var(--gfm-transition), transform var(--gfm-transition);
+}
+@media (min-width: 640px) {
+  .gfm-story-card {
+    grid-template-columns: 180px 1fr;
+  }
+}
+.gfm-story-card:hover {
+  box-shadow: var(--gfm-shadow-md);
+  transform: translateY(-2px);
+}
+
+.gfm-story-image {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--gfm-gray-100);
+}
+@media (min-width: 640px) {
+  .gfm-story-image {
+    aspect-ratio: auto;
+    height: 100%;
+  }
+}
+.gfm-story-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.gfm-story-card:hover .gfm-story-image img {
+  transform: scale(1.05);
+}
+
+.gfm-story-body {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.gfm-story-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gfm-green-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.5rem;
+}
+
+.gfm-story-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--gfm-gray-900);
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+
+.gfm-story-text {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--gfm-gray-500);
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.gfm-story-link {
+  margin-top: auto;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--gfm-green-dark);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+.gfm-story-link:hover {
+  color: var(--gfm-green);
 }
 
 /* ========== Timeline stream ========== */
@@ -448,23 +750,640 @@ body.gofundme-theme {
   transform: scale(1.25);
 }
 
-/* ========== Section label ========== */
-.gfm-section-label {
+/* ========== School detail page ========== */
+.gfm-school-hero {
+  position: relative;
+  width: 100%;
+  min-height: 320px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: var(--gfm-gray-100);
+}
+@media (min-width: 768px) {
+  .gfm-school-hero { min-height: 400px; }
+}
+@media (min-width: 1024px) {
+  .gfm-school-hero { min-height: 460px; }
+}
+
+.gfm-school-hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.gfm-school-hero-media img,
+.gfm-school-hero-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gfm-school-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    180deg,
+    rgba(26, 31, 26, 0) 30%,
+    rgba(26, 31, 26, 0.55) 70%,
+    rgba(26, 31, 26, 0.82) 100%
+  );
+}
+
+.gfm-school-hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 2.5rem;
+  color: #fff;
+}
+@media (min-width: 768px) {
+  .gfm-school-hero-content { padding-bottom: 3rem; }
+}
+
+.gfm-school-hero-label {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.375rem;
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--gfm-green-dark);
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 0.75rem;
 }
-.gfm-section-label::before {
-  content: '';
-  width: 1.5rem;
-  height: 2px;
+
+.gfm-school-hero h1 {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 0.75rem;
+}
+
+.gfm-school-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  font-size: 0.9375rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.gfm-school-stats-bar {
+  background: #fff;
+  border-bottom: 1px solid var(--gfm-gray-100);
+}
+
+.gfm-school-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 1.25rem 0;
+}
+@media (min-width: 768px) {
+  .gfm-school-stats {
+    grid-template-columns: repeat(4, 1fr);
+    padding: 1.5rem 0;
+  }
+}
+
+.gfm-school-stat {
+  text-align: center;
+  padding: 0.75rem;
+  border-radius: var(--gfm-radius);
+  background: var(--gfm-bg);
+}
+
+.gfm-school-stat-value {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gfm-gray-900);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.gfm-school-stat-label {
+  font-size: 0.8125rem;
+  color: var(--gfm-gray-500);
+}
+
+.gfm-intro {
+  max-width: 48rem;
+}
+.gfm-intro h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gfm-gray-900);
+  margin-bottom: 0.75rem;
+}
+.gfm-intro p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--gfm-gray-600);
+}
+
+/* Needs list */
+.gfm-needs-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .gfm-needs-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.gfm-need-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: #fff;
+  border: 1px solid var(--gfm-gray-100);
+  border-radius: var(--gfm-radius);
+  transition: border-color var(--gfm-transition), box-shadow var(--gfm-transition);
+}
+.gfm-need-item:hover {
+  border-color: var(--gfm-green);
+  box-shadow: var(--gfm-shadow);
+}
+
+.gfm-need-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--gfm-radius);
+  background: var(--gfm-green-soft);
+  color: var(--gfm-green-dark);
+}
+
+.gfm-need-info {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.gfm-need-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--gfm-gray-900);
+  margin-bottom: 0.125rem;
+}
+
+.gfm-need-meta {
+  font-size: 0.8125rem;
+  color: var(--gfm-gray-500);
+}
+
+.gfm-need-count {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gfm-green-dark);
+}
+
+/* Gallery */
+.gfm-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .gfm-gallery {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .gfm-gallery {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.gfm-gallery-item {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--gfm-radius);
+  overflow: hidden;
+  background: var(--gfm-gray-100);
+}
+.gfm-gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.gfm-gallery-item:hover img {
+  transform: scale(1.06);
+}
+
+.gfm-gallery-caption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 0.75rem;
+  font-size: 0.8125rem;
+  color: #fff;
+  background: linear-gradient(transparent, rgba(26, 31, 26, 0.7));
+}
+
+/* ========== Dashboard page ========== */
+.gfm-dashboard-hero {
+  background: #fff;
+  border-bottom: 1px solid var(--gfm-gray-100);
+}
+
+.gfm-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .gfm-kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.gfm-kpi-card {
+  padding: 1.25rem;
+  background: #fff;
+  border: 1px solid var(--gfm-gray-100);
+  border-radius: var(--gfm-radius-lg);
+  transition: box-shadow var(--gfm-transition);
+}
+.gfm-kpi-card:hover {
+  box-shadow: var(--gfm-shadow-md);
+}
+
+.gfm-kpi-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--gfm-radius);
+  margin-bottom: 0.75rem;
+}
+.gfm-kpi-icon.green {
+  background: var(--gfm-green-soft);
+  color: var(--gfm-green-dark);
+}
+.gfm-kpi-icon.gray {
+  background: var(--gfm-gray-50);
+  color: var(--gfm-gray-600);
+}
+
+.gfm-kpi-value {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--gfm-gray-900);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.gfm-kpi-label {
+  font-size: 0.8125rem;
+  color: var(--gfm-gray-500);
+}
+
+.gfm-filter-card {
+  background: #fff;
+  border: 1px solid var(--gfm-gray-100);
+  border-radius: var(--gfm-radius-lg);
+  padding: 1.25rem;
+}
+@media (min-width: 768px) {
+  .gfm-filter-card {
+    padding: 1.5rem;
+  }
+}
+
+.gfm-filter-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--gfm-gray-700);
+  margin-bottom: 0.625rem;
+}
+
+.gfm-filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.gfm-filter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.5rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--gfm-gray-700);
+  background: var(--gfm-bg);
+  border: 1px solid var(--gfm-gray-100);
+  border-radius: var(--gfm-radius-pill);
+  text-decoration: none;
+  transition: all var(--gfm-transition);
+}
+.gfm-filter-tag:hover {
+  border-color: var(--gfm-green);
+  color: var(--gfm-green-dark);
+}
+.gfm-filter-tag.active {
   background: var(--gfm-green);
-  border-radius: 2px;
+  color: #fff;
+  border-color: var(--gfm-green);
+}
+
+.gfm-filter-controls {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--gfm-gray-100);
+}
+@media (min-width: 768px) {
+  .gfm-filter-controls {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .gfm-filter-controls {
+    grid-template-columns: 160px 160px 1fr auto;
+    align-items: end;
+  }
+}
+
+.gfm-filter-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.gfm-filter-field label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--gfm-gray-600);
+}
+
+.gfm-form-control {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9375rem;
+  color: var(--gfm-gray-900);
+  background: #fff;
+  border: 1px solid var(--gfm-gray-200);
+  border-radius: var(--gfm-radius);
+  transition: border-color var(--gfm-transition), box-shadow var(--gfm-transition);
+  outline: none;
+  min-height: 44px;
+}
+.gfm-form-control:hover {
+  border-color: var(--gfm-gray-400);
+}
+.gfm-form-control:focus {
+  border-color: var(--gfm-green);
+  box-shadow: var(--gfm-shadow-focus);
+}
+
+.gfm-filter-actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Table */
+.gfm-table-wrap {
+  display: none;
+  background: #fff;
+  border: 1px solid var(--gfm-gray-100);
+  border-radius: var(--gfm-radius-lg);
+  overflow: hidden;
+}
+@media (min-width: 1024px) {
+  .gfm-table-wrap {
+    display: block;
+  }
+}
+
+.gfm-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.gfm-table thead {
+  background: var(--gfm-bg);
+}
+.gfm-table th {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gfm-gray-500);
+  border-bottom: 1px solid var(--gfm-gray-100);
+}
+.gfm-table th.center,
+.gfm-table td.center {
+  text-align: center;
+}
+.gfm-table td {
+  padding: 1.125rem 1.25rem;
+  border-bottom: 1px solid var(--gfm-gray-100);
+  vertical-align: middle;
+  font-size: 0.9375rem;
+}
+.gfm-table tbody tr {
+  transition: background var(--gfm-transition);
+}
+.gfm-table tbody tr:hover {
+  background: var(--gfm-green-mist);
+}
+.gfm-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.gfm-cell-donor {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.gfm-donor-avatar {
+  width: 2.25rem;
+  height: 2.25rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--gfm-green-soft);
+  color: var(--gfm-green-dark);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+}
+
+.gfm-cell-item {
+  max-width: 260px;
+}
+.gfm-item-name {
+  font-weight: 600;
+  color: var(--gfm-gray-900);
+  margin-bottom: 0.125rem;
+}
+.gfm-item-detail {
+  font-size: 0.8125rem;
+  color: var(--gfm-gray-500);
+  line-height: 1.5;
+}
+
+.gfm-cell-meta {
+  font-size: 0.875rem;
+  color: var(--gfm-gray-600);
+}
+.gfm-cell-meta .school-name {
+  color: var(--gfm-gray-900);
+  font-weight: 600;
+}
+
+.gfm-cell-date {
+  font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  font-size: 0.8125rem;
+  color: var(--gfm-gray-500);
+}
+
+/* Status badge */
+.gfm-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--gfm-radius-pill);
+}
+.gfm-status::before {
+  content: '';
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+}
+.gfm-status-received {
+  background: #f1f5f9;
+  color: #475569;
+}
+.gfm-status-received::before { background: #94a3b8; }
+.gfm-status-distributing {
+  background: #fef3c7;
+  color: #92400e;
+}
+.gfm-status-distributing::before { background: #f59e0b; }
+.gfm-status-completed {
+  background: var(--gfm-green-soft);
+  color: var(--gfm-green-dark);
+}
+.gfm-status-completed::before { background: var(--gfm-green); }
+
+/* Mobile cards */
+.gfm-card-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 640px) {
+  .gfm-card-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (min-width: 1024px) {
+  .gfm-card-list {
+    display: none;
+  }
+}
+
+.gfm-record-card {
+  background: #fff;
+  border: 1px solid var(--gfm-gray-100);
+  border-radius: var(--gfm-radius-lg);
+  padding: 1.25rem;
+  transition: box-shadow var(--gfm-transition);
+}
+.gfm-record-card:hover {
+  box-shadow: var(--gfm-shadow-md);
+}
+
+.gfm-record-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.gfm-record-card-donor {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.gfm-record-card-name {
+  font-weight: 700;
+  color: var(--gfm-gray-900);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gfm-record-card-item {
+  font-size: 0.8125rem;
+  color: var(--gfm-gray-500);
+  margin-top: 0.125rem;
+}
+
+.gfm-record-card-body {
+  display: grid;
+  gap: 0.625rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--gfm-gray-100);
+}
+
+.gfm-record-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.gfm-record-card-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gfm-gray-400);
+}
+
+.gfm-record-card-value {
+  font-size: 0.875rem;
+  color: var(--gfm-gray-700);
+  text-align: right;
+}
+
+.gfm-empty {
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  color: var(--gfm-gray-500);
+}
+.gfm-empty i {
+  margin: 0 auto 1rem;
+  opacity: 0.5;
 }
 
 /* ========== Footer ========== */
@@ -509,7 +1428,15 @@ body.gofundme-theme {
   .gfm-timeline-card,
   .gfm-carousel-btn,
   .gfm-carousel-dot,
-  .gfm-index-letter {
+  .gfm-index-letter,
+  .gfm-school-card,
+  .gfm-story-card,
+  .gfm-need-item,
+  .gfm-gallery-item img,
+  .gfm-school-card-image img,
+  .gfm-story-image img,
+  .gfm-kpi-card,
+  .gfm-record-card {
     transition: none !important;
     animation: none !important;
     transform: none !important;

@@ -19,10 +19,11 @@
       </a>
 
       <nav class="hidden md:flex items-center gap-6" aria-label="主导航">
-        <a href="#directory" class="gfm-header-link">学校目录</a>
-        <a href="#updates" class="gfm-header-link">最新动态</a>
-        <a href="#impact" class="gfm-header-link">影响指标</a>
-        <a href="#stories" class="gfm-header-link">儿童心声</a>
+        <a href="{{ url_for('main.index', ui='gofundme') }}" class="gfm-header-link active">首页</a>
+        {% if schools %}
+        <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='gofundme') }}" class="gfm-header-link">学校详情</a>
+        {% endif %}
+        <a href="{{ url_for('main.dashboard', ui='gofundme') }}" class="gfm-header-link">捐赠公示</a>
       </nav>
 
       <button id="gfm-menu-toggle" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition" aria-expanded="false" aria-controls="gfm-mobile-menu" aria-label="打开菜单">
@@ -33,10 +34,11 @@
 
   <div id="gfm-mobile-menu" class="hidden md:hidden border-t border-gray-100 px-4 py-3">
     <nav class="flex flex-col gap-1" aria-label="移动端导航">
-      <a href="#directory" class="gfm-header-link px-3 py-2 rounded-lg hover:bg-gray-50">学校目录</a>
-      <a href="#updates" class="gfm-header-link px-3 py-2 rounded-lg hover:bg-gray-50">最新动态</a>
-      <a href="#impact" class="gfm-header-link px-3 py-2 rounded-lg hover:bg-gray-50">影响指标</a>
-      <a href="#stories" class="gfm-header-link px-3 py-2 rounded-lg hover:bg-gray-50">儿童心声</a>
+      <a href="{{ url_for('main.index', ui='gofundme') }}" class="gfm-header-link px-3 py-2 rounded-lg hover:bg-gray-50">首页</a>
+      {% if schools %}
+      <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='gofundme') }}" class="gfm-header-link px-3 py-2 rounded-lg hover:bg-gray-50">学校详情</a>
+      {% endif %}
+      <a href="{{ url_for('main.dashboard', ui='gofundme') }}" class="gfm-header-link px-3 py-2 rounded-lg hover:bg-gray-50">捐赠公示</a>
     </nav>
   </div>
 </header>
@@ -77,62 +79,98 @@
       <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6 gfm-reveal">
         <div>
           <span class="gfm-section-label mb-2">学校目录</span>
-          <h2 id="gfm-directory-heading" class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">合作学校列表</h2>
+          <h2 id="gfm-directory-heading" class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">合作学校卡片</h2>
         </div>
         <p class="text-sm text-gray-500">
           共 <span class="font-semibold text-gray-900" id="gfm-school-count">{{ schools|length }}</span> 所学校
         </p>
       </div>
 
-      <nav class="gfm-index-bar gfm-reveal" data-delay="1" aria-label="按字母索引">
-        <a href="#gfm-group-A" class="gfm-index-letter">A</a>
-        <a href="#gfm-group-B" class="gfm-index-letter">B</a>
-        <a href="#gfm-group-C" class="gfm-index-letter">C</a>
-        <a href="#gfm-group-D" class="gfm-index-letter">D</a>
-        <a href="#gfm-group-E" class="gfm-index-letter">E</a>
-        <a href="#gfm-group-F" class="gfm-index-letter">F</a>
-        <a href="#gfm-group-G" class="gfm-index-letter">G</a>
-        <a href="#gfm-group-H" class="gfm-index-letter">H</a>
-        <span class="gfm-index-letter" aria-hidden="true">…</span>
-        <a href="#gfm-group-X" class="gfm-index-letter">X</a>
-        <a href="#gfm-group-Y" class="gfm-index-letter">Y</a>
-        <a href="#gfm-group-Z" class="gfm-index-letter">Z</a>
-      </nav>
-
-      <ul class="gfm-directory-list gfm-reveal" data-delay="2" id="gfm-directory-list">
+      <div class="gfm-directory-grid gfm-reveal" data-delay="1" id="gfm-directory-grid">
         {% for school in schools %}
-        {% set first_letter = school.name[0] if school.name else '?' %}
-        <li class="gfm-directory-item" data-name="{{ school.name }}" data-location="{{ school.location }}" data-region="{{ school.location[:2] if school.location else '' }}">
-          <span class="gfm-directory-num gfm-mono">{{ '%02d' % loop.index }}</span>
-          <div class="gfm-directory-info">
-            <h3 class="gfm-directory-title">
-              <a href="{{ url_for('main.school_detail', school_id=school.id, ui='gofundme') }}" class="hover:text-green-700 transition">
-                {{ school.name }}
-              </a>
-            </h3>
-            <div class="gfm-directory-meta">
-              <span class="inline-flex items-center gap-1">
-                <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
-                {{ school.location }}
+        {% set region = school.location[:2] if school.location else '' %}
+        {% set school_img = variant_asset('gofundme', 'images/school-' ~ ((loop.index - 1) % 3 + 1) ~ '.jpg', 'https://images.pexels.com/photos/7395291/pexels-photo-7395291.jpeg?auto=compress&cs=tinysrgb&w=800') %}
+        <a href="{{ url_for('main.school_detail', school_id=school.id, ui='gofundme') }}"
+           class="gfm-school-card gfm-directory-card"
+           data-name="{{ school.name }}"
+           data-location="{{ school.location }}"
+           data-region="{{ region }}">
+          <div class="gfm-school-card-image">
+            <img src="{{ school_img }}" alt="{{ school.name }}校园环境" loading="lazy">
+            <span class="gfm-school-card-location">
+              <i data-lucide="map-pin" class="w-3 h-3"></i>
+              {{ school.location or '地址待补充' }}
+            </span>
+          </div>
+          <div class="gfm-school-card-body">
+            <h3 class="gfm-school-card-title">{{ school.name }}</h3>
+            <p class="gfm-school-card-desc">{{ school.description or '学校简介待补充' }}</p>
+            <div class="gfm-school-card-stats">
+              <span class="gfm-school-card-stat">
+                <i data-lucide="users" class="w-3.5 h-3.5 text-gray-400"></i>
+                {{ school.student_count or 0 }} 名学生
               </span>
-              <span class="inline-flex items-center gap-1">
-                <i data-lucide="users" class="w-3.5 h-3.5"></i>
-                {{ school.student_count }} 名学生
-              </span>
-              <span class="inline-flex items-center gap-1">
-                <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
-                建校 {{ school.founding_year }}
+              <span class="gfm-school-card-stat">
+                <i data-lucide="calendar" class="w-3.5 h-3.5 text-gray-400"></i>
+                创校 {{ school.founded_year or '-' }}
               </span>
             </div>
+            <div class="gfm-school-card-tags">
+              <span class="gfm-school-card-tag">特教学校</span>
+              {% if region %}<span class="gfm-school-card-tag">{{ region }}</span>{% endif %}
+              <span class="gfm-school-card-tag">了解详情</span>
+            </div>
           </div>
-          <i data-lucide="chevron-right" class="gfm-directory-arrow w-5 h-5"></i>
-        </li>
+        </a>
         {% endfor %}
-      </ul>
+      </div>
 
       <p id="gfm-no-results" class="hidden text-center text-gray-500 py-12">
         未找到匹配的学校，请尝试其他关键词。
       </p>
+    </div>
+  </section>
+
+  <!-- Success Stories -->
+  <section id="stories" class="py-14 lg:py-20" aria-labelledby="gfm-stories-heading">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-10 gfm-reveal">
+        <span class="gfm-section-label justify-center mb-2">成功故事</span>
+        <h2 id="gfm-stories-heading" class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">每一份关注都有回响</h2>
+        <p class="mt-3 text-gray-500 max-w-xl mx-auto">
+          从捐赠到校、从课堂到生活，这些真实片段记录了善意如何落地生根。
+        </p>
+      </div>
+
+      <div class="gfm-stories-grid gfm-reveal" data-delay="1">
+        {% for i in range(1, 5) %}
+        {% set scene_img = variant_asset('gofundme', 'images/scene-' ~ (((i - 1) % 14) + 1) ~ '.jpg', 'https://images.pexels.com/photos/8364026/pexels-photo-8364026.jpeg?auto=compress&cs=tinysrgb&w=800') %}
+        <article class="gfm-story-card">
+          <div class="gfm-story-image">
+            <img src="{{ scene_img }}" alt="校园故事场景 {{ i }}" loading="lazy">
+          </div>
+          <div class="gfm-story-body">
+            <span class="gfm-story-label">故事 {{ '%02d' % i }}</span>
+            <h3 class="gfm-story-title">
+              {% if i == 1 %}冬季校服温暖到校
+              {% elif i == 2 %}音乐教室里的第一次合唱
+              {% elif i == 3 %}烘焙课上的甜蜜时光
+              {% else %}运动场上的欢笑与汗水{% endif %}
+            </h3>
+            <p class="gfm-story-text">
+              {% if i == 1 %}200套加厚冬季校服已分发到每一位孩子手中，让这个冬天不再寒冷。
+              {% elif i == 2 %}新到的电子琴与非洲鼓让孩子们第一次完整地唱完了一首歌。
+              {% elif i == 3 %}从称量面粉到装饰饼干，孩子们在烘焙课上收获了技能与快乐。
+              {% else %}春季趣味运动会上，拔河、接力跑、袋鼠跳……每个孩子都在闪闪发光。{% endif %}
+            </p>
+            <span class="gfm-story-link">
+              阅读故事
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </span>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
     </div>
   </section>
 
@@ -146,7 +184,7 @@
           <p class="text-gray-500 text-sm leading-relaxed mb-6">
             实时更新的校园故事与捐赠流向记录，让每一份善意都可追溯、可查看。
           </p>
-          <a href="{{ url_for('main.dashboard') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-green-700 hover:text-green-800 transition">
+          <a href="{{ url_for('main.dashboard', ui='gofundme') }}" class="inline-flex items-center gap-2 text-sm font-semibold text-green-700 hover:text-green-800 transition">
             查看完整公示大屏
             <i data-lucide="arrow-right" class="w-4 h-4"></i>
           </a>
@@ -165,7 +203,7 @@
                   </span>
                 </div>
                 <h3 class="gfm-timeline-title">{{ post.title }}</h3>
-                <p class="gfm-timeline-body line-clamp-2">{{ post.body or '暂无详情' }}</p>
+                <p class="gfm-timeline-body line-clamp-2">{{ post.content or '暂无详情' }}</p>
               </div>
             </article>
             {% endfor %}
@@ -204,16 +242,17 @@
   </section>
 
   <!-- Children Quotes Carousel -->
-  <section id="stories" class="py-14 lg:py-20" aria-labelledby="gfm-stories-heading">
+  <section id="voices" class="py-14 lg:py-20" aria-labelledby="gfm-voices-heading">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-10 gfm-reveal">
         <span class="gfm-section-label justify-center mb-2">儿童心声</span>
-        <h2 id="gfm-stories-heading" class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">孩子们想对你说</h2>
+        <h2 id="gfm-voices-heading" class="text-2xl sm:text-3xl font-bold text-gray-900 mt-2">孩子们想对你说</h2>
       </div>
 
       <div class="gfm-carousel gfm-reveal" data-delay="1" role="region" aria-roledescription="轮播" aria-label="儿童引言轮播">
         <div class="gfm-carousel-track" id="gfm-carousel-track">
           {% for child in children %}
+          {% set child_img = child.avatar or variant_asset('gofundme', 'images/child-' ~ ((loop.index - 1) % 12 + 1) ~ '.jpg', 'https://images.pexels.com/photos/8364026/pexels-photo-8364026.jpeg?auto=compress&cs=tinysrgb&w=200') %}
           <div class="gfm-carousel-slide" role="group" aria-roledescription="幻灯片" aria-label="第 {{ loop.index }} 张">
             <figure class="gfm-quote">
               <div class="gfm-quote-mark">
@@ -223,9 +262,7 @@
                 {{ child.quote or '谢谢每一个关心我们的人，我会继续努力的。' }}
               </blockquote>
               <figcaption class="gfm-quote-author">
-                {% if child.avatar_url %}
-                <img src="{{ child.avatar_url }}" alt="" class="gfm-quote-avatar" loading="lazy">
-                {% endif %}
+                <img src="{{ child_img }}" alt="" class="gfm-quote-avatar" loading="lazy">
                 <span>{{ child.name }}，{{ child.age }} 岁</span>
               </figcaption>
             </figure>
@@ -257,10 +294,11 @@
         <span class="text-lg font-bold text-gray-900">特教公益</span>
       </div>
       <nav class="flex flex-wrap gap-x-6 gap-y-2" aria-label="页脚导航">
-        <a href="#directory" class="gfm-footer-link">学校目录</a>
-        <a href="#updates" class="gfm-footer-link">最新动态</a>
-        <a href="#impact" class="gfm-footer-link">影响指标</a>
-        <a href="#stories" class="gfm-footer-link">儿童心声</a>
+        <a href="{{ url_for('main.index', ui='gofundme') }}" class="gfm-footer-link">首页</a>
+        {% if schools %}
+        <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='gofundme') }}" class="gfm-footer-link">学校详情</a>
+        {% endif %}
+        <a href="{{ url_for('main.dashboard', ui='gofundme') }}" class="gfm-footer-link">捐赠公示</a>
       </nav>
     </div>
     <div class="border-t border-gray-100 pt-6 flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-gray-400">
@@ -287,9 +325,9 @@
     });
   }
 
-  // Directory search & filter
+  // Directory search & filter (cards)
   const searchInput = document.getElementById('gfm-school-search');
-  const directoryItems = document.querySelectorAll('#gfm-directory-list .gfm-directory-item');
+  const directoryCards = document.querySelectorAll('#gfm-directory-grid .gfm-directory-card');
   const schoolCount = document.getElementById('gfm-school-count');
   const noResults = document.getElementById('gfm-no-results');
   const filterTags = document.querySelectorAll('.gfm-search-tags .gfm-tag');
@@ -299,15 +337,15 @@
     const query = (searchInput.value || '').trim().toLowerCase();
     let visible = 0;
 
-    directoryItems.forEach(function(item) {
-      const name = (item.dataset.name || '').toLowerCase();
-      const location = (item.dataset.location || '').toLowerCase();
-      const region = item.dataset.region || '';
+    directoryCards.forEach(function(card) {
+      const name = (card.dataset.name || '').toLowerCase();
+      const location = (card.dataset.location || '').toLowerCase();
+      const region = card.dataset.region || '';
       const matchesQuery = !query || name.includes(query) || location.includes(query);
       const matchesRegion = activeRegion === 'all' || region === activeRegion;
       const show = matchesQuery && matchesRegion;
 
-      item.style.display = show ? '' : 'none';
+      card.style.display = show ? '' : 'none';
       if (show) visible++;
     });
 

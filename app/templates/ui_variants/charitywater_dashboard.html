@@ -1,0 +1,316 @@
+{% extends "ui_variants/_shell.html" %}
+
+{% block title %}捐赠透明公示 · 善意旅程 · charitywater{% endblock %}
+{% block body_class %}cw-cinematic antialiased text-slate-800{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ui_variants/charitywater.css') }}">
+<noscript>
+  <style>
+    .cw-reveal { opacity: 1 !important; transform: none !important; }
+  </style>
+</noscript>
+{% endblock %}
+
+{% block content %}
+<!-- 顶部导航 -->
+<header class="cw-nav">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      <a href="{{ url_for('main.index', ui='charitywater') }}" class="flex items-center gap-2 text-slate-800">
+        <i data-lucide="droplets" class="w-5 h-5 text-cyan-600"></i>
+        <span class="text-lg md:text-xl font-semibold tracking-tight">清泉公益</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="{{ url_for('main.index', ui='charitywater') }}" class="cw-nav-link">首页</a>
+        <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='charitywater') }}" class="cw-nav-link">学校详情</a>
+        <a href="{{ url_for('main.dashboard', ui='charitywater') }}" class="cw-nav-link">透明公示</a>
+      </nav>
+
+      <button id="cw-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-slate-100 transition-colors" aria-label="打开菜单">
+        <i data-lucide="menu" class="w-6 h-6 text-slate-700"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- 移动端菜单 -->
+  <div id="cw-mobile-menu" class="hidden md:hidden border-t border-slate-200 bg-white/95 backdrop-blur-xl">
+    <div class="px-6 py-4 space-y-3">
+      <a href="{{ url_for('main.index', ui='charitywater') }}" class="block text-sm font-medium text-slate-600 hover:text-cyan-700">首页</a>
+      <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='charitywater') }}" class="block text-sm font-medium text-slate-600 hover:text-cyan-700">学校详情</a>
+      <a href="{{ url_for('main.dashboard', ui='charitywater') }}" class="block text-sm font-medium text-slate-600 hover:text-cyan-700">透明公示</a>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+  <!-- Hero -->
+  <section class="cw-dashboard-hero" aria-labelledby="dashboard-heading">
+    <div class="cw-dashboard-hero-bg"
+         style="background-image: url('{{ variant_asset('charitywater', 'images/scene-7.jpg', '') }}');"
+         role="img" aria-label="捐赠物资整理与分发场景"></div>
+    <div class="cw-dashboard-hero-overlay"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-16 md:pt-44 md:pb-24">
+      <span class="inline-block px-3 py-1 border border-white/30 rounded-full text-white/80 text-xs tracking-[0.2em] uppercase mb-4">Transparency Dashboard</span>
+      <h1 id="dashboard-heading" class="cw-serif text-4xl md:text-6xl lg:text-7xl font-bold text-white max-w-3xl leading-tight mb-6">
+        善意旅程，全程可见
+      </h1>
+      <p class="text-lg md:text-xl text-white/80 max-w-2xl font-light leading-relaxed">
+        从捐赠者出发，到孩子签收，每一笔物资的位置与状态都在这张地图上被记录。
+      </p>
+    </div>
+  </section>
+
+  <!-- KPI -->
+  <section class="cw-kpi-section -mt-12 md:-mt-16 mx-4 md:mx-8 lg:mx-12" aria-labelledby="kpi-heading">
+    <h2 id="kpi-heading" class="sr-only">核心数据指标</h2>
+    <div class="cw-kpi-grid">
+      <article class="cw-kpi-card cw-reveal">
+        <i data-lucide="heart" class="w-6 h-6 text-cyan-600 mb-3" aria-hidden="true"></i>
+        <span class="cw-kpi-number">{{ total_count }}</span>
+        <span class="cw-kpi-label">爱心捐赠总笔数</span>
+      </article>
+      <article class="cw-kpi-card cw-reveal" style="transition-delay: 0.1s;">
+        <i data-lucide="users" class="w-6 h-6 text-cyan-600 mb-3" aria-hidden="true"></i>
+        <span class="cw-kpi-number">{{ donor_count }}</span>
+        <span class="cw-kpi-label">累计捐赠人次</span>
+      </article>
+      <article class="cw-kpi-card cw-reveal" style="transition-delay: 0.2s;">
+        <i data-lucide="banknote" class="w-6 h-6 text-cyan-600 mb-3" aria-hidden="true"></i>
+        <span class="cw-kpi-number">¥{{ total_amount|int }}</span>
+        <span class="cw-kpi-label">累计善款金额</span>
+      </article>
+      <article class="cw-kpi-card cw-reveal" style="transition-delay: 0.3s;">
+        <i data-lucide="check-circle-2" class="w-6 h-6 text-cyan-600 mb-3" aria-hidden="true"></i>
+        <span class="cw-kpi-number">{{ completed_count }}</span>
+        <span class="cw-kpi-label">已完成分发</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- 筛选器 -->
+  <section class="cw-filter-section py-12 md:py-16" aria-labelledby="filter-heading">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <h2 id="filter-heading" class="sr-only">筛选与排序</h2>
+      <div class="cw-filter-card cw-reveal">
+        <div class="cw-filter-group">
+          <span class="cw-filter-label">学校筛选</span>
+          <div class="cw-filter-tags" role="group" aria-label="按学校筛选">
+            <a href="{{ url_for('main.dashboard', ui='charitywater', status=status, q=q, sort=sort) }}" class="cw-filter-tag {% if not school_id %}is-active{% endif %}">全部学校</a>
+            {% for school in schools %}
+            <a href="{{ url_for('main.dashboard', ui='charitywater', school_id=school.id, status=status, q=q, sort=sort) }}" class="cw-filter-tag {% if school_id == school.id %}is-active{% endif %}">{{ school.name }}</a>
+            {% endfor %}
+          </div>
+        </div>
+
+        <form class="cw-filter-controls" method="GET" action="{{ url_for('main.dashboard', ui='charitywater') }}">
+          <input type="hidden" name="ui" value="charitywater">
+          {% if school_id %}
+          <input type="hidden" name="school_id" value="{{ school_id }}">
+          {% endif %}
+
+          <div class="cw-filter-field">
+            <label for="status">状态</label>
+            <select id="status" name="status" class="cw-form-control" aria-label="按状态筛选" onchange="this.form.submit()">
+              <option value="" {% if not status %}selected{% endif %}>全部状态</option>
+              <option value="received" {% if status == 'received' %}selected{% endif %}>已接收</option>
+              <option value="distributing" {% if status == 'distributing' %}selected{% endif %}>分发中</option>
+              <option value="completed" {% if status == 'completed' %}selected{% endif %}>已完成</option>
+            </select>
+          </div>
+
+          <div class="cw-filter-field">
+            <label for="sort">排序</label>
+            <select id="sort" name="sort" class="cw-form-control" aria-label="排序方式" onchange="this.form.submit()">
+              <option value="date_desc" {% if sort == 'date_desc' %}selected{% endif %}>时间从新到旧</option>
+              <option value="date_asc" {% if sort == 'date_asc' %}selected{% endif %}>时间从旧到新</option>
+              <option value="amount_desc" {% if sort == 'amount_desc' %}selected{% endif %}>金额从高到低</option>
+              <option value="amount_asc" {% if sort == 'amount_asc' %}selected{% endif %}>金额从低到高</option>
+            </select>
+          </div>
+
+          <div class="cw-filter-field">
+            <label for="q">搜索</label>
+            <input type="text" id="q" name="q" class="cw-form-control" value="{{ q }}" placeholder="捐赠人 / 物品名称" aria-label="搜索捐赠人或物品">
+          </div>
+
+          <div class="cw-filter-actions">
+            <button type="submit" class="cw-btn cw-btn-primary">筛选</button>
+            <a href="{{ url_for('main.dashboard', ui='charitywater') }}" class="cw-btn cw-btn-secondary">重置</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 地图式旅程视图 -->
+  <section class="cw-journey-section py-12 md:py-20" aria-labelledby="journey-heading">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <header class="mb-12 md:mb-16 cw-reveal">
+        <span class="text-cyan-600 text-xs font-semibold tracking-[0.2em] uppercase">Journey Map</span>
+        <h2 id="journey-heading" class="cw-serif text-3xl md:text-5xl font-bold text-slate-900 mt-3">每一笔捐赠的旅程</h2>
+      </header>
+
+      {% if donations %}
+      <div class="cw-journey-map">
+        <!-- 地图背景装饰 -->
+        <div class="cw-map-water" aria-hidden="true">
+          <svg viewBox="0 0 1200 200" preserveAspectRatio="none" class="w-full h-full">
+            <path d="M0,100 C200,60 400,140 600,100 C800,60 1000,140 1200,100 L1200,200 L0,200 Z" fill="currentColor" opacity="0.08"/>
+            <path d="M0,130 C250,90 450,170 700,130 C950,90 1100,170 1200,130 L1200,200 L0,200 Z" fill="currentColor" opacity="0.06"/>
+          </svg>
+        </div>
+
+        <div class="cw-journey-list">
+          {% for donation in donations %}
+          <article class="cw-journey-row cw-reveal" data-status="{{ donation.status }}" style="transition-delay: {{ (loop.index0 % 6) * 0.08 }}s;">
+            <div class="cw-journey-origin">
+              <span class="cw-journey-place" aria-label="捐赠来源">{{ donation.donor_name }}</span>
+              <time class="cw-journey-time">{{ donation.created_at.strftime('%Y.%m.%d') if donation.created_at else '—' }}</time>
+            </div>
+
+            <div class="cw-journey-route-line" aria-hidden="true">
+              <span class="cw-journey-dot-sm"></span>
+              <span class="cw-journey-line-fill" style="width: {% if donation.status == 'received' %}15%{% elif donation.status == 'distributing' %}60%{% else %}100%{% endif %}"></span>
+              <span class="cw-journey-dot-sm cw-journey-dot-sm-end"></span>
+            </div>
+
+            <div class="cw-journey-shipment">
+              <div class="cw-shipment-card">
+                <div class="cw-shipment-header">
+                  <span class="cw-shipment-name">{{ donation.item_name }}</span>
+                  {% if donation.status == 'received' %}
+                  <span class="cw-status-pill cw-status-received">已接收</span>
+                  {% elif donation.status == 'distributing' %}
+                  <span class="cw-status-pill cw-status-distributing">发放中</span>
+                  {% else %}
+                  <span class="cw-status-pill cw-status-completed">已送达</span>
+                  {% endif %}
+                </div>
+                {% if donation.item_detail %}
+                <p class="cw-shipment-detail">{{ donation.item_detail }} · {{ donation.quantity or '数量待补充' }}</p>
+                {% endif %}
+                {% if donation.amount %}
+                <p class="cw-shipment-amount">¥{{ "{:,.0f}".format(donation.amount) }}</p>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="cw-journey-destination">
+              <span class="cw-journey-place" aria-label="接收方">{{ donation.school.name if donation.school else '待定学校' }}</span>
+              <span class="cw-journey-class">{{ donation.received_class or '学校统一接收' }}</span>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+      {% else %}
+      <div class="cw-empty cw-empty-visible cw-reveal">
+        <i data-lucide="inbox" class="w-12 h-12 mb-4" aria-hidden="true"></i>
+        <p class="text-lg">暂无符合条件的捐赠记录</p>
+        <p class="text-sm">请尝试调整筛选条件或稍后再来查看。</p>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- 状态图例 -->
+  <section class="cw-legend-section py-12 md:py-16" aria-labelledby="legend-heading">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <h2 id="legend-heading" class="sr-only">状态图例</h2>
+      <div class="cw-legend-card cw-reveal">
+        <div class="cw-legend-item">
+          <span class="cw-legend-dot cw-legend-dot-received" aria-hidden="true"></span>
+          <div>
+            <p class="font-semibold text-slate-900">已接收</p>
+            <p class="text-sm text-slate-500">物资已送达学校仓库，等待分发</p>
+          </div>
+        </div>
+        <div class="cw-legend-item">
+          <span class="cw-legend-dot cw-legend-dot-distributing" aria-hidden="true"></span>
+          <div>
+            <p class="font-semibold text-slate-900">发放中</p>
+            <p class="text-sm text-slate-500">物资正在配送到各班级或孩子手中</p>
+          </div>
+        </div>
+        <div class="cw-legend-item">
+          <span class="cw-legend-dot cw-legend-dot-completed" aria-hidden="true"></span>
+          <div>
+            <p class="font-semibold text-slate-900">已送达</p>
+            <p class="text-sm text-slate-500">物资已被签收，旅程完成</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 页脚 -->
+<footer class="cw-footer">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between gap-12 mb-12">
+      <div class="max-w-sm">
+        <div class="flex items-center gap-2 text-white mb-4">
+          <i data-lucide="droplets" class="w-5 h-5 text-cyan-400"></i>
+          <span class="text-xl cw-serif font-bold">清泉公益</span>
+        </div>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          为特殊教育学校提供透明的物资支持与持续的温暖陪伴。本站仅作公益展示与透明公示，不接受线上捐赠。
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-12 text-sm">
+        <div>
+          <h4 class="text-white font-semibold mb-3">导航</h4>
+          <ul class="space-y-2">
+            <li><a href="{{ url_for('main.index', ui='charitywater') }}" class="text-slate-400 hover:text-white transition-colors">首页</a></li>
+            <li><a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='charitywater') }}" class="text-slate-400 hover:text-white transition-colors">学校详情</a></li>
+            <li><a href="{{ url_for('main.dashboard', ui='charitywater') }}" class="text-slate-400 hover:text-white transition-colors">捐赠公示</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between gap-4 text-xs text-slate-500">
+      <p>© 2026 清泉公益 · 测试专用 UI 变体：charitywater</p>
+      <p>页面数据均为演示用途。</p>
+    </div>
+  </div>
+</footer>
+{% endblock %}
+
+{% block body_scripts %}
+<script>
+(function() {
+  'use strict';
+
+  // 移动端菜单
+  const menuBtn = document.getElementById('cw-menu-btn');
+  const mobileMenu = document.getElementById('cw-mobile-menu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', function() {
+      const expanded = mobileMenu.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-expanded', String(!expanded));
+    });
+  }
+
+  // 滚动揭示
+  const revealEls = document.querySelectorAll('.cw-reveal');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduced) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('cw-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('cw-visible'));
+  }
+})();
+</script>
+{% endblock %}

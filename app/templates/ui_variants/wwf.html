@@ -4,38 +4,78 @@
 
 {% block head_extra %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/ui_variants/wwf.css') }}">
+<noscript>
+  <style>
+    .wwf-reveal { opacity: 1 !important; transform: none !important; }
+    .wwf-line-path { stroke-dashoffset: 0 !important; }
+  </style>
+</noscript>
 {% endblock %}
 
 {% block body_class %}wwf-variant{% endblock %}
 
 {% block content %}
 {% set total = total_amount|default(0)|float %}
+{% set received = recent_donations|selectattr('status','equalto','received')|list|length %}
+{% set distributing = recent_donations|selectattr('status','equalto','distributing')|list|length %}
+{% set completed = recent_donations|selectattr('status','equalto','completed')|list|length %}
+{% set total_status = [received + distributing + completed, 1]|max %}
+
+{# 基于真实捐赠数据计算金额分布（按物品关键词粗略归类） #}
+{% set teaching_amount = namespace(value=0) %}
+{% set living_amount = namespace(value=0) %}
+{% set rehab_amount = namespace(value=0) %}
+{% set admin_amount = namespace(value=0) %}
+{% for d in recent_donations %}
+  {% if d.amount %}
+    {% set item = (d.item_name ~ ' ' ~ (d.item_detail or ''))|lower %}
+    {% if '教具' in item or '教材' in item or '图书' in item or '文具' in item or '教学' in item %}
+      {% set teaching_amount.value = teaching_amount.value + d.amount %}
+    {% elif '餐' in item or '食品' in item or '衣物' in item or '被褥' in item or '生活' in item %}
+      {% set living_amount.value = living_amount.value + d.amount %}
+    {% elif '康复' in item or '器材' in item or '辅助' in item or '理疗' in item %}
+      {% set rehab_amount.value = rehab_amount.value + d.amount %}
+    {% else %}
+      {% set admin_amount.value = admin_amount.value + d.amount %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+{% set use_real_split = total > 0 and (teaching_amount.value + living_amount.value + rehab_amount.value + admin_amount.value) > 0 %}
+{% if use_real_split %}
+  {% set teaching_pct = (teaching_amount.value / total * 100)|round|int %}
+  {% set living_pct = (living_amount.value / total * 100)|round|int %}
+  {% set rehab_pct = (rehab_amount.value / total * 100)|round|int %}
+  {% set admin_pct = 100 - teaching_pct - living_pct - rehab_pct %}
+  {% set splits = [('教学物资', teaching_pct, '#6A8D46', teaching_amount.value), ('生活辅助', living_pct, '#C7A75A', living_amount.value), ('康复器材', rehab_pct, '#8FAE68', rehab_amount.value), ('运营管理', admin_pct, '#3D5A3B', admin_amount.value)] %}
+{% else %}
+  {% set splits = [('教学物资', 42, '#6A8D46', total * 0.42), ('生活辅助', 28, '#C7A75A', total * 0.28), ('康复器材', 18, '#8FAE68', total * 0.18), ('运营管理', 12, '#3D5A3B', total * 0.12)] %}
+{% endif %}
 
 {# ---------- 顶部导航 ---------- #}
 <header id="wwf-nav" class="wwf-nav fixed top-0 left-0 right-0 z-50">
   <div class="max-w-7xl mx-auto px-6 lg:px-8">
     <div class="flex items-center justify-between h-20">
-      <a href="?ui=wwf" class="flex items-center gap-3 text-xl md:text-2xl font-bold tracking-tight">
+      <a href="{{ url_for('main.index', ui='wwf') }}" class="flex items-center gap-3 text-xl md:text-2xl font-bold tracking-tight">
         <span class="inline-flex items-center justify-center w-10 h-10 rounded-full wwf-glass">
           <i data-lucide="leaf" class="w-6 h-6 text-[#C7A75A]"></i>
         </span>
         <span class="font-['Noto_Serif_SC'] text-[#F7F5F0]">守护计划</span>
       </a>
 
-      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-[#E8DCC4]">
-        <a href="#executive" class="hover:text-white transition-colors">摘要</a>
-        <a href="#bento" class="hover:text-white transition-colors">仪表盘</a>
-        <a href="#viz" class="hover:text-white transition-colors">数据可视化</a>
-        <a href="#schools" class="hover:text-white transition-colors">学校分布</a>
-        <a href="#children" class="hover:text-white transition-colors">儿童风采</a>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-[#E8DCC4]" aria-label="主导航">
+        <a href="{{ url_for('main.index', ui='wwf') }}" class="hover:text-white transition-colors">首页</a>
+        {% if schools %}
+        <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='wwf') }}" class="hover:text-white transition-colors">学校详情</a>
+        {% endif %}
+        <a href="{{ url_for('main.dashboard', ui='wwf') }}" class="hover:text-white transition-colors">捐赠公示</a>
       </nav>
 
-      <a href="/" class="hidden md:inline-flex items-center gap-2 text-sm text-[#E8DCC4] hover:text-white transition-colors">
+      <a href="{{ url_for('main.index') }}" class="hidden md:inline-flex items-center gap-2 text-sm text-[#E8DCC4] hover:text-white transition-colors">
         <i data-lucide="arrow-left" class="w-4 h-4"></i>
         返回默认版
       </a>
 
-      <button id="wwf-menu-btn" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl wwf-glass text-[#F7F5F0]">
+      <button id="wwf-menu-btn" class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl wwf-glass text-[#F7F5F0]" aria-label="打开菜单">
         <i data-lucide="menu" class="w-5 h-5"></i>
       </button>
     </div>
@@ -43,21 +83,26 @@
 
   <div id="wwf-mobile-menu" class="hidden md:hidden px-6 pb-5">
     <div class="wwf-glass-strong rounded-2xl p-4 space-y-2">
-      <a href="#executive" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">摘要</a>
-      <a href="#bento" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">仪表盘</a>
-      <a href="#viz" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">数据可视化</a>
-      <a href="#schools" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">学校分布</a>
-      <a href="#children" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">儿童风采</a>
-      <a href="/" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">返回默认版</a>
+      <a href="{{ url_for('main.index', ui='wwf') }}" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">首页</a>
+      {% if schools %}
+      <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='wwf') }}" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">学校详情</a>
+      {% endif %}
+      <a href="{{ url_for('main.dashboard', ui='wwf') }}" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">捐赠公示</a>
+      <a href="{{ url_for('main.index') }}" class="block py-2 px-3 rounded-lg hover:bg-white/10 text-[#E8DCC4]">返回默认版</a>
     </div>
   </div>
 </header>
 
 <main class="wwf-container">
   {# ---------- 封面 Hero ---------- #}
-  <section class="relative min-h-[90vh] flex items-end pb-16 md:pb-24 pt-24 overflow-hidden">
-    <div class="wwf-hero-bg"></div>
-    <div class="absolute inset-0 bg-gradient-to-t from-[#0F231C] via-[#0F231C]/85 to-[#0F231C]/30"></div>
+  <section class="relative min-h-[90vh] flex items-end pb-16 md:pb-24 pt-24 overflow-hidden" aria-labelledby="wwf-hero-title">
+    <div class="wwf-hero-bg">
+      <video id="wwf-hero-video" class="wwf-hero-video" src="{{ variant_asset('wwf', 'videos/hero-video.mp4', '') }}" muted loop playsinline poster="{{ variant_asset('wwf', 'images/scene-1.jpg', 'https://images.pexels.com/photos/7395291/pexels-photo-7395291.jpeg?auto=compress&cs=tinysrgb&w=1200') }}" aria-label="自然景观与校园生活年度纪录短片"></video>
+    </div>
+
+    <button id="wwf-hero-video-toggle" class="wwf-video-control" aria-label="暂停背景视频">
+      <i data-lucide="pause" class="w-5 h-5"></i>
+    </button>
 
     <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 w-full">
       <div class="max-w-3xl">
@@ -65,7 +110,7 @@
           <i data-lucide="file-text" class="w-4 h-4 text-[#C7A75A]"></i>
           2026 年度报告 · WWF 自然守护风格测试变体
         </div>
-        <h1 class="wwf-reveal text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05] font-['Noto_Serif_SC'] text-[#F7F5F0] mb-6">
+        <h1 id="wwf-hero-title" class="wwf-reveal text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05] font-['Noto_Serif_SC'] text-[#F7F5F0] mb-6">
           守护每一次<br>
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#C7A75A] to-[#8FAE68]">特殊成长</span>
         </h1>
@@ -73,19 +118,21 @@
           以年度报告 Bento 仪表盘的形式，公开合作学校、受助儿童、物资状态与资金用途。没有口号，只有可追踪的数据。
         </p>
         <div class="wwf-reveal flex flex-wrap gap-4">
-          <a href="#executive" class="wwf-btn-primary">
+          <a href="#bento" class="wwf-btn-primary">
             <i data-lucide="bar-chart-2" class="w-5 h-5"></i>
             阅读报告摘要
           </a>
-          <a href="#schools" class="wwf-btn-ghost">
-            <i data-lucide="map" class="w-5 h-5"></i>
-            查看学校分布
+          {% if schools %}
+          <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='wwf') }}" class="wwf-btn-ghost">
+            <i data-lucide="school" class="w-5 h-5"></i>
+            关注学校
           </a>
+          {% endif %}
         </div>
       </div>
     </div>
 
-    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce text-[#E8DCC4]/60">
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce text-[#E8DCC4]/60" aria-hidden="true">
       <i data-lucide="chevron-down" class="w-7 h-7"></i>
     </div>
   </section>
@@ -156,7 +203,7 @@
             <p class="text-sm text-[#E8DCC4]/70">来自 {{ total_donations|default(0) }} 笔公开捐赠记录</p>
           </div>
           <div class="mt-6 h-24 md:h-32">
-            <svg viewBox="0 0 300 80" class="w-full h-full overflow-visible" preserveAspectRatio="none">
+            <svg viewBox="0 0 300 80" class="w-full h-full overflow-visible" preserveAspectRatio="none" aria-hidden="true">
               <defs>
                 <linearGradient id="sparkGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stop-color="rgba(199,167,90,0.35)"/>
@@ -182,7 +229,7 @@
           </div>
           <div class="space-y-2">
             {% for school in schools %}
-            <a href="/school/{{ school.id }}?ui=wwf" class="wwf-school-row group flex items-center justify-between p-3 rounded-2xl transition-colors">
+            <a href="{{ url_for('main.school_detail', school_id=school.id, ui='wwf') }}" class="wwf-school-row group flex items-center justify-between p-3 rounded-2xl transition-colors">
               <div class="flex items-center gap-3 min-w-0">
                 <span class="w-8 h-8 rounded-full bg-[#6A8D46]/20 flex items-center justify-center text-[#C7A75A] text-xs font-bold shrink-0">{{ loop.index }}</span>
                 <div class="min-w-0">
@@ -208,7 +255,7 @@
           <p class="text-xs text-[#E8DCC4]/60 mb-4">本年度公开档案</p>
           <div class="flex -space-x-2.5 overflow-hidden">
             {% for child in children[:8] %}
-            <img src="{{ child.avatar_url or 'https://images.unsplash.com/photo-1540479859555-17af45c78602?auto=format&fit=crop&w=100&q=80' }}"
+            <img src="{{ variant_asset('wwf', 'images/child-' ~ loop.index ~ '.jpg', child.avatar) }}"
                  alt="{{ child.name }}" title="{{ child.name }}"
                  class="w-9 h-9 rounded-full border-2 border-[#1B3B2F] object-cover wwf-avatar-ring">
             {% endfor %}
@@ -237,11 +284,7 @@
             <i data-lucide="pie-chart" class="w-4 h-4"></i>
             物资状态
           </div>
-          {% set received = recent_donations|selectattr('status','equalto','received')|list|length %}
-          {% set distributing = recent_donations|selectattr('status','equalto','distributing')|list|length %}
-          {% set completed = recent_donations|selectattr('status','equalto','completed')|list|length %}
-          {% set total_status = [received + distributing + completed, 1]|max %}
-          <div class="relative h-28 w-28 mx-auto">
+          <div class="relative h-28 w-28 mx-auto" role="img" aria-label="捐赠物资状态分布：已接收 {{ received }} 笔，分发中 {{ distributing }} 笔，已完成 {{ completed }} 笔">
             <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
               <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                     fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
@@ -265,9 +308,9 @@
             </div>
           </div>
           <div class="mt-3 flex flex-wrap justify-center gap-2 text-[10px]">
-            <span class="flex items-center gap-1 text-[#E8DCC4]/80"><span class="w-2 h-2 rounded-full bg-[#6A8D46]"></span>已接收</span>
-            <span class="flex items-center gap-1 text-[#E8DCC4]/80"><span class="w-2 h-2 rounded-full bg-[#C7A75A]"></span>分发中</span>
-            <span class="flex items-center gap-1 text-[#E8DCC4]/80"><span class="w-2 h-2 rounded-full bg-[#3D5A3B]"></span>已完成</span>
+            <span class="flex items-center gap-1 text-[#E8DCC4]/80"><span class="w-2 h-2 rounded-full bg-[#6A8D46]"></span>已接收 {{ received }}</span>
+            <span class="flex items-center gap-1 text-[#E8DCC4]/80"><span class="w-2 h-2 rounded-full bg-[#C7A75A]"></span>分发中 {{ distributing }}</span>
+            <span class="flex items-center gap-1 text-[#E8DCC4]/80"><span class="w-2 h-2 rounded-full bg-[#3D5A3B]"></span>已完成 {{ completed }}</span>
           </div>
         </div>
 
@@ -299,12 +342,11 @@
             资金用途拆分
           </div>
           <div class="space-y-4">
-            {% set splits = [('教学物资', 42, '#6A8D46'), ('生活辅助', 28, '#C7A75A'), ('康复器材', 18, '#8FAE68'), ('运营管理', 12, '#3D5A3B')] %}
-            {% for label, pct, color in splits %}
+            {% for label, pct, color, amount in splits %}
             <div>
               <div class="flex justify-between text-xs text-[#E8DCC4]/80 mb-1.5">
                 <span>{{ label }}</span>
-                <span class="font-mono">{{ pct }}%</span>
+                <span class="font-mono">{{ pct }}% · ¥{{ "{:,.0f}".format(amount) }}</span>
               </div>
               <div class="h-2 rounded-full bg-white/10 overflow-hidden">
                 <div class="h-full rounded-full wwf-fin-bar" style="width: {{ pct }}%; background-color: {{ color }};"></div>
@@ -341,6 +383,11 @@
             <p class="text-sm text-[#E8DCC4]/60">暂无捐赠记录。</p>
             {% endfor %}
           </div>
+          <div class="mt-4 pt-4 border-t border-white/10">
+            <a href="{{ url_for('main.dashboard', ui='wwf') }}" class="text-xs text-[#C7A75A] hover:text-[#F2D78A] flex items-center gap-1 transition-colors">
+              查看公示 <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -361,7 +408,7 @@
             <i data-lucide="activity" class="w-4 h-4"></i>
             五年捐赠增长趋势
           </div>
-          <div class="relative h-64">
+          <div class="relative h-64" aria-hidden="true">
             <svg viewBox="0 0 400 200" class="w-full h-full overflow-visible">
               <defs>
                 <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
@@ -386,6 +433,7 @@
               <text x="340" y="190" fill="#E8DCC4" font-size="10" text-anchor="middle">2025</text>
             </svg>
           </div>
+          <p class="text-xs text-[#E8DCC4]/60 mt-2">图示为模拟趋势，具体数据以公示页为准。</p>
         </div>
 
         {# 环形图 #}
@@ -395,23 +443,20 @@
             帮扶领域分布
           </div>
           <div class="flex flex-col md:flex-row items-center gap-8">
-            <div class="relative h-48 w-48 shrink-0">
+            <div class="relative h-48 w-48 shrink-0" role="img" aria-label="帮扶领域分布：{% for label, pct, color, amount in splits %}{{ label }} {{ pct }}%{% if not loop.last %}，{% endif %}{% endfor %}">
               <svg viewBox="0 0 36 36" class="w-full h-full -rotate-90">
                 <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                       fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="3"/>
+                {% set offset = 0 %}
+                {% for label, pct, color, amount in splits %}
                 <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      fill="none" stroke="#6A8D46" stroke-width="3" stroke-dasharray="42, 100"/>
-                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      fill="none" stroke="#C7A75A" stroke-width="3" stroke-dasharray="28, 100" stroke-dashoffset="-42"/>
-                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      fill="none" stroke="#8FAE68" stroke-width="3" stroke-dasharray="18, 100" stroke-dashoffset="-70"/>
-                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-                      fill="none" stroke="#3D5A3B" stroke-width="3" stroke-dasharray="12, 100" stroke-dashoffset="-88"/>
+                      fill="none" stroke="{{ color }}" stroke-width="3" stroke-dasharray="{{ pct }}, 100" stroke-dashoffset="-{{ offset }}"/>
+                {% set offset = offset + pct %}
+                {% endfor %}
               </svg>
             </div>
             <div class="flex-1 w-full space-y-4">
-              {% set fields = [('教学物资', 42, '#6A8D46'), ('生活辅助', 28, '#C7A75A'), ('康复器材', 18, '#8FAE68'), ('运营管理', 12, '#3D5A3B')] %}
-              {% for label, pct, color in fields %}
+              {% for label, pct, color, amount in splits %}
               <div class="flex items-center justify-between text-sm">
                 <div class="flex items-center gap-2">
                   <span class="w-3 h-3 rounded-full" style="background-color: {{ color }};"></span>
@@ -460,7 +505,7 @@
           </div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {% for school in schools %}
-            <a href="/school/{{ school.id }}?ui=wwf" class="wwf-school-row group block p-4 rounded-2xl transition-colors">
+            <a href="{{ url_for('main.school_detail', school_id=school.id, ui='wwf') }}" class="wwf-school-row group block p-4 rounded-2xl transition-colors">
               <div class="flex items-start justify-between gap-3 mb-2">
                 <h3 class="text-base font-semibold text-[#F7F5F0] group-hover:text-[#C7A75A] transition-colors">{{ school.name }}</h3>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-[#6A8D46]/20 text-[#B8D68C]">{{ school.location }}</span>
@@ -493,7 +538,7 @@
         {% for child in children %}
         <div class="wwf-reveal wwf-avatar-card group flex flex-col items-center text-center">
           <div class="relative mb-3">
-            <img src="{{ child.avatar_url or 'https://images.unsplash.com/photo-1540479859555-17af45c78602?auto=format&fit=crop&w=150&q=80' }}"
+            <img src="{{ variant_asset('wwf', 'images/child-' ~ loop.index ~ '.jpg', child.avatar) }}"
                  alt="{{ child.name }}"
                  class="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-[#C7A75A]/30 group-hover:border-[#C7A75A] transition-colors">
             <span class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-[#6A8D46] text-[#F7F5F0] text-[10px] flex items-center justify-center font-bold">{{ child.age }}</span>
@@ -529,8 +574,7 @@
             <div class="text-3xl md:text-4xl font-bold text-[#F7F5F0] font-['JetBrains_Mono']">¥{{ "{:,.0f}".format(total) }}</div>
           </div>
           <div class="flex flex-wrap gap-4 text-sm">
-            {% set fields = [('教学物资', 42, '#6A8D46'), ('生活辅助', 28, '#C7A75A'), ('康复器材', 18, '#8FAE68'), ('运营管理', 12, '#3D5A3B')] %}
-            {% for label, pct, color in fields %}
+            {% for label, pct, color, amount in splits %}
             <div class="flex items-center gap-2">
               <span class="w-3 h-3 rounded-full" style="background-color: {{ color }};"></span>
               <span class="text-[#E8DCC4]">{{ label }} {{ pct }}%</span>
@@ -539,8 +583,8 @@
           </div>
         </div>
 
-        <div class="h-10 md:h-12 rounded-full overflow-hidden flex wwf-stacked-bar">
-          {% for label, pct, color in fields %}
+        <div class="h-10 md:h-12 rounded-full overflow-hidden flex wwf-stacked-bar" role="img" aria-label="资金用途堆叠条">
+          {% for label, pct, color, amount in splits %}
           <div class="h-full flex items-center justify-center text-[10px] md:text-xs font-semibold text-[#0F231C] wwf-stacked-segment"
                style="width: {{ pct }}%; background-color: {{ color }};">
             <span class="hidden md:inline">{{ label }}</span>
@@ -549,9 +593,9 @@
         </div>
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8">
-          {% for label, pct, color in fields %}
+          {% for label, pct, color, amount in splits %}
           <div class="text-center p-4 rounded-2xl bg-white/5">
-            <div class="text-2xl font-bold text-[#F7F5F0] font-['JetBrains_Mono'] mb-1">¥{{ "{:,.0f}".format(total * pct / 100) }}</div>
+            <div class="text-2xl font-bold text-[#F7F5F0] font-['JetBrains_Mono'] mb-1">¥{{ "{:,.0f}".format(amount) }}</div>
             <div class="text-xs text-[#E8DCC4]/70">{{ label }}</div>
           </div>
           {% endfor %}
@@ -561,7 +605,7 @@
   </section>
 
   {# ---------- 页脚 ---------- #}
-  <footer class="border-t border-white/10 bg-[#0F231C]/80 backdrop-blur-md">
+  <footer class="wwf-footer">
     <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12 md:py-16">
       <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div class="flex items-center gap-3">
@@ -574,11 +618,12 @@
           </div>
         </div>
         <div class="flex flex-wrap gap-6 text-sm text-[#E8DCC4]/70">
-          <a href="#executive" class="hover:text-[#C7A75A]">摘要</a>
-          <a href="#bento" class="hover:text-[#C7A75A]">仪表盘</a>
-          <a href="#viz" class="hover:text-[#C7A75A]">可视化</a>
-          <a href="#schools" class="hover:text-[#C7A75A]">学校</a>
-          <a href="/" class="hover:text-[#C7A75A]">默认版</a>
+          <a href="{{ url_for('main.index', ui='wwf') }}" class="hover:text-[#C7A75A]">首页</a>
+          {% if schools %}
+          <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='wwf') }}" class="hover:text-[#C7A75A]">学校详情</a>
+          {% endif %}
+          <a href="{{ url_for('main.dashboard', ui='wwf') }}" class="hover:text-[#C7A75A]">捐赠公示</a>
+          <a href="{{ url_for('main.index') }}" class="hover:text-[#C7A75A]">默认版</a>
         </div>
       </div>
       <div class="border-t border-white/10 mt-8 pt-8 text-xs text-[#E8DCC4]/50 flex flex-col md:flex-row items-center justify-between gap-4">
@@ -607,21 +652,46 @@
   const mobileMenu = document.getElementById('wwf-mobile-menu');
   if (menuBtn && mobileMenu) {
     menuBtn.addEventListener('click', () => {
+      const isHidden = mobileMenu.classList.contains('hidden');
       mobileMenu.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+    });
+  }
+
+  // 背景视频播放/暂停控制
+  const video = document.getElementById('wwf-hero-video');
+  const videoToggle = document.getElementById('wwf-hero-video-toggle');
+  if (video && videoToggle) {
+    video.play().catch(() => {});
+    videoToggle.addEventListener('click', () => {
+      if (video.paused) {
+        video.play();
+        videoToggle.setAttribute('aria-label', '暂停背景视频');
+        videoToggle.innerHTML = '<i data-lucide="pause" class="w-5 h-5"></i>';
+      } else {
+        video.pause();
+        videoToggle.setAttribute('aria-label', '播放背景视频');
+        videoToggle.innerHTML = '<i data-lucide="play" class="w-5 h-5"></i>';
+      }
+      if (typeof lucide !== 'undefined') lucide.createIcons();
     });
   }
 
   // 滚动揭示
   const revealEls = document.querySelectorAll('.wwf-reveal, .wwf-line-path');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('wwf-visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-  revealEls.forEach(el => observer.observe(el));
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('wwf-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('wwf-visible'));
+  }
 
   // Lucide 图标刷新
   if (typeof lucide !== 'undefined') lucide.createIcons();

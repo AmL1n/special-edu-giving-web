@@ -25,3 +25,8 @@ Thumbs.db
 
 # Environment variables
 .env
+
+# Generated / downloaded assets
+app/static/media/ui_variants/
+screenshots/
+

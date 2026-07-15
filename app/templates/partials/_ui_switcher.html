@@ -70,27 +70,27 @@
     </div>
   </summary>
   <div class="ui-switcher-body">
-    <a href="{{ url_for('main.index') }}" class="{% if not ui_variant %}active{% endif %}">
+    <a href="{{ ui_switch_url('') }}" class="{% if not ui_variant %}active{% endif %}">
       <i data-lucide="home" style="width:14px;height:14px;"></i>
       默认版
     </a>
-    <a href="{{ url_for('main.index', ui='charitywater') }}" class="{% if ui_variant == 'charitywater' %}active{% endif %}">
+    <a href="{{ ui_switch_url('charitywater') }}" class="{% if ui_variant == 'charitywater' %}active{% endif %}">
       <i data-lucide="droplets" style="width:14px;height:14px;"></i>
       Charity: Water
     </a>
-    <a href="{{ url_for('main.index', ui='justgiving') }}" class="{% if ui_variant == 'justgiving' %}active{% endif %}">
+    <a href="{{ ui_switch_url('justgiving') }}" class="{% if ui_variant == 'justgiving' %}active{% endif %}">
       <i data-lucide="heart-handshake" style="width:14px;height:14px;"></i>
       JustGiving
     </a>
-    <a href="{{ url_for('main.index', ui='donorsee') }}" class="{% if ui_variant == 'donorsee' %}active{% endif %}">
+    <a href="{{ ui_switch_url('donorsee') }}" class="{% if ui_variant == 'donorsee' %}active{% endif %}">
       <i data-lucide="video" style="width:14px;height:14px;"></i>
       DonorSee
     </a>
-    <a href="{{ url_for('main.index', ui='wwf') }}" class="{% if ui_variant == 'wwf' %}active{% endif %}">
+    <a href="{{ ui_switch_url('wwf') }}" class="{% if ui_variant == 'wwf' %}active{% endif %}">
       <i data-lucide="leaf" style="width:14px;height:14px;"></i>
       WWF
     </a>
-    <a href="{{ url_for('main.index', ui='gofundme') }}" class="{% if ui_variant == 'gofundme' %}active{% endif %}">
+    <a href="{{ ui_switch_url('gofundme') }}" class="{% if ui_variant == 'gofundme' %}active{% endif %}">
       <i data-lucide="trending-up" style="width:14px;height:14px;"></i>
       GoFundMe
     </a>

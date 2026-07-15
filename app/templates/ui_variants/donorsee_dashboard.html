@@ -1,0 +1,275 @@
+{% extends "ui_variants/_shell.html" %}
+
+{% block title %}DonorSee · 捐赠透明公示档案{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ui_variants/donorsee.css') }}">
+{% endblock %}
+
+{% block body_class %}ds-page{% endblock %}
+
+{% block content %}
+
+<div class="ds-ambient-glow" id="ambientGlow" aria-hidden="true"></div>
+
+<a href="#archive-main" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:bg-[#0d181d] focus:text-[#d8e5e7] focus:px-4 focus:py-2 focus:rounded-lg">跳转到主要内容</a>
+
+<!-- 顶部导航 -->
+<header class="ds-nav">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="{{ url_for('main.index', ui='donorsee') }}" class="flex items-center gap-2.5 group">
+      <span class="w-8 h-8 rounded-lg flex items-center justify-center bg-[rgba(94,205,199,0.12)] border border-[rgba(94,176,191,0.3)] text-[#5ecdc7] font-bold">D</span>
+      <span class="text-base font-semibold tracking-tight text-[#f0f7f7]">DonorSee <span class="text-[#7d9aa0] font-normal">公益透明</span></span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-8" aria-label="页面导航">
+      <a href="{{ url_for('main.index', ui='donorsee') }}" class="ds-nav-link">首页时间轴</a>
+      <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='donorsee') }}" class="ds-nav-link">学校故事</a>
+      <a href="#archive-filters" class="ds-nav-link">筛选档案</a>
+    </nav>
+
+    <a href="{{ url_for('main.dashboard', ui='donorsee') }}" class="ds-nav-pill">
+      <i data-lucide="scroll-text" class="w-3.5 h-3.5"></i>
+      公示档案
+    </a>
+  </div>
+</header>
+
+<main id="archive-main">
+
+  <!-- 档案页 Hero -->
+  <section class="ds-page-hero ds-page-hero-short" aria-labelledby="archive-title">
+    <div class="ds-hero-video" aria-hidden="true">
+      <img src="{{ variant_asset('donorsee', 'images/scene-7.jpg', 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&w=1920&q=80') }}" alt="" class="ds-hero-video-media">
+      <div class="ds-hero-video-overlay"></div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-6 pt-32 pb-16 relative z-10">
+      <div class="ds-reveal max-w-3xl">
+        <p class="ds-hero-kicker">Transparency Archive</p>
+        <h1 id="archive-title" class="ds-hero-title text-3xl md:text-5xl lg:text-6xl mb-6">
+          捐赠透明公示档案
+        </h1>
+        <p class="ds-hero-lead text-base md:text-lg">
+          每一笔捐赠的来源、去向与当前状态都记录在此。你可以按学校、状态或时间筛选，独立核对任何一条记录。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 数据概览 -->
+  <section class="ds-section ds-kpi-section" aria-labelledby="kpi-heading">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 id="kpi-heading" class="sr-only">核心数据概览</h2>
+      <div class="ds-kpi-grid">
+        <article class="ds-kpi-card ds-reveal ds-reveal-delay-1">
+          <i data-lucide="heart" class="w-5 h-5" aria-hidden="true"></i>
+          <p class="ds-kpi-num">{{ total_count }}</p>
+          <p class="ds-kpi-label">捐赠笔数</p>
+        </article>
+        <article class="ds-kpi-card ds-reveal ds-reveal-delay-2">
+          <i data-lucide="users" class="w-5 h-5" aria-hidden="true"></i>
+          <p class="ds-kpi-num">{{ donor_count }}</p>
+          <p class="ds-kpi-label">捐赠人次</p>
+        </article>
+        <article class="ds-kpi-card ds-reveal ds-reveal-delay-3">
+          <i data-lucide="banknote" class="w-5 h-5" aria-hidden="true"></i>
+          <p class="ds-kpi-num">¥{{ "%.0f"|format(total_amount) }}</p>
+          <p class="ds-kpi-label">累计金额</p>
+        </article>
+        <article class="ds-kpi-card ds-reveal ds-reveal-delay-4">
+          <i data-lucide="check-circle" class="w-5 h-5" aria-hidden="true"></i>
+          <p class="ds-kpi-num">{{ completed_count }}</p>
+          <p class="ds-kpi-label">已送达</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 筛选器 -->
+  <section id="archive-filters" class="ds-section" aria-labelledby="filters-heading">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 id="filters-heading" class="sr-only">档案筛选</h2>
+      <form class="ds-filter-bar ds-glass ds-reveal" method="GET" action="{{ url_for('main.dashboard', ui='donorsee') }}">
+        <div class="ds-filter-grid">
+          <div class="ds-filter-field">
+            <label for="q">搜索</label>
+            <input type="text" id="q" name="q" class="ds-input" value="{{ q }}" placeholder="捐赠人 / 物品名称">
+          </div>
+
+          <div class="ds-filter-field">
+            <label for="status">状态</label>
+            <select id="status" name="status" class="ds-select">
+              <option value="" {% if not status %}selected{% endif %}>全部状态</option>
+              <option value="received" {% if status == 'received' %}selected{% endif %}>已接收</option>
+              <option value="distributing" {% if status == 'distributing' %}selected{% endif %}>分发中</option>
+              <option value="completed" {% if status == 'completed' %}selected{% endif %}>已送达</option>
+            </select>
+          </div>
+
+          <div class="ds-filter-field">
+            <label for="school_id">学校</label>
+            <select id="school_id" name="school_id" class="ds-select">
+              <option value="" {% if not school_id %}selected{% endif %}>全部学校</option>
+              {% for s in schools %}
+              <option value="{{ s.id }}" {% if school_id == s.id %}selected{% endif %}>{{ s.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="ds-filter-field">
+            <label for="sort">排序</label>
+            <select id="sort" name="sort" class="ds-select">
+              <option value="date_desc" {% if sort == 'date_desc' %}selected{% endif %}>时间从新到旧</option>
+              <option value="date_asc" {% if sort == 'date_asc' %}selected{% endif %}>时间从旧到新</option>
+              <option value="amount_desc" {% if sort == 'amount_desc' %}selected{% endif %}>金额从高到低</option>
+              <option value="amount_asc" {% if sort == 'amount_asc' %}selected{% endif %}>金额从低到高</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ds-filter-actions">
+          <button type="submit" class="ds-btn ds-btn-primary">
+            <i data-lucide="search" class="w-4 h-4"></i>
+            筛选档案
+          </button>
+          <a href="{{ url_for('main.dashboard', ui='donorsee') }}" class="ds-btn ds-btn-ghost">
+            重置
+          </a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- 捐赠档案卡片 -->
+  <section class="ds-section ds-archive-section" aria-labelledby="records-heading">
+    <div class="max-w-6xl mx-auto px-6">
+      <header class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 ds-reveal">
+        <div>
+          <p class="ds-chapter-tag"><i data-lucide="archive" class="w-3.5 h-3.5"></i> Archive</p>
+          <h2 id="records-heading" class="ds-section-title">捐赠档案记录</h2>
+        </div>
+        <p class="text-sm text-[#7d9aa0]">共 {{ donations|length }} 条记录</p>
+      </header>
+
+      {% if donations %}
+      <div class="ds-archive-grid">
+        {% for d in donations %}
+        {% set status_class = 'ds-status-received' if d.status == 'received' else ('ds-status-distributing' if d.status == 'distributing' else 'ds-status-completed') %}
+        {% set status_text = '已接收' if d.status == 'received' else ('分发中' if d.status == 'distributing' else '已送达') %}
+        <article class="ds-archive-card ds-reveal ds-reveal-delay-{{ (loop.index0 % 3) + 1 }}">
+          <div class="ds-archive-card-header">
+            <div class="ds-archive-donor">
+              <span class="ds-archive-avatar" aria-hidden="true">{{ d.donor_name[0] }}</span>
+              <div>
+                <p class="ds-archive-donor-name">{{ d.donor_name }}</p>
+                <p class="ds-archive-donor-item">{{ d.item_name }}</p>
+              </div>
+            </div>
+            <span class="ds-status {{ status_class }}">
+              <i data-lucide="{% if d.status == 'completed' %}check-circle{% elif d.status == 'distributing' %}loader-2{% else %}inbox{% endif %}" class="w-3 h-3"></i>
+              {{ status_text }}
+            </span>
+          </div>
+
+          <div class="ds-archive-card-body">
+            <div class="ds-archive-row">
+              <span>物品详情</span>
+              <strong>{{ d.item_detail or '—' }} <span class="text-[#7d9aa0] font-normal">× {{ d.quantity or '1' }}</span></strong>
+            </div>
+            <div class="ds-archive-row">
+              <span>接收学校</span>
+              <strong>{{ d.school.name if d.school else '未知学校' }}</strong>
+            </div>
+            <div class="ds-archive-row">
+              <span>接收班级</span>
+              <strong>{{ d.received_class or '学校统一' }}</strong>
+            </div>
+            <div class="ds-archive-row">
+              <span>捐赠时间</span>
+              <strong class="ds-mono">{{ d.created_at.strftime('%Y-%m-%d') if d.created_at else '-' }}</strong>
+            </div>
+            {% if d.amount %}
+            <div class="ds-archive-row">
+              <span>折合金额</span>
+              <strong class="ds-mono">¥{{ "{:,.0f}".format(d.amount) }}</strong>
+            </div>
+            {% endif %}
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="ds-empty ds-reveal" role="status" aria-live="polite">
+        <i data-lucide="inbox" class="w-12 h-12 mb-4" aria-hidden="true"></i>
+        <p class="text-lg">暂无符合条件的捐赠记录</p>
+        <p class="text-sm mt-1">请尝试调整筛选条件或稍后再来查看。</p>
+        <a href="{{ url_for('main.dashboard', ui='donorsee') }}" class="ds-btn ds-btn-ghost mt-6">重置筛选</a>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+
+</main>
+
+<!-- 页脚 -->
+<footer class="ds-footer">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 mb-8">
+      <div>
+        <a href="{{ url_for('main.index', ui='donorsee') }}" class="flex items-center gap-2 mb-2">
+          <span class="w-7 h-7 rounded-md flex items-center justify-center bg-[rgba(94,205,199,0.12)] border border-[rgba(94,176,191,0.3)] text-[#5ecdc7] font-bold text-sm">D</span>
+          <span class="text-base font-semibold text-[#f0f7f7]">DonorSee 公益透明</span>
+        </a>
+        <p class="text-sm text-[#7d9aa0] max-w-sm leading-relaxed">
+          用时间轴与验证节点，让公益的每一步都经得起审视。
+        </p>
+      </div>
+      <nav class="flex flex-wrap gap-6" aria-label="页脚导航">
+        <a href="{{ url_for('main.index', ui='donorsee') }}" class="ds-footer-link">首页时间轴</a>
+        <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='donorsee') }}" class="ds-footer-link">学校故事</a>
+        <a href="{{ url_for('main.dashboard', ui='donorsee') }}" class="ds-footer-link">公示档案</a>
+      </nav>
+    </div>
+    <hr class="ds-divider mb-6">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[#7d9aa0]">
+      <p>© {{ 2026 }} 特殊学校公益展示网站 · UI 变体测试页（donorsee）</p>
+      <p>测试结束后删除 <code>app/templates/ui_variants</code> 与 <code>app/static/css/ui_variants</code></p>
+    </div>
+  </div>
+</footer>
+
+{% endblock %}
+
+{% block body_scripts %}
+<script>
+(function() {
+  'use strict';
+
+  const glow = document.getElementById('ambientGlow');
+  if (glow && !window.matchMedia('(pointer: coarse)').matches) {
+    let raf = null;
+    window.addEventListener('scroll', () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        const y = window.scrollY;
+        glow.style.top = (y * 0.25 + window.innerHeight * 0.4) + 'px';
+        glow.style.left = (window.innerWidth * 0.5 + Math.sin(y * 0.001) * 80) + 'px';
+        raf = null;
+      });
+    }, { passive: true });
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -48px 0px' });
+
+  document.querySelectorAll('.ds-reveal').forEach(el => observer.observe(el));
+})();
+</script>
+{% endblock %}

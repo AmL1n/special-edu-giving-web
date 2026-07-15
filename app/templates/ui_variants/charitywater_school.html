@@ -1,0 +1,391 @@
+{% extends "ui_variants/_shell.html" %}
+
+{% block title %}{{ school.name }} · 学校特写 · charitywater{% endblock %}
+{% block body_class %}cw-cinematic antialiased text-slate-800{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ui_variants/charitywater.css') }}">
+<noscript>
+  <style>
+    .cw-reveal { opacity: 1 !important; transform: none !important; }
+  </style>
+</noscript>
+{% endblock %}
+
+{% block content %}
+<!-- 顶部导航 -->
+<header class="cw-nav cw-nav-dark">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 md:h-20">
+      <a href="{{ url_for('main.index', ui='charitywater') }}" class="flex items-center gap-2 text-white">
+        <i data-lucide="droplets" class="w-5 h-5 text-cyan-400"></i>
+        <span class="text-lg md:text-xl font-semibold tracking-tight">清泉公益</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="{{ url_for('main.index', ui='charitywater') }}" class="cw-nav-link cw-nav-link-dark">首页</a>
+        <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='charitywater') }}" class="cw-nav-link cw-nav-link-dark">学校详情</a>
+        <a href="{{ url_for('main.dashboard', ui='charitywater') }}" class="cw-nav-link cw-nav-link-dark">透明公示</a>
+      </nav>
+
+      <button id="cw-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors" aria-label="打开菜单">
+        <i data-lucide="menu" class="w-6 h-6 text-white"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- 移动端菜单 -->
+  <div id="cw-mobile-menu" class="hidden md:hidden border-t border-white/10 bg-slate-900/95 backdrop-blur-xl">
+    <div class="px-6 py-4 space-y-3">
+      <a href="{{ url_for('main.index', ui='charitywater') }}" class="block text-sm font-medium text-slate-300 hover:text-cyan-300">首页</a>
+      <a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='charitywater') }}" class="block text-sm font-medium text-slate-300 hover:text-cyan-300">学校详情</a>
+      <a href="{{ url_for('main.dashboard', ui='charitywater') }}" class="block text-sm font-medium text-slate-300 hover:text-cyan-300">透明公示</a>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+  <!-- 全幅封面 Hero -->
+  <section class="cw-school-hero" aria-labelledby="school-name">
+    <div class="cw-school-hero-bg cw-parallax" data-speed="-0.06"
+         style="background-image: url('{{ variant_asset('charitywater', 'images/school-' ~ ((school.id - 1) % 3 + 1) ~ '.jpg', school.cover_image) }}');"
+         role="img" aria-label="{{ school.name }}校园"></div>
+    <div class="cw-school-hero-overlay"></div>
+
+    <div class="relative z-10 w-full px-6 lg:px-12 pt-32 pb-20 md:pt-48 md:pb-32">
+      <div class="max-w-7xl mx-auto">
+        <span class="inline-block px-3 py-1 border border-white/30 rounded-full text-white/80 text-xs tracking-[0.2em] uppercase mb-4">School Story</span>
+        <h1 id="school-name" class="cw-serif text-4xl md:text-6xl lg:text-7xl font-bold text-white max-w-4xl leading-tight mb-6">
+          {{ school.name }}
+        </h1>
+        <div class="flex flex-wrap items-center gap-3 text-white/80 text-sm md:text-base">
+          <span class="inline-flex items-center gap-1">
+            <i data-lucide="map-pin" class="w-4 h-4" aria-hidden="true"></i>
+            {{ school.location or '地址待补充' }}
+          </span>
+          {% if school.founded_year %}
+          <span class="w-1 h-1 rounded-full bg-white/50" aria-hidden="true"></span>
+          <span>创校 {{ school.founded_year }} 年</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 主体内容：sticky 侧边栏 + Tab -->
+  <section class="cw-detail-section py-16 md:py-24">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="cw-detail-layout">
+        <!-- 主内容 -->
+        <div class="cw-detail-main">
+          <!-- 学校简介 -->
+          <div class="cw-intro cw-reveal mb-16">
+            <h2 class="cw-serif text-2xl md:text-3xl font-bold text-slate-900 mb-5">学校简介</h2>
+            <p class="text-lg text-slate-600 leading-[1.9]">{{ school.description or '学校简介待补充' }}</p>
+          </div>
+
+          <!-- 本地照片画廊 -->
+          <div class="cw-gallery cw-reveal mb-16">
+            <h2 class="cw-serif text-2xl md:text-3xl font-bold text-slate-900 mb-5">校园画廊</h2>
+            <div class="cw-gallery-grid">
+              {% for i in range(1, 7) %}
+              <figure class="cw-gallery-item">
+                <img src="{{ variant_asset('charitywater', 'images/scene-' ~ i ~ '.jpg', '') }}"
+                     alt="{{ school.name }}校园生活场景 {{ i }}" loading="lazy">
+              </figure>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- Tab 切换 -->
+          <div data-tab-group="detail" class="cw-tabs-wrap">
+            <div class="cw-tabs" role="tablist" aria-label="学校详情分类">
+              <button class="cw-tab active" id="tab-daily" role="tab" aria-selected="true" aria-controls="panel-daily" data-tab="daily">日常动态</button>
+              <button class="cw-tab" id="tab-donations" role="tab" aria-selected="false" aria-controls="panel-donations" data-tab="donations">捐赠公示</button>
+              <button class="cw-tab" id="tab-children" role="tab" aria-selected="false" aria-controls="panel-children" data-tab="children">学生风采</button>
+            </div>
+
+            <!-- 日常动态 -->
+            <div class="cw-tab-panel active" id="panel-daily" role="tabpanel" aria-labelledby="tab-daily" data-tab-content="daily">
+              {% if posts %}
+              <div class="cw-posts-grid">
+                {% for post in posts %}
+                <article class="cw-post-card cw-reveal">
+                  <div class="cw-post-image">
+                    <img src="{{ variant_asset('charitywater', 'images/scene-' ~ ((loop.index - 1) % 14 + 1) ~ '.jpg', post.image_url or '') }}"
+                         alt="{{ post.title }}" loading="lazy"
+                         onerror="this.onerror=null;this.src='{{ post.image_url or 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80' }}';">
+                    <span class="cw-post-tag {% if post.post_type == 'distribution' %}cw-tag-gold{% else %}cw-tag-moss{% endif %}">
+                      {% if post.post_type == 'distribution' %}捐赠分发{% else %}校园日常{% endif %}
+                    </span>
+                  </div>
+                  <div class="cw-post-body">
+                    <time class="cw-post-date">{{ post.created_at.strftime('%Y 年 %m 月 %d 日') if post.created_at else '' }}</time>
+                    <h3 class="cw-serif text-xl font-bold text-slate-900 mb-2">{{ post.title }}</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">{{ post.content or '' }}</p>
+                  </div>
+                </article>
+                {% endfor %}
+              </div>
+              {% else %}
+              <div class="cw-empty cw-empty-visible">
+                <i data-lucide="inbox" class="w-10 h-10 mb-3" aria-hidden="true"></i>
+                <p>暂无日常动态</p>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- 捐赠公示 -->
+            <div class="cw-tab-panel" id="panel-donations" role="tabpanel" aria-labelledby="tab-donations" data-tab-content="donations">
+              {% if donations %}
+              <div class="cw-donation-list">
+                {% for donation in donations %}
+                <article class="cw-donation-journey cw-reveal" data-status="{{ donation.status }}">
+                  <div class="cw-journey-meta">
+                    <span class="cw-journey-serial" aria-label="第 {{ loop.index }} 条">{{ loop.index }}</span>
+                    <div>
+                      <p class="font-semibold text-slate-900">{{ donation.donor_name }}</p>
+                      <time class="text-xs text-slate-500">{{ donation.created_at.strftime('%Y.%m.%d') if donation.created_at else '—' }}</time>
+                    </div>
+                  </div>
+                  <div class="cw-journey-track" aria-label="捐赠状态">
+                    <div class="cw-journey-stop">
+                      <span class="cw-journey-dot" aria-hidden="true"></span>
+                      <span class="cw-journey-label">捐赠出发</span>
+                    </div>
+                    <div class="cw-journey-line" aria-hidden="true"></div>
+                    <div class="cw-journey-stop">
+                      <span class="cw-journey-dot cw-journey-dot-{% if donation.status == 'received' %}start{% elif donation.status == 'distributing' %}mid{% else %}end{% endif %}" aria-hidden="true"></span>
+                      <span class="cw-journey-label">
+                        {% if donation.status == 'received' %}已接收
+                        {% elif donation.status == 'distributing' %}发放中
+                        {% else %}已送达{% endif %}
+                      </span>
+                    </div>
+                    <div class="cw-journey-line" aria-hidden="true"></div>
+                    <div class="cw-journey-stop">
+                      <span class="cw-journey-dot cw-journey-dot-{% if donation.status == 'completed' %}end{% else %}future{% endif %}" aria-hidden="true"></span>
+                      <span class="cw-journey-label">孩子手中</span>
+                    </div>
+                  </div>
+                  <div class="cw-journey-detail">
+                    <p class="text-slate-900 font-semibold">{{ donation.item_name }}</p>
+                    <p class="text-sm text-slate-600">{{ donation.item_detail or '' }} · {{ donation.quantity or '数量待补充' }}</p>
+                    <p class="text-xs text-slate-500 mt-1">接收班级：{{ donation.received_class or '学校统一' }}</p>
+                  </div>
+                </article>
+                {% endfor %}
+              </div>
+              {% else %}
+              <div class="cw-empty cw-empty-visible">
+                <i data-lucide="inbox" class="w-10 h-10 mb-3" aria-hidden="true"></i>
+                <p>暂无捐赠记录</p>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- 学生风采 -->
+            <div class="cw-tab-panel" id="panel-children" role="tabpanel" aria-labelledby="tab-children" data-tab-content="children">
+              {% if children %}
+              <div class="cw-children-grid">
+                {% for child in children %}
+                <article class="cw-child-card cw-reveal">
+                  <div class="cw-child-avatar">
+                    <img src="{{ variant_asset('charitywater', 'images/child-' ~ ((loop.index - 1) % 12 + 1) ~ '.jpg', child.avatar) }}"
+                         alt="{{ child.name }}的照片" loading="lazy">
+                  </div>
+                  <h3 class="cw-serif text-xl font-bold text-slate-900 mb-1">{{ child.name }}</h3>
+                  <p class="text-sm text-slate-500 mb-3">{{ child.age }} 岁 · {{ school.name }}</p>
+                  {% if child.bio %}
+                  <p class="text-slate-600 text-sm leading-relaxed mb-3">{{ child.bio }}</p>
+                  {% endif %}
+                  <blockquote class="cw-child-quote">“{{ child.quote or '每一天都是新的开始' }}”</blockquote>
+                  {% if child.tags %}
+                  <div class="cw-child-tags">
+                    {% for tag in child.tags.split(',') %}
+                    {% if tag.strip() %}
+                    <span class="cw-tag cw-tag-soft">{{ tag.strip() }}</span>
+                    {% endif %}
+                    {% endfor %}
+                  </div>
+                  {% endif %}
+                </article>
+                {% endfor %}
+              </div>
+              {% else %}
+              <div class="cw-empty cw-empty-visible">
+                <i data-lucide="users" class="w-10 h-10 mb-3" aria-hidden="true"></i>
+                <p>暂无学生风采信息</p>
+              </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Sticky 侧边信息卡 -->
+        <aside class="cw-sidebar" aria-label="学校信息">
+          <div class="cw-sidebar-card cw-reveal">
+            <h2 class="cw-serif text-xl font-bold text-slate-900 mb-5">学校信息</h2>
+
+            <div class="cw-school-switcher">
+              <label for="school-select">切换学校</label>
+              <select id="school-select" class="cw-form-select" aria-label="选择要查看的学校">
+                {% for s in all_schools %}
+                <option value="{{ s.id }}" {% if s.id == school.id %}selected{% endif %}>{{ s.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="cw-sidebar-row">
+              <span class="cw-sidebar-key">学生人数</span>
+              <span class="cw-sidebar-val">{{ school.student_count or 0 }} 人</span>
+            </div>
+            <div class="cw-sidebar-row">
+              <span class="cw-sidebar-key">教职工</span>
+              <span class="cw-sidebar-val">{{ school.teacher_count or 0 }} 人</span>
+            </div>
+            <div class="cw-sidebar-row">
+              <span class="cw-sidebar-key">创校年份</span>
+              <span class="cw-sidebar-val">{{ school.founded_year or '-' }} 年</span>
+            </div>
+            <div class="cw-sidebar-row">
+              <span class="cw-sidebar-key">捐赠记录</span>
+              <span class="cw-sidebar-val">{{ donations|length }} 笔</span>
+            </div>
+            <div class="cw-sidebar-row">
+              <span class="cw-sidebar-key">动态更新</span>
+              <span class="cw-sidebar-val">{{ posts|length }} 篇</span>
+            </div>
+
+            <div class="cw-sidebar-cta">
+              <a href="{{ url_for('main.dashboard', school_id=school.id, ui='charitywater') }}" class="cw-cta-primary w-full justify-center">
+                查看捐赠公示 <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </a>
+            </div>
+
+            <p class="cw-sidebar-note">
+              所有数据均来自学校真实申报与捐赠系统记录，项目为公益展示原型，部分信息经脱敏处理。
+            </p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- 页脚 -->
+<footer class="cw-footer">
+  <div class="max-w-7xl mx-auto px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row justify-between gap-12 mb-12">
+      <div class="max-w-sm">
+        <div class="flex items-center gap-2 text-white mb-4">
+          <i data-lucide="droplets" class="w-5 h-5 text-cyan-400"></i>
+          <span class="text-xl cw-serif font-bold">清泉公益</span>
+        </div>
+        <p class="text-sm text-slate-400 leading-relaxed">
+          为特殊教育学校提供透明的物资支持与持续的温暖陪伴。本站仅作公益展示与透明公示，不接受线上捐赠。
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row gap-12 text-sm">
+        <div>
+          <h4 class="text-white font-semibold mb-3">导航</h4>
+          <ul class="space-y-2">
+            <li><a href="{{ url_for('main.index', ui='charitywater') }}" class="text-slate-400 hover:text-white transition-colors">首页</a></li>
+            <li><a href="{{ url_for('main.school_detail', school_id=schools[0].id, ui='charitywater') }}" class="text-slate-400 hover:text-white transition-colors">学校详情</a></li>
+            <li><a href="{{ url_for('main.dashboard', ui='charitywater') }}" class="text-slate-400 hover:text-white transition-colors">捐赠公示</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between gap-4 text-xs text-slate-500">
+      <p>© 2026 清泉公益 · 测试专用 UI 变体：charitywater</p>
+      <p>页面数据均为演示用途。</p>
+    </div>
+  </div>
+</footer>
+{% endblock %}
+
+{% block body_scripts %}
+<script>
+(function() {
+  'use strict';
+
+  // 移动端菜单
+  const menuBtn = document.getElementById('cw-menu-btn');
+  const mobileMenu = document.getElementById('cw-mobile-menu');
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', function() {
+      const expanded = mobileMenu.classList.toggle('hidden');
+      menuBtn.setAttribute('aria-expanded', String(!expanded));
+    });
+  }
+
+  // 学校切换
+  const select = document.getElementById('school-select');
+  if (select) {
+    select.addEventListener('change', function () {
+      const id = this.value;
+      if (!id) return;
+      const base = "{{ url_for('main.school_detail', school_id=0, ui='charitywater') }}";
+      window.location.href = base.replace('/0', '/' + id);
+    });
+  }
+
+  // Tab 可访问性增强
+  const tabs = document.querySelectorAll('.cw-tab');
+  const panels = document.querySelectorAll('.cw-tab-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => {
+        t.setAttribute('aria-selected', 'false');
+        t.classList.remove('active');
+      });
+      tab.setAttribute('aria-selected', 'true');
+      tab.classList.add('active');
+      const target = tab.dataset.tab;
+      panels.forEach(p => {
+        const isTarget = p.dataset.tabContent === target;
+        p.classList.toggle('active', isTarget);
+      });
+    });
+  });
+
+  // 滚动揭示
+  const revealEls = document.querySelectorAll('.cw-reveal');
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (!reduced) {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('cw-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => observer.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('cw-visible'));
+  }
+
+  // 轻微视差
+  const parallaxEls = document.querySelectorAll('.cw-parallax');
+  if (!reduced && parallaxEls.length) {
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          parallaxEls.forEach(el => {
+            const speed = parseFloat(el.dataset.speed) || 0;
+            el.style.transform = 'translateY(' + (scrollY * speed) + 'px) scale(1.08)';
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+})();
+</script>
+{% endblock %}

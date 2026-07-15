@@ -64,7 +64,8 @@
 │   └── static/                   # 静态资源
 │       ├── css/app.css           # 全局样式（温润人文杂志诗学、暖色调、响应式）
 │       ├── css/ui_variants/      # 各变体独立样式（上线前随 ui_variants 删除）
-│       └── js/app.js             # 滚动动画、Tab 切换、数字滚动动画、移动端抽屉
+│       ├── js/app.js             # 滚动动画、Tab 切换、数字滚动动画、移动端抽屉
+│       └── media/ui_variants/    # 变体本地图片与视频素材（上线前删除）
 ├── config.py                     # Flask 配置类
 ├── run.py                        # 启动脚本：创建应用、建表、运行开发服务器
 ├── seed.py                       # 初始化/重置并注入演示数据
@@ -73,6 +74,8 @@
 ├── screenshots/                  # 验收截图（桌面 + 移动端）
 ├── DEPLOY.md                     # 上线准备与部署指南
 ├── requirements.txt              # Python 依赖
+├── tests/                        # 测试目录（当前为 UI 变体冒烟测试）
+│   └── test_ui_variants.py
 └── instance/
     └── special_school.db         # SQLite 数据库文件（默认位置，git 忽略）
 ```
@@ -195,6 +198,24 @@ flask db upgrade   # 执行迁移
 
 导入接口未做字段校验与权限控制，仅在可信内网或本地使用。
 
+### 4.4 UI 风格变体（测试阶段）
+
+项目当前包含 5 套参考国际公益平台的 UI 风格变体，用于设计方向比选。通过 `?ui=<variant>` 查询参数切换：
+
+| 变体 | 参考风格 | 首页 | 学校详情页 | 捐赠公示页 |
+|------|----------|------|------------|------------|
+| `charitywater` | Charity: Water | `/?ui=charitywater` | `/school/1?ui=charitywater` | `/dashboard?ui=charitywater` |
+| `justgiving` | JustGiving（萤火特刊） | `/?ui=justgiving` | `/school/1?ui=justgiving` | `/dashboard?ui=justgiving` |
+| `donorsee` | DonorSee | `/?ui=donorsee` | `/school/1?ui=donorsee` | `/dashboard?ui=donorsee` |
+| `wwf` | WWF 年度报告 | `/?ui=wwf` | `/school/1?ui=wwf` | `/dashboard?ui=wwf` |
+| `gofundme` | GoFundMe | `/?ui=gofundme` | `/school/1?ui=gofundme` | `/dashboard?ui=gofundme` |
+
+- 模板：`app/templates/ui_variants/<variant>.html`（首页）、`<variant>_school.html`（学校详情）、`<variant>_dashboard.html`（捐赠公示）。
+- 样式：`app/static/css/ui_variants/<variant>.css`。
+- 本地媒体：`app/static/media/ui_variants/<variant>/images/` 与 `videos/`，通过 `variant_asset()` 辅助函数引用；缺失时回退到远程占位 URL。
+- 媒体下载脚本：`download_media.py` 用于从 Pexels / Mixkit 拉取演示素材（仅供开发预览）。
+- 清理方式：上线前删除 `app/templates/ui_variants`、`app/static/css/ui_variants`、`app/static/media/ui_variants`、`download_media.py`，并移除 `app/views.py` 中的变体路由逻辑，保留默认模板。
+
 ---
 
 ## 5. 配置说明
@@ -294,17 +315,19 @@ class Config:
 
 ## 8. 测试策略
 
-当前项目**未配置任何测试框架或测试用例**。建议后续补充：
+当前已配置基础冒烟测试：
 
-- 使用 `pytest` + `pytest-flask` 编写单元测试与接口测试。
-- 针对 `/api/stats`、`/api/donations`、`/api/import` 编写断言。
-- 针对页面路由（`/`, `/school/1`, `/dashboard`）测试模板渲染与 HTTP 200 响应。
-- 运行命令建议：
+- `tests/test_ui_variants.py`：使用标准库 `unittest` 验证默认路由与 5 套 UI 变体的首页、学校详情页、捐赠公示页均能返回 HTTP 200，并校验页面引用的 `/static/` 图片在本地真实存在。
+- 运行方式：
 
 ```bash
-pip install pytest pytest-flask
-pytest
+python -m unittest discover -s tests -v
 ```
+
+建议后续继续补充：
+
+- 使用 `pytest` + `pytest-flask` 针对 `/api/stats`、`/api/donations`、`/api/import` 编写接口断言。
+- 针对后台 `/admin/*` 路由补充登录与权限测试。
 
 ---
 
@@ -360,6 +383,7 @@ location /static/ {
 - [ ] 修改 `SECRET_KEY`、`ADMIN_USERNAME`、`ADMIN_PASSWORD`。
 - [ ] 将 SQLite 替换为 MySQL / PostgreSQL 并备份旧数据。
 - [ ] 清空或替换 `seed.py` 中的虚拟学校、儿童、捐赠数据。
+- [ ] 删除测试阶段 UI 变体：`app/templates/ui_variants`、`app/static/css/ui_variants`、`app/static/media/ui_variants`、`download_media.py`，并还原 `app/views.py` 默认路由。
 - [ ] 替换所有 Unsplash / 占位图片为真实授权素材，并补充 `alt` 文本。
 - [ ] 限制 `/api/import` 访问（建议仅允许已登录管理员）。
 - [ ] 配置 CORS 白名单，关闭跨域全开。
